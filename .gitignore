@@ -1,0 +1,9 @@
+# Java Executable
+out/
+
+# IDEA editor files
+HandyHand.iml
+
+# Gradle
+.gradle/
+build/
