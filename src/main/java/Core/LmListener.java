@@ -1,20 +1,37 @@
 package Core;
 
 import com.leapmotion.leap.*;
+import processing.core.PImage;
 
 public class LmListener extends Listener {
+    long lastFrame = 0;
+    public long count = 0;
+
 
 
     public void onConnect(Controller controller) {
-        controller.enableGesture(Gesture.Type.TYPE_SWIPE);
-        controller.enableGesture(Gesture.Type.TYPE_CIRCLE);
-        controller.enableGesture(Gesture.Type.TYPE_SCREEN_TAP);
-        controller.enableGesture(Gesture.Type.TYPE_KEY_TAP);
+        for (Gesture.Type v :Gesture.Type.values()) {
+            controller.enableGesture(v);
+        }
+        controller.setPolicy(Controller.PolicyFlag.POLICY_IMAGES);
     }
 
     public void onFrame(Controller controller) {
         Frame frame = controller.frame();
+        if(frame.id() % 2 == 0 && frame.isValid()) return;
+        lastFrame = frame.id();
 
+
+    }
+
+    public void getImage(Frame frame){
+        ImageList images = frame.images();
+        for (Image img : images){
+
+        }
+    }
+
+    public void getPos(Frame frame){
         if (!frame.hands().isEmpty()) {
             Hand hand = frame.hands().get(0);
 
