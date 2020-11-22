@@ -18,5 +18,11 @@ public class Main {
         }
 
         controller.removeListener(listener);
+
+        Daemon D1= new Daemon("Démon 1");
+        D1.start();
+        D1.run();
+
+
     }
 }
