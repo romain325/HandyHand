@@ -3,7 +3,7 @@ package Utils.CallBack;
 import com.leapmotion.leap.Frame;
 import processing.core.PApplet;
 
-public abstract class FrameCallback {
+public abstract class SketchCallback {
     private PApplet sketch;
     public final void setUpSketch(PApplet sketch){
         this.sketch = sketch;

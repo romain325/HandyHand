@@ -1,5 +1,6 @@
 package Core;
 
+import Core.Listener.LmListener;
 import com.leapmotion.leap.Controller;
 
 import java.io.IOException;
@@ -19,9 +20,9 @@ public class Main {
 
         controller.removeListener(listener);
 
-        Daemon D1= new Daemon("Démon 1");
+        /*Daemon D1= new Daemon("Démon 1");
         D1.start();
-        D1.run();
+        D1.run();*/
 
 
     }

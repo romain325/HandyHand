@@ -1,12 +1,12 @@
 package Visual.ProcessingVisual;
 
-import Utils.CallBack.FrameCallback;
+import Utils.CallBack.SketchCallback;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Image;
 import com.leapmotion.leap.ImageList;
 import processing.core.PImage;
 
-public class CameraView extends FrameCallback {
+public class CameraView extends SketchCallback {
     @Override
     public void render(Frame frame) {
         getSketch().background(100);
