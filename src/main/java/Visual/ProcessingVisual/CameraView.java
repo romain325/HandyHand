@@ -1,9 +1,7 @@
 package Visual.ProcessingVisual;
 
 import Utils.CallBack.SketchCallback;
-import com.leapmotion.leap.Frame;
-import com.leapmotion.leap.Image;
-import com.leapmotion.leap.ImageList;
+import com.leapmotion.leap.*;
 import processing.core.PImage;
 
 public class CameraView extends SketchCallback {
@@ -18,6 +16,7 @@ public class CameraView extends SketchCallback {
     }
 
     public void getImage(Frame frame){
+        int cameraOffset = 20;
         if(frame == null || !frame.isValid())return;
 
         ImageList images = frame.images();
@@ -33,6 +32,9 @@ public class CameraView extends SketchCallback {
             }
             camera.updatePixels();
             getSketch().image(camera, 640 * img.id(),0);
+            for (Hand hand : frame.hands()){
+                getSketch().ellipse(-hand.palmPosition().getX() + 350,hand.palmPosition().getZ() + 100, - hand.palmPosition().getY(), - hand.palmPosition().getY());
+            }
         }
     }
 }

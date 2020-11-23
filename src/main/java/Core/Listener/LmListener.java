@@ -1,13 +1,10 @@
 package Core.Listener;
 
 import com.leapmotion.leap.*;
-import processing.core.PImage;
 
 public class LmListener extends Listener {
     long lastFrame = 0;
     public long count = 0;
-
-
 
     public void onConnect(Controller controller) {
         for (Gesture.Type v :Gesture.Type.values()) {
@@ -18,9 +15,8 @@ public class LmListener extends Listener {
 
     public void onFrame(Controller controller) {
         Frame frame = controller.frame();
-        if(frame.id() % 2 == 0 && frame.isValid()) return;
+        if(frame.id() % 2 == 0 || !frame.isValid()) return;
         lastFrame = frame.id();
-
 
     }
 
@@ -49,7 +45,6 @@ public class LmListener extends Listener {
         GestureList gestures = frame.gestures();
         for (int i = 0; i < gestures.count(); i++) {
             Gesture gesture = gestures.get(i);
-
             switch (gesture.type()) {
                 case TYPE_CIRCLE:
                     CircleGesture circle = new CircleGesture(gesture);
