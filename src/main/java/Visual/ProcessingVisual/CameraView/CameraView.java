@@ -1,4 +1,4 @@
-package Visual.ProcessingVisual;
+package Visual.ProcessingVisual.CameraView;
 
 import Utils.CallBack.SketchCallback;
 import com.leapmotion.leap.*;
@@ -33,7 +33,8 @@ public class CameraView extends SketchCallback {
             camera.updatePixels();
             getSketch().image(camera, 640 * img.id(),0);
             for (Hand hand : frame.hands()){
-                getSketch().ellipse(-hand.palmPosition().getX() + 350,hand.palmPosition().getZ() + 100, - hand.palmPosition().getY(), - hand.palmPosition().getY());
+                getSketch().ellipse(-hand.palmPosition().getX() + 350,hand.palmPosition().getZ() + 100,10,10);
+                // (float) (-0.5 * hand.palmPosition().getY()), (float) (-0.5* hand.palmPosition().getY())
             }
         }
     }
