@@ -1,4 +1,4 @@
-package Visual.ProcessingVisual;
+package Visual.ProcessingVisual.CameraView;
 
 import Utils.CallBack.ShaderCallback;
 import com.leapmotion.leap.Frame;

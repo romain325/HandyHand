@@ -1,9 +1,9 @@
-package Testing.CameraTest;
+package Testing.VisualTest.CameraTest;
 
 import Testing.Tester;
 import Visual.Renderer.ProcessingRenderer;
-import Visual.ProcessingVisual.CameraView;
-import Visual.ProcessingVisual.CameraViewNormalized;
+import Visual.ProcessingVisual.CameraView.CameraView;
+import Visual.ProcessingVisual.CameraView.CameraViewNormalized;
 import com.leapmotion.leap.Controller;
 
 import java.util.HashMap;

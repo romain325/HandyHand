@@ -1,11 +1,12 @@
 package Testing;
 
-import Testing.CameraTest.CameraViewTest;
-import Testing.DaemonTest.DaemonTest;
+import Testing.VisualTest.CameraTest.CameraViewTest;
+import Testing.VisualTest.SkeletonTest.SkeletonTest;
 
 public class MainTest {
     public static void main(String[] args) {
-        new CameraViewTest().start();
+        new SkeletonTest().start();
+        // new CameraViewTest().start();
         // new DaemonTest().start();
     }
 }
