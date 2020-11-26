@@ -1,8 +1,7 @@
 package Testing.DaemonTest;
 
 import Core.Daemon.Daemon;
-import Core.Daemon.Runner.ControllerRunner;
-import Core.Daemon.Runner.HandPosition;
+import Core.Daemon.Runner.HandPositionRunner;
 import Testing.Tester;
 
 public class DaemonTest implements Tester {
@@ -17,7 +16,7 @@ public class DaemonTest implements Tester {
     }
 
     private void daemonTesting() {
-        Daemon daemon = new Daemon("Placement", new HandPosition());
+        Daemon daemon = new Daemon("Placement", new HandPositionRunner());
         daemon.start();
     }
 }
