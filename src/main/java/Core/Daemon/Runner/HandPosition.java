@@ -4,10 +4,13 @@ import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.HandList;
 
 public class HandPosition extends ControllerRunner{
+
     @Override
     public void run() {
         System.out.println("Starting Daemon");
         while (true) {
+
+            /*
             HandList hands = getController().frame().hands();
             switch (hands.count()) {
                 case 0 -> System.out.println("No hands recognized");
@@ -79,7 +82,7 @@ public class HandPosition extends ControllerRunner{
                         }
                     }
                 }
-            }
+            }*/
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

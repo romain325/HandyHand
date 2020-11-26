@@ -17,6 +17,7 @@ public class LmListener extends Listener {
         Frame frame = controller.frame();
         if(frame.id() % 2 == 0 || !frame.isValid()) return;
         lastFrame = frame.id();
+        getPos(frame);
 
     }
 
