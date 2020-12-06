@@ -6,14 +6,26 @@ import com.leapmotion.leap.Listener;
 
 public abstract class MainListener extends Listener {
     public abstract void onConnect(Controller controller);
-    public abstract void onFrame(Controller controller);
+
+    @Override
+    public void onFrame(Controller controller){
+        if(!limitFrameRate(controller.frame())){
+            return;
+        }
+        action(controller.frame());
+    }
+
+    public abstract void action(Frame frame);
 
     /**
      * Limit the CallRate to ~30cps
      * @param frame Leap Motion Frame
      * @return false if you jump the frame, true if you don't
      */
-    public boolean limitFrameRate(Frame frame){
+    protected final boolean limitFrameRate(Frame frame){
         return frame.id() % 2 != 0 && frame.isValid();
     }
+
+    public abstract boolean isActive();
+
 }
