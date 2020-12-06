@@ -5,7 +5,6 @@ import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Listener;
 
 public abstract class MainListener extends Listener {
-    public abstract void onConnect(Controller controller);
 
     @Override
     public void onFrame(Controller controller){
