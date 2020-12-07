@@ -4,19 +4,22 @@ import styles from './Counter.css';
 import routes from '../../constants/routes.json';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Jumbotron from 'react-bootstrap/Jumbotron'
 
 export default function Counter() {
   return (
-    <body>
+    <div>
       <div className={styles.backButton} data-tid="backButton">
         <Link to={routes.HOME}>
           <i className="fa fa-arrow-left fa-3x" />
         </Link>
       </div>
-      <Form className={styles.rect} >
+      <Form >
           <h2>Connexion</h2>
           <Form.Label>
-            Connecté vous avec à votre compte
+            <Jumbotron>
+              Connecté vous avec à votre compte
+            </Jumbotron>
           </Form.Label>
           <Form.Group controlId="name">
             <Form.Control type="text" placeholder="Pseudo" />
@@ -28,9 +31,9 @@ export default function Counter() {
             <Form.Check type="checkbox" label="Enregistrer mes données"/>
           </Form.Group>
           <Button variant="primary" type="submit">
-           Connexion
+            Connexion
           </Button>
       </Form>
-    </body>
+    </div>
   );
 }
