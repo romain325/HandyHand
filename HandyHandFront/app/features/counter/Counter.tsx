@@ -4,7 +4,6 @@ import styles from './Counter.css';
 import routes from '../../constants/routes.json';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Jumbotron from 'react-bootstrap/Jumbotron'
 
 export default function Counter() {
   return (
@@ -14,26 +13,34 @@ export default function Counter() {
           <i className="fa fa-arrow-left fa-3x" />
         </Link>
       </div>
-      <Form >
+      <div className={styles.form}>
+        <Form>
           <h2>Connexion</h2>
-          <Form.Label>
-            <Jumbotron>
-              Connecté vous avec à votre compte
-            </Jumbotron>
-          </Form.Label>
-          <Form.Group controlId="name">
-            <Form.Control type="text" placeholder="Pseudo" />
+          <h6>Connecté vous avec votre compte</h6>
+          <Form.Group controlId="formBasicEmail" >
+            <Form.Control type="email" placeholder="Pseudo" />
+            <Form.Text className="text-muted">
+              Entrez votre pseudo de connexion
+            </Form.Text>
           </Form.Group>
-          <Form.Group controlId="password">
+
+          <Form.Group controlId="formBasicPassword" >
             <Form.Control type="password" placeholder="Mot de passe" />
           </Form.Group>
-          <Form.Group controlId="formBasicCheckbox" className="formGroup">
-            <Form.Check type="checkbox" label="Enregistrer mes données"/>
+
+          <Form.Group controlId="formBasicCheckbox" className="checkbox">
+            <Form.Check type="checkbox" label="Se souvenir de moi" />
           </Form.Group>
-          <Button variant="primary" type="submit">
+
+          <Button type="submit" variant="primary"  block>
             Connexion
           </Button>
-      </Form>
+
+          <Button type="submit" variant="outline-primary"  block>
+            Crée un compte
+          </Button>
+        </Form>
+      </div>
     </div>
   );
 }

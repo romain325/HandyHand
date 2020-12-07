@@ -10,7 +10,7 @@ export default function ConnexionFeature() {
           <i className="fa fa-arrow-left fa-3x" />
         </Link>
       </div>
-      <h2>Home</h2>
+      <h2>Test</h2>
     </div>
   );
 }

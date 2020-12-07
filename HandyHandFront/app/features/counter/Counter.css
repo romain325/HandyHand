@@ -1,32 +1,20 @@
 
- .div{
-  margin-left: auto;
-  margin-right: auto;
-  width: 500px;
-  background: #ffffff;
-}
-
 Form{
-  background: #4C566A;
+  margin: auto;
+  margin-top: 15%;
+  padding: 10px;
+  width: 30%;
+  text-align: center;
+  background-color: #FFFFFF ;
   color: #4C566A;
 }
 
-Form div{
-  text-align: center;
-  margin: 20px ;
-}
-
-.rect{
-  background:whitesmoke;
-  width: 500px;
-  text-align: center;
-  margin: auto;
-}
-
-Form div button{
-  width: auto;
+.buttonConnect{
+  background-color: #4C566A ;
 }
 
 h2{
   color: #4C566A;
 }
+
+
