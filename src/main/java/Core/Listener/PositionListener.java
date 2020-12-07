@@ -11,7 +11,6 @@ public class PositionListener extends MainListener{
     HandPosition handPosition = new HandPosition();
     String wantedHand;
     Set<Position> wantedPos;
-    private boolean isActive;
 
 
     private PositionListener(String hand, Set<Position> pos){

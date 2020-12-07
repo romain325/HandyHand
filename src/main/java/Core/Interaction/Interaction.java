@@ -15,6 +15,11 @@ public class Interaction implements Runnable{
         return frame.id() % 2 != 0 && frame.isValid();
     }
 
+    /**
+     * Add a new script with attached listeners
+     * @param listeners Array of listener
+     * @param script Script to execute
+     */
     public void addListener(MainListener[] listeners, Script script) {
         if(listeners.length <= 0){
             return;
@@ -26,6 +31,9 @@ public class Interaction implements Runnable{
         }
     }
 
+    /**
+     * Action to run on x call
+     */
     @Override
     public void run() {
         for (Script s : listeners.keySet() ) {
@@ -38,4 +46,6 @@ public class Interaction implements Runnable{
             }
         }
     }
+
+
 }
