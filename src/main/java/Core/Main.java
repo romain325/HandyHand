@@ -1,5 +1,6 @@
 package Core;
 
+import Core.Gesture.GestureListener;
 import Core.Listener.LmListener;
 import com.leapmotion.leap.Controller;
 
@@ -7,7 +8,8 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        LmListener listener = new LmListener();
+        //LmListener listener = new LmListener();
+        GestureListener listener = new GestureListener();
         Controller controller = new Controller();
 
         controller.addListener(listener);
@@ -23,7 +25,6 @@ public class Main {
         /*Daemon D1= new Daemon("Démon 1");
         D1.start();
         D1.run();*/
-
 
     }
 }
