@@ -29,7 +29,7 @@ public class PositionListener extends MainListener{
             return null;
         }
         if(positions.length > 2){ return null; }
-        if(Arrays.asList(positions).contains(Position.NONE)) return null; // || (Arrays.asList(positions).contains(Position.FRONT) && Arrays.asList(positions).contains(Position.BACK)) || (Arrays.asList(positions).contains(Position.LEFT) && Arrays.asList(positions).contains(Position.RIGHT))){ return null ;}
+        if(Arrays.asList(positions).contains(Position.NONE) || (Arrays.asList(positions).contains(Position.FRONT) && Arrays.asList(positions).contains(Position.BACK)) || (Arrays.asList(positions).contains(Position.LEFT) && Arrays.asList(positions).contains(Position.RIGHT))){ return null ;}
 
         return new PositionListener(hand, new HashSet<>(Arrays.asList(positions)));
     }

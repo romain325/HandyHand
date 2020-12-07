@@ -21,7 +21,7 @@ public class Interaction implements Runnable{
         }
         this.listeners.put(script, new HashSet<>(Arrays.asList(listeners)));
         for (MainListener lis : listeners) {
-            //if(lis == null) continue;
+            if(lis == null) continue;
             controller.addListener(lis);
         }
     }
