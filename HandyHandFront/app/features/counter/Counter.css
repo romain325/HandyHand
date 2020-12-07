@@ -1,37 +1,32 @@
-.backButton {
-  position: absolute;
+
+ .div{
+  margin-left: auto;
+  margin-right: auto;
+  width: 500px;
+  background: #ffffff;
 }
 
-.counter {
-  position: absolute;
-  top: 30%;
-  left: 45%;
-  font-size: 10rem;
-  font-weight: bold;
-  letter-spacing: -0.025em;
+Form{
+  background: #4C566A;
+  color: #4C566A;
 }
 
-.btnGroup {
-  position: relative;
-  top: 500px;
-  width: 480px;
-  margin: 0 auto;
+Form div{
+  text-align: center;
+  margin: 20px ;
 }
 
-.btn {
-  font-size: 1.6rem;
-  font-weight: bold;
-  background-color: #fff;
-  border-radius: 50%;
-  margin: 10px;
-  width: 100px;
-  height: 100px;
-  opacity: 0.7;
-  cursor: pointer;
-  font-family: Arial, Helvetica, Helvetica Neue, sans-serif;
+.rect{
+  background:whitesmoke;
+  width: 500px;
+  text-align: center;
+  margin: auto;
 }
 
-.btn:hover {
-  color: white;
-  background-color: rgba(0, 0, 0, 0.5);
+Form div button{
+  width: auto;
+}
+
+h2{
+  color: #4C566A;
 }

@@ -1,71 +1,36 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './Counter.css';
 import routes from '../../constants/routes.json';
-import {
-  increment,
-  decrement,
-  incrementIfOdd,
-  incrementAsync,
-  selectCount,
-} from './counterSlice';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 export default function Counter() {
-  const dispatch = useDispatch();
-  const value = useSelector(selectCount);
   return (
-    <div>
+    <body>
       <div className={styles.backButton} data-tid="backButton">
         <Link to={routes.HOME}>
           <i className="fa fa-arrow-left fa-3x" />
         </Link>
       </div>
-      <div className={`counter ${styles.counter}`} data-tid="counter">
-        {value}
-      </div>
-      <div className={styles.btnGroup}>
-        <button
-          className={styles.btn}
-          onClick={() => {
-            dispatch(increment());
-          }}
-          data-tclass="btn"
-          type="button"
-        >
-          <i className="fa fa-plus" />
-        </button>
-        <button
-          className={styles.btn}
-          onClick={() => {
-            dispatch(decrement());
-          }}
-          data-tclass="btn"
-          type="button"
-        >
-          <i className="fa fa-minus" />
-        </button>
-        <button
-          className={styles.btn}
-          onClick={() => {
-            dispatch(incrementIfOdd());
-          }}
-          data-tclass="btn"
-          type="button"
-        >
-          odd
-        </button>
-        <button
-          className={styles.btn}
-          onClick={() => {
-            dispatch(incrementAsync());
-          }}
-          data-tclass="btn"
-          type="button"
-        >
-          async
-        </button>
-      </div>
-    </div>
+      <Form className={styles.rect} >
+          <h2>Connexion</h2>
+          <Form.Label>
+            Connecté vous avec à votre compte
+          </Form.Label>
+          <Form.Group controlId="name">
+            <Form.Control type="text" placeholder="Pseudo" />
+          </Form.Group>
+          <Form.Group controlId="password">
+            <Form.Control type="password" placeholder="Mot de passe" />
+          </Form.Group>
+          <Form.Group controlId="formBasicCheckbox" className="formGroup">
+            <Form.Check type="checkbox" label="Enregistrer mes données"/>
+          </Form.Group>
+          <Button variant="primary" type="submit">
+           Connexion
+          </Button>
+      </Form>
+    </body>
   );
 }
