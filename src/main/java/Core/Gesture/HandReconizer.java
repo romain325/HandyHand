@@ -50,7 +50,7 @@ public class HandReconizer {
     }
 
     //Count the number showed by the hand (with the fingers)
-    public static int countHandFingers(Hand hand) {
+    public static int countHandFingersOut(Hand hand) {
         if(hand == null) return -1;
         if(!hand.isValid()) return -1;
 

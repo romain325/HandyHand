@@ -349,21 +349,49 @@ public class FingerReconizer {
         Vector vProxPrev = prox.prevJoint(); //The position of the beginning of proximal bone
 
         float distance = vDistalNext.distanceTo(vProxPrev); //The distance between the two vector
+        //float distance = (float) Math.sqrt(Math.pow((double)(vDistalNext.getX() - vProxPrev.getX()), 2.0) +
+        //        Math.pow((double)(vDistalNext.getY() - vProxPrev.getY()), 2.0) +
+        //        Math.pow((double)(vDistalNext.getZ() - vProxPrev.getZ()), 2.0));
 
         Bone inter = finger.bone(Bone.Type.TYPE_INTERMEDIATE); //The intermediate bone of the finger
-        //The lenght of the fingertip
+        //The length of the fingertip
         float FingertipLenght = distal.length() + prox.length() + inter.length();
 
         float percentage = 0; //The percentage of the curve of the fingertip
         //Difference between the distance of the vector and the one when the finger isn't curve
-        float interval = 0;
+        float interval = FingertipLenght-distance;
+
+
         //There are a difference between the thumb and others fingers
-        if(finger.type() != Finger.Type.TYPE_THUMB) {
-            interval = FingertipLenght-distance;
-            percentage = (interval)*100/34; //Generally, when the finger is bend, the interval is ~34
-        } else {
-            interval = FingertipLenght-distance < 1.5 ? 0 : FingertipLenght-distance;
-            percentage = (interval)*100/25; //Generally, when the thumb is bend, the interval is ~25
+        switch (finger.type()) {
+            case TYPE_THUMB -> {
+                interval = interval < 1.5 ? 0 : FingertipLenght-distance;
+                percentage = (interval)*100/25; //Generally, when the thumb is bend, the interval is ~25
+                break;
+            }
+            case TYPE_INDEX -> {
+                System.out.println("Index");
+                System.out.println("vDistalNext : " + vDistalNext);
+                System.out.println("vProxPrev : " + vProxPrev);
+                System.out.println("FingertipLenght : " + FingertipLenght);
+                System.out.println("distance : " + distance);
+                System.out.println("interval : " + interval);
+                percentage = (interval)*100/33; //Generally, when the finger is bend, the interval is ~34
+                System.out.println("percentage : " + percentage);
+                break;
+            }
+            case TYPE_MIDDLE -> {
+                percentage = (interval)*100/34; //Generally, when the finger is bend, the interval is ~34
+                break;
+            }
+            case TYPE_RING -> {
+                percentage = (interval)*100/34; //Generally, when the finger is bend, the interval is ~34
+                break;
+            }
+            case TYPE_PINKY -> {
+                percentage = (interval)*100/34; //Generally, when the finger is bend, the interval is ~34
+                break;
+            }
         }
 
         //Correction of the percentage
