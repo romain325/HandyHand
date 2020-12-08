@@ -19,10 +19,11 @@ public class Interaction implements Runnable{
      * Add a new script with attached listeners
      * @param listeners Array of listener
      * @param script Script to execute
+     * @throws IllegalArgumentException If argument are null
      */
-    public void addListener(MainListener[] listeners, Script script) {
-        if(listeners.length <= 0){
-            return;
+    public void addListener(MainListener[] listeners, Script script) throws IllegalArgumentException {
+        if(listeners.length <= 0 || script == null){
+            throw new IllegalArgumentException("The parameters given aren't valid");
         }
         this.listeners.put(script, new HashSet<>(Arrays.asList(listeners)));
         for (MainListener lis : listeners) {

@@ -30,6 +30,9 @@ public class CallLoop implements Runnable{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+
+             // or with lastFrameId ?
             */
 
         }
