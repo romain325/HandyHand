@@ -165,14 +165,16 @@ public class FingerCurveCalculator {
                 break;
 
             case TYPE_INDEX:
+/*
                 System.out.println("Index");
                 System.out.println("vDistalNext : " + vDistalNext);
                 System.out.println("vProxPrev : " + vProxPrev);
                 System.out.println("FingertipLenght : " + FingertipLenght);
                 System.out.println("distance : " + distance);
                 System.out.println("interval : " + interval);
+*/
                 percentage = (interval)*100/33; //Generally, when the finger is bend, the interval is ~34
-                System.out.println("percentage : " + percentage);
+                //System.out.println("percentage : " + percentage);
                 break;
 
             case TYPE_MIDDLE:

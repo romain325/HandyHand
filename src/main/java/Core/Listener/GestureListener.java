@@ -1,33 +1,37 @@
 
 package Core.Listener;
 
-import Core.Gesture.HandRecognizer;
+import Core.Gesture.GestureMatcher;
+import Core.Gesture.HandPoses.HandType;
 import com.leapmotion.leap.*;
-
-import java.lang.reflect.Method;
-import java.util.Map;
 
 public class GestureListener extends MainListener {
     String key;
+    HandType handType;
 
     private static boolean scriptExist(String key){
-
+        return GestureMatcher.gestureExist(key);
     }
 
-    private GestureListener(String form){
-        this.key = form;
+    private GestureListener(String key, HandType handType) {
+        this.key = key;
+        this.handType = handType;
     }
 
     public static GestureListener GestureListenerFactory(String form) {
-        if()
-        return new GestureListener(form);
+        return GestureListener.GestureListenerFactory(form, HandType.BOTH);
+    }
+    public static GestureListener GestureListenerFactory(String form, HandType handType) {
+        return new GestureListener(form, handType);
     }
 
     @Override
     public void action(Frame frame) {
-        //frameInfo(frame);
+        isActive = GestureMatcher.getResult(this.key,frame, this.handType);
     }
 
+
+/*
     public void frameInfo(Frame frame) {
         if(!frame.isValid()) {
             System.out.println("Frame not valid");
@@ -136,6 +140,10 @@ public class GestureListener extends MainListener {
 
         System.out.println("\n");
     }
+*/
+
+
+
 
     /*
     public void handsInfo(HandList hands) {

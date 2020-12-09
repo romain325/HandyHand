@@ -1,6 +1,7 @@
-package Core.Gesture;
+package Core.Gesture.HandPoses;
 
 import Core.Gesture.Finger.FingerState;
+import Core.Gesture.Finger.FingerStateRecognizer;
 import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Hand;
 
@@ -13,7 +14,7 @@ public class HandRecognizer {
         if(hand == null || !hand.isValid()) return false;
 
         for (Map.Entry<Finger.Type, FingerState> entry : fingerStateRecognizer.getFingersState(hand).entrySet()) {
-            if(entry.getValue() != FingerState.BENDING) return false;
+            if(entry.getValue() != FingerState.BENDING && entry.getKey() != Finger.Type.TYPE_THUMB) return false;
         }
 
         return true;
@@ -43,6 +44,19 @@ public class HandRecognizer {
         return true;
     }
 
+    public boolean isHandFuck(Hand hand){
+        if(hand == null || !hand.isValid()) return false;
+
+        Map<Finger.Type,FingerState> states =  fingerStateRecognizer.getFingersState(hand);
+
+        if(states.get(Finger.Type.TYPE_INDEX) != FingerState.BENDING) return false;
+        if(states.get(Finger.Type.TYPE_MIDDLE) != FingerState.OUT) return false;
+        if(states.get(Finger.Type.TYPE_RING) != FingerState.BENDING) return false;
+        if(states.get(Finger.Type.TYPE_PINKY) != FingerState.BENDING) return false;
+
+        return true;
+    }
+
     //Count the number showed by the hand (with the fingers)
     public int countHandFingersOut(Hand hand) {
         if(hand == null || !hand.isValid()) return -1;
@@ -54,6 +68,8 @@ public class HandRecognizer {
 
         return i;
     }
+
+
 
 }
 

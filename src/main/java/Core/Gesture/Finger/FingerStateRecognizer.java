@@ -1,4 +1,4 @@
-package Core.Gesture;
+package Core.Gesture.Finger;
 
 import Core.Gesture.Finger.FingerCurveCalculator;
 import Core.Gesture.Finger.FingerState;
@@ -43,7 +43,7 @@ public class FingerStateRecognizer {
         if(f < 15){
             return FingerState.OUT;
         }
-        if (f > 85) {
+        if (f > 75) {
             return FingerState.BENDING;
         }
         return FingerState.NORMAL;
