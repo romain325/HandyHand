@@ -5,6 +5,7 @@ import processing.data.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.prefs.Preferences;
 
 public class Script implements Runnable {
@@ -36,7 +37,7 @@ public class Script implements Runnable {
     public void run() {
         try {
             // if you want to have access to a python script on Windows you have to specify the Path to your python .exe
-            Process process = new ProcessBuilder(this.execPath,this.file).start();
+            Process process = new ProcessBuilder(this.execPath, this.file, String.join(" ", this.args)).start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuilder builder = new StringBuilder();
             String line = null;

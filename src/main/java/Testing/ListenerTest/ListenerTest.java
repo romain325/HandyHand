@@ -25,7 +25,7 @@ public class ListenerTest implements Tester {
         PositionListener listener = PositionListener.PositionListenerFactory("left", new Position[]{Position.LEFT, Position.FRONT});
         PositionListener listener2 = PositionListener.PositionListenerFactory("right", new Position[]{Position.RIGHT, Position.FRONT});
         interaction.addListener(new MainListener[]{listener}, new Script("/bin/python3", new String[]{} ,"/home/romain/test.py"));
-        interaction.addListener(new MainListener[]{listener2}, new Script("/usr/bin/bash", new String[]{} ,"/home/romain/test.sh"));
+        interaction.addListener(new MainListener[]{listener2}, new Script("/usr/bin/bash", new String[]{"-v"} ,"/home/romain/test.sh"));
         Daemon daemon = new Daemon("Positionlistener", new CallLoop(interaction));
         daemon.start();
     }
