@@ -15,9 +15,11 @@ public class LmListener extends Listener {
 
     public void onFrame(Controller controller) {
         Frame frame = controller.frame();
-        if(frame.id() % 2 != 0 || !frame.isValid()) return;
-        lastFrame = frame.id();
         getPos(frame);
+    }
+
+    public boolean isActive() {
+        return false;
     }
 
     public void getImage(Frame frame){

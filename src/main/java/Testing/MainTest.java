@@ -1,14 +1,15 @@
 package Testing;
 
-import Testing.CameraTest.CameraViewTest;
-import Testing.DaemonTest.DaemonTest;
-import Testing.GestureTest.GestureTest;
+import Testing.ListenerTest.ListenerTest;
+import Testing.VisualTest.CameraTest.CameraViewTest;
+import Testing.VisualTest.SkeletonTest.SkeletonTest;
 
 public class MainTest {
     public static void main(String[] args) {
+        // new SkeletonTest().start();
         // new CameraViewTest().start();
         // new DaemonTest().start();
-        new GestureTest().start();
+        new ListenerTest().start();
     }
 }
 
