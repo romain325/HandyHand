@@ -24,7 +24,7 @@ public class HandPosition {
     }
 
     private String getHand(Hand hand){
-        return hand.isLeft() ? "Left" : "Right";
+        return hand.isLeft() ? "left" : "right";
     }
 
     private Set<Position> getSpacePos(Hand hand){
