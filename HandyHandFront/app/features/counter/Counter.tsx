@@ -2,45 +2,55 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Counter.css';
 import routes from '../../constants/routes.json';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import { Col, Container } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+
 
 export default function Counter() {
   return (
     <div>
+
       <div className={styles.backButton} data-tid="backButton">
         <Link to={routes.HOME}>
           <i className="fa fa-arrow-left fa-3x" />
         </Link>
       </div>
-      <div className={styles.form}>
-        <Form>
-          <h2>Connexion</h2>
-          <h6>Connecté vous avec votre compte</h6>
-          <Form.Group controlId="formBasicEmail" >
-            <Form.Control type="email" placeholder="Pseudo" />
-            <Form.Text className="text-muted">
-              Entrez votre pseudo de connexion
-            </Form.Text>
-          </Form.Group>
 
-          <Form.Group controlId="formBasicPassword" >
-            <Form.Control type="password" placeholder="Mot de passe" />
-          </Form.Group>
+      <Container>
+        <Row>
+          <Col>
+            <ButtonGroup vertical>
 
-          <Form.Group controlId="formBasicCheckbox" className="checkbox">
-            <Form.Check type="checkbox" label="Se souvenir de moi" />
-          </Form.Group>
+            </ButtonGroup>
+          </Col>
+          <Col xs={6}>2 of 3 (wider)</Col>
+          <Col>3 of 3</Col>
+        </Row>
+      </Container>
 
-          <Button type="submit" variant="primary"  block>
-            Connexion
-          </Button>
-
-          <Button type="submit" variant="outline-primary"  block>
-            Crée un compte
-          </Button>
-        </Form>
-      </div>
+      <Container className={styles.Contain}>
+        <Row className="border border-dark ">
+          <Col className="border border-dark ">Nom</Col>
+          <Col className="border border-dark ">Description</Col>
+          <Col className="border border-dark ">Date de denrière édition</Col>
+        </Row>
+        <Row className="border border-dark ">
+          <Col>Nom</Col>
+          <Col>Description</Col>
+          <Col>Date de denrière édition</Col>
+        </Row>
+        <Row className="border border-dark ">
+          <Col>Nom</Col>
+          <Col>Description</Col>
+          <Col>Date de denrière édition</Col>
+        </Row>
+        <Row className="border border-dark ">
+          <Col>Nom</Col>
+          <Col>Description</Col>
+          <Col>Date de denrière édition</Col>
+        </Row>
+      </Container>
     </div>
   );
 }

@@ -1,20 +1,8 @@
 
-Form{
-  margin: auto;
-  margin-top: 15%;
-  padding: 10px;
-  width: 30%;
-  text-align: center;
-  background-color: #FFFFFF ;
-  color: #4C566A;
-}
 
-.buttonConnect{
-  background-color: #4C566A ;
-}
+.Contain{
+  background-color : #C4C4C4;
+  border-color : #000000;
 
-h2{
-  color: #4C566A;
 }
-
 

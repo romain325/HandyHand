@@ -17,14 +17,7 @@ const CounterPage = (props: Record<string, any>) => (
   </React.Suspense>
 );
 
-const LazyConnexionPage = React.lazy(() =>
-  import(/* webpackChunkName: "Connexion" */ './containers/Connexion')
-);
-const ConnexionPage = (props: Record<string, any>) => (
-  <React.Suspense fallback={<h1>Loading...</h1>}>
-    <LazyConnexionPage {...props} />
-  </React.Suspense>
-);
+
 
 export default function Routes() {
   return (
@@ -32,7 +25,6 @@ export default function Routes() {
       <Switch>
         <Route path={routes.COUNTER} component={CounterPage} />
         <Route path={routes.HOME} component={HomePage} />
-        <Route path={routes.CONNEXION} component={ConnexionPage} />
         <Route path={routes.ENREGISTREMENT} component={Enregistrement} />
       </Switch>
     </App>
