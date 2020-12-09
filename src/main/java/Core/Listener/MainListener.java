@@ -42,6 +42,8 @@ public abstract class MainListener extends Listener {
      * is the current listener seeing the right thing
      * @return true if the config is active, false if not
      */
-    public abstract boolean isActive();
+    public boolean isActive(){
+        return isActive;
+    }
 
 }
