@@ -15,23 +15,18 @@ public class GestureTest implements Tester {
     @Override
     public void start() {
         GestureMatcher.init();
-        Controller controller = new Controller();
-        GestureListener listener = GestureListener.GestureListenerFactory("rock", HandType.LEFT);
-        controller.addListener(listener);
 
 
-        gestureTesting(controller);
+        gestureTesting();
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        controller.removeListener(listener);
-
     }
 
-    public void gestureTesting(Controller controller){
+    public void gestureTesting(){
         Interaction interaction = new Interaction();
         MainListener listener = GestureListener.GestureListenerFactory("rock");
         interaction.addListener(new MainListener[]{listener}, new Script("/usr/bin/bash", new String[]{} ,"/home/romain/test.sh"));
