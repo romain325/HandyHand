@@ -1,16 +1,15 @@
 
-package Core.Gesture;
+package Core.Listener;
 
+import Core.Gesture.FingerRecognizer;
+import Core.Gesture.HandRecognizer;
 import com.leapmotion.leap.*;
 
 import java.util.Map;
 
-public class GestureListener extends Listener {
+public class GestureListener extends MainListener {
 
-    public void onConnect(Controller controller) {
-        //controller.setPolicy(Controller.PolicyFlag.POLICY_IMAGES);
-    }
-
+    @Override
     public void onFrame(Controller controller) {
         Frame frame = controller.frame();
         if(frame.id() % 120 != 0 || !frame.isValid()) return;
@@ -25,24 +24,19 @@ public class GestureListener extends Listener {
         };
         //Appelle les différentes méthodes d'analyse des frames..
         //handsInfo(frame.hands());
-        System.out.println();
         //FingerReconizerTest(frame.hands().get(0));
         //HandReconizerTest(frame.hands().get(0));
         fingertipTest(frame.hands().get(0));
     }
 
     public void fingertipTest(Hand hand) {
-        if(hand == null) {
-            System.out.println("Hand null");
-            return;
-        }
-        if(!hand.isValid()) {
+        if(hand == null || !hand.isValid()) {
             System.out.println("Hand not valid");
             return;
         }
 
         System.out.println("fingertipsCurve : ");
-        for (Map.Entry<Finger.Type, Float> e: FingerReconizer.fingertipsCurve(hand).entrySet()) {
+        for (Map.Entry<Finger.Type, Float> e: FingerRecognizer.fingertipsCurve(hand).entrySet()) {
             //System.out.println(e.getKey() + " : " + e.getValue());
         }
     }
@@ -59,10 +53,10 @@ public class GestureListener extends Listener {
 
         System.out.println("\n");
 
-        System.out.println("isHandClosed : " + HandReconizer.isHandClosed(hand));
-        System.out.println("isHandOpen : " + HandReconizer.isHandOpen(hand));
-        System.out.println("isHandScissors : " + HandReconizer.isHandScissors(hand));
-        System.out.println("countHandFingers : " + HandReconizer.countHandFingersOut(hand));
+        System.out.println("isHandClosed : " + HandRecognizer.isHandClosed(hand));
+        System.out.println("isHandOpen : " + HandRecognizer.isHandOpen(hand));
+        System.out.println("isHandScissors : " + HandRecognizer.isHandScissors(hand));
+        System.out.println("countHandFingers : " + HandRecognizer.countHandFingersOut(hand));
 
         System.out.println("\n");
     }
@@ -80,52 +74,52 @@ public class GestureListener extends Listener {
         System.out.println("\n");
 
         System.out.println("fingersCurve : ");
-        for (Map.Entry<Finger.Type, Float> e: FingerReconizer.fingersCurve(hand).entrySet()) {
+        for (Map.Entry<Finger.Type, Float> e: FingerRecognizer.fingersCurve(hand).entrySet()) {
             System.out.println(e.getKey() + " : " + e.getValue());
         }
 
         System.out.println("fingersOut : ");
-        for (Map.Entry<Finger.Type, Boolean> e: FingerReconizer.fingersOut(hand).entrySet()) {
+        for (Map.Entry<Finger.Type, Boolean> e: FingerRecognizer.fingersOut(hand).entrySet()) {
             System.out.println(e.getKey() + " : " + e.getValue());
         }
 
         System.out.println("fingersBend : ");
-        for (Map.Entry<Finger.Type, Boolean> e: FingerReconizer.fingersBend(hand).entrySet()) {
+        for (Map.Entry<Finger.Type, Boolean> e: FingerRecognizer.fingersBend(hand).entrySet()) {
             System.out.println(e.getKey() + " : " + e.getValue());
         }
 
         System.out.println("\n");
 
         System.out.println("fingersStartCurve : ");
-        for (Map.Entry<Finger.Type, Float> e: FingerReconizer.fingersStartCurve(hand).entrySet()) {
+        for (Map.Entry<Finger.Type, Float> e: FingerRecognizer.fingersStartCurve(hand).entrySet()) {
             System.out.println(e.getKey() + " : " + e.getValue());
         }
 
         System.out.println("fingersStartOut : ");
-        for (Map.Entry<Finger.Type, Boolean> e: FingerReconizer.fingersStartOut(hand).entrySet()) {
+        for (Map.Entry<Finger.Type, Boolean> e: FingerRecognizer.fingersStartOut(hand).entrySet()) {
             System.out.println(e.getKey() + " : " + e.getValue());
         }
 
         System.out.println("fingersStartBend : ");
-        for (Map.Entry<Finger.Type, Boolean> e: FingerReconizer.fingersStartBend(hand).entrySet()) {
+        for (Map.Entry<Finger.Type, Boolean> e: FingerRecognizer.fingersStartBend(hand).entrySet()) {
             System.out.println(e.getKey() + " : " + e.getValue());
         }
 
         System.out.println("\n");
 
         System.out.println("fingertipsCurve : ");
-        for (Map.Entry<Finger.Type, Float> e: FingerReconizer.fingertipsCurve(hand).entrySet()) {
+        for (Map.Entry<Finger.Type, Float> e: FingerRecognizer.fingertipsCurve(hand).entrySet()) {
             System.out.println(e.getKey() + " : " + e.getValue());
         }
 
         System.out.println("fingertipsOut : ");
-        for (Map.Entry<Finger.Type, Boolean> e: FingerReconizer.fingertipsOut(hand).entrySet()) {
+        for (Map.Entry<Finger.Type, Boolean> e: FingerRecognizer.fingertipsOut(hand).entrySet()) {
             System.out.println(e.getKey() + " : " + e.getValue());
         }
 
 
         System.out.println("fingertipsBend : ");
-        for (Map.Entry<Finger.Type, Boolean> e: FingerReconizer.fingertipsBend(hand).entrySet()) {
+        for (Map.Entry<Finger.Type, Boolean> e: FingerRecognizer.fingertipsBend(hand).entrySet()) {
             System.out.println(e.getKey() + " : " + e.getValue());
         }
 
