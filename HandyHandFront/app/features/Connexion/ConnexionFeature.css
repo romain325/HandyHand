@@ -1,0 +1,18 @@
+Form {
+  margin: auto;
+  margin-top: 15%;
+  padding: 10px;
+  width: 30%;
+  text-align: center;
+  background-color: #ffffff;
+  color: #4c566a;
+  border-radius: 10px;
+}
+
+.buttonConnect {
+  background-color: #4c566a;
+}
+
+h2 {
+  color: #4c566a;
+}
