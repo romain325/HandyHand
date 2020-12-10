@@ -27,7 +27,7 @@ public class GestureTest implements Tester {
 
     public void gestureTesting(){
         Interaction interaction = new Interaction();
-        MainListener listener = GestureListener.GestureListenerFactory("rock");
+        MainListener listener = GestureListener.GestureListenerFactory("scissors");
         interaction.addListener(new MainListener[]{listener}, new Script("/usr/bin/bash", new String[]{} ,"/home/romain/test.sh"));
         Daemon daemon = new Daemon("GestureListener", new CallLoop(interaction));
         daemon.start();
