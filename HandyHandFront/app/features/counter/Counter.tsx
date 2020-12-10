@@ -5,11 +5,7 @@ import routes from '../../constants/routes.json';
 import { Card, Col, Container } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import SideBar from '../SideBar/SideBar';
-import { Button } from 'react-bootstrap';
-import NavBar from '../../components/NavBar';
-import CardScript from '../../components/CardScript';
-
-
+import { Button, Form } from 'react-bootstrap';
 
 export default function Counter() {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -21,14 +17,6 @@ export default function Counter() {
 
   return (
     <Container>
-      <div>
-        <NavBar />
-      </div>
-      <Row>
-        <Col>
-          <SideBar isOpen={isOpen} toggleBar={toggleNavBar} />
-        </Col>
-      </Row>
       <Row>
         <Col>
           <div className={styles.backButton} data-tid="backButton">
@@ -36,34 +24,37 @@ export default function Counter() {
               <i className="fa fa-arrow-left fa-3x" />
             </Link>
           </div>
-          <Button onClick={toggleNavBar}>Menu</Button>
         </Col>
       </Row>
       <Row>
-        <Container>
-          <Row>
+        <Form>
+
+          <Form.Row>
             <Col>
-            <CardScript></CardScript>
+            <Form.Group controlId="formGridAddress1">
+              <Form.Label>Nom du script</Form.Label>
+              <Form.Control placeholder="..." />
+            </Form.Group>
             </Col>
             <Col>
-            <CardScript></CardScript>
+            <Form.Group controlId="formGridAddress1">
+              <Form.Label>Description</Form.Label>
+              <Form.Control placeholder="..." />
+            </Form.Group>
             </Col>
-            <Col>
-            <CardScript></CardScript>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-            <CardScript></CardScript>
-            </Col>
-            <Col>
-            <CardScript></CardScript>
-            </Col>
-            <Col>
-            <CardScript></CardScript>
-            </Col>
-          </Row>
-        </Container>
+          </Form.Row>
+          <Form.Group>
+            <Form.File
+              className="position-relative"
+              required
+              name="file"
+              label="Choisissez un script"
+              id="validationFormik107"
+              feedbackTooltip
+            />
+          </Form.Group>
+          <Button variant="primary">Valider</Button>
+        </Form>
       </Row>
     </Container>
   );
