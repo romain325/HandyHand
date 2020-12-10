@@ -1,20 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Counter.css';
 import routes from '../../constants/routes.json';
 import { Card, Col, Container } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
-import SideBar from '../SideBar/SideBar';
 import { Button, Form } from 'react-bootstrap';
 
 export default function Counter() {
-  const [isOpen, setOpen] = useState<boolean>(false);
-
-  function toggleNavBar() {
-    setOpen(!isOpen);
-    console.log(isOpen);
-  }
-
   return (
     <Container>
       <Row>
@@ -28,32 +20,19 @@ export default function Counter() {
       </Row>
       <Row>
         <Form>
-
           <Form.Row>
-            <Col>
-            <Form.Group controlId="formGridAddress1">
-              <Form.Label>Nom du script</Form.Label>
-              <Form.Control placeholder="..." />
-            </Form.Group>
-            </Col>
-            <Col>
-            <Form.Group controlId="formGridAddress1">
-              <Form.Label>Description</Form.Label>
-              <Form.Control placeholder="..." />
-            </Form.Group>
-            </Col>
+            <Form.Group as={Col} md="4" >
           </Form.Row>
           <Form.Group>
             <Form.File
               className="position-relative"
               required
               name="file"
-              label="Choisissez un script"
+              label="File"
               id="validationFormik107"
               feedbackTooltip
             />
           </Form.Group>
-          <Button variant="primary">Valider</Button>
         </Form>
       </Row>
     </Container>

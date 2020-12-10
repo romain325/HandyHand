@@ -1,5 +1,6 @@
 {
   "HOME": "/",
   "COUNTER": "/counter",
-  "CONNEXION": "/connexion"
+  "CONNEXION": "/connexion",
+  "ENREGISTREMENT": "/enregistrement"
 }

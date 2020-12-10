@@ -1,5 +1,5 @@
 import React from 'react';
-import ConnexionFeature from '../features/Connexion/ConnexionFeature';
+import ConnexionFeature from '../features/connexion/ConnexionFeature';
 
 
 export default function HomePage() {
