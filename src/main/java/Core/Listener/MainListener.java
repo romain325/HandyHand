@@ -35,13 +35,15 @@ public abstract class MainListener extends Listener {
      * @return false if you jump the frame, true if you don't
      */
     protected final boolean limitFrameRate(Frame frame){
-        return frame.id() % 2 != 0 && frame.isValid();
+        return frame.id() % 120 == 0 && frame.isValid();
     }
 
     /**
      * is the current listener seeing the right thing
      * @return true if the config is active, false if not
      */
-    public abstract boolean isActive();
+    public boolean isActive(){
+        return isActive;
+    }
 
 }

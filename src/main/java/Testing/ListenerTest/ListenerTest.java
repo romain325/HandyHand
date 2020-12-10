@@ -9,9 +9,6 @@ import Core.Position.Position;
 import Core.Script.Script;
 import Testing.Tester;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 public class ListenerTest implements Tester {
     @Override
     public void start() {
@@ -26,7 +23,9 @@ public class ListenerTest implements Tester {
     private void listenerTesting() {
         Interaction interaction = new Interaction();
         PositionListener listener = PositionListener.PositionListenerFactory("left", new Position[]{Position.LEFT, Position.FRONT});
-        interaction.addListener(new MainListener[]{listener}, new Script("Shit", new String[]{} ,"Another Piece of shit"));
+        PositionListener listener2 = PositionListener.PositionListenerFactory("right", new Position[]{Position.RIGHT, Position.FRONT});
+        interaction.addListener(new MainListener[]{listener}, new Script("/bin/python3", new String[]{} ,"/home/romain/test.py"));
+        interaction.addListener(new MainListener[]{listener2}, new Script("/usr/bin/bash", new String[]{"-v"} ,"/home/romain/test.sh"));
         Daemon daemon = new Daemon("Positionlistener", new CallLoop(interaction));
         daemon.start();
     }

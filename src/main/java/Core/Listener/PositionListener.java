@@ -45,8 +45,4 @@ public class PositionListener extends MainListener{
         isActive = false;
     }
 
-    @Override
-    public boolean isActive() {
-        return isActive;
-    }
 }
