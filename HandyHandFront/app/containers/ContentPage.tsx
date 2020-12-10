@@ -16,9 +16,9 @@ const ContentPage = (props: Props) => {
   }
 
   return (
-    <div className="mh-100">
+    <div className="fullHeight">
       <HeaderBar toggleSidebar={toggleNavBar} />
-      <Row className="mh-100">
+      <Row className="fullHeight">
         <Col md={4}
           style={{
             display:`${isOpen ? 'inherit' : 'none'}`
