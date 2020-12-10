@@ -1,20 +1,18 @@
-Form{
+Form {
   margin: auto;
   margin-top: 15%;
   padding: 10px;
   width: 30%;
   text-align: center;
-  background-color: #FFFFFF ;
-  color: #4C566A;
+  background-color: #ffffff;
+  color: #4c566a;
   border-radius: 10px;
 }
 
-.buttonConnect{
-  background-color: #4C566A ;
+.buttonConnect {
+  background-color: #4c566a;
 }
 
-h2{
-  color: #4C566A;
+h2 {
+  color: #4c566a;
 }
-
-
