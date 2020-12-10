@@ -45,7 +45,6 @@ public class FingerCurveCalculator {
 
     /**
      * A function that calculates the percentage of the curve of each fingers of the hand
-     *
      * @param hand A hand that we want the information of the fingers
      * @return
      */
@@ -84,146 +83,11 @@ public class FingerCurveCalculator {
      * This is due to a probability for a great value that is low
      */
     public float fingerStart(Finger finger) {
-        float percentage = -1;
-        if (finger == null) return -1;
-        if (!finger.isValid() || !finger.isFinger()) return -1;
-
-        //If the finger is not the thumb
-        if (finger.type() != Finger.Type.TYPE_THUMB) {
-            Bone meta = finger.bone(Bone.Type.TYPE_METACARPAL); //The metacarpal bone of the finger
-            Bone prox = finger.bone(Bone.Type.TYPE_PROXIMAL); //The proximal bone of the finger
-
-            Vector vMetaPrev = meta.prevJoint(); //The position of the beginning of metacarpal bone
-            Vector vProxNext = prox.nextJoint(); //The position of the end of proximal bone
-
-            float distance = vMetaPrev.distanceTo(vProxNext); //The distance between the two vector
-
-            float lengthMeta = meta.length();
-            float lengthProx = prox.length();
-            float size = lengthMeta + lengthProx; //The size when bones aren't curve
-
-            //Difference between the distance of the vector and the one when the finger isn't curve
-            float interval = size - distance - 1; //Since there are imbalance, we use -1
-
-            //Calculate the percentage
-            switch(finger.type()) {
-                case TYPE_INDEX:
-                    percentage = interval * 100 / 21; //Generally, when the index is bend, the interval is ~21
-                    break;
-                case TYPE_MIDDLE:
-                    percentage = interval * 100 / 23; //Generally, when the finger is bend, the interval is ~23
-                    break;
-                case TYPE_RING:
-                    percentage = interval * 100 / 23; //Generally, when the finger is bend, the interval is ~23
-                    break;
-                case TYPE_PINKY:
-                    break;
-            }
-
-            percentage = Math.round(percentage/10)*10;
-
-            //Correction of the percentage
-            percentage = percentage > 100 ? 100 : percentage;
-            percentage = percentage < 1 ? 0 : percentage;
-
-            if (finger.type() == Finger.Type.TYPE_INDEX) {
-                System.out.println("\nIndex");
-                System.out.println("vMetaPrev : " + vMetaPrev);
-                System.out.println("vProxNext : " + vProxNext);
-                System.out.println("size : " + size);
-                System.out.println("distance : " + distance);
-                //System.out.println("interval : " + interval);
-                System.out.println("percentage : " + percentage);
-            }
-        }
-        //If the finger is the thumb
-        else {
-            Hand hand = finger.hand(); //The hand of the thumb
-            Vector handCenter = hand.sphereCenter(); //The position of the center of the hand
-
-            Bone proxThumb = finger.bone(Bone.Type.TYPE_PROXIMAL); //The proximal bone of the thumb
-            Vector vProxThumb = proxThumb.nextJoint(); //The position of the end of proximal bone
-
-            float distance = vProxThumb.distanceTo(handCenter); //The distance between the bone and the center of the hand
-
-            //Calculate the percentage
-            percentage = 0;
-            if (distance < 180) percentage = 50; //Values have been found by test, but may not be correct
-            if (distance < 125) percentage = 100; //Values have been found by test, but may not be correct
-        }
-
-        return percentage;
-    }
-
-    /**
-     * A function that calculates the percentage of the curve of the fingertip
-     *
-     * @param finger The finger that we want the information
-     * @return The percentage of the curve of the fingertip
-     */
-    public float fingerTip(Finger finger) {
-        if(finger == null || !finger.isValid() || !finger.isFinger()) return -1;
-
-
-        Bone distal = finger.bone(Bone.Type.TYPE_DISTAL); //The distal bone of the finger
-        Bone prox = finger.bone(Bone.Type.TYPE_PROXIMAL); //The proximal bone of the finger
-
-        Vector vDistalNext = distal.nextJoint(); //The position of the end of distal bone
-        Vector vProxPrev = prox.prevJoint(); //The position of the beginning of proximal bone
-
-        //float distance = vDistalNext.distanceTo(vProxPrev); //The distance between the two vector
-        float distance = (float) Math.sqrt(Math.pow((double)(vDistalNext.getX() - vProxPrev.getX()), 2.0) +
-                Math.pow((double)(vDistalNext.getY() - vProxPrev.getY()), 2.0));
-
-        Bone inter = finger.bone(Bone.Type.TYPE_INTERMEDIATE); //The intermediate bone of the finger
-        //The length of the fingertip
-        float FingertipLenght = distal.length() + prox.length() + inter.length();
-
-        float percentage = 0; //The percentage of the curve of the fingertip
-        //Difference between the distance of the vector and the one when the finger isn't curve
-
-        float interval = FingertipLenght-distance;
-
-        //There are a difference between the thumb and others fingers
-        switch (finger.type()) {
-            case TYPE_THUMB:
-                interval = interval < 1.5 ? 0 : FingertipLenght-distance;
-                percentage = (interval)*100/25; //Generally, when the thumb is bend, the interval is ~25
-                break;
-
-            case TYPE_INDEX:
-                percentage = (interval)*100/33; //Generally, when the finger is bend, the interval is ~34
-
-
-                System.out.println("\nIndex");
-                System.out.println("vDistalNext : " + vDistalNext);
-                System.out.println("vProxPrev : " + vProxPrev);
-                System.out.println("FingertipLenght : " + FingertipLenght);
-                System.out.println("distance : " + distance);
-                //System.out.println("interval : " + interval);
-                //System.out.println("percentage : " + percentage);
-                break;
-
-            case TYPE_MIDDLE:
-            case TYPE_RING:
-            case TYPE_PINKY:
-                percentage = (interval)*100/34; //Generally, when the finger is bend, the interval is ~34
-                break;
-        }
-
-        //Correction of the percentage
-        percentage = percentage > 100 ? 100 : percentage;
-        percentage = percentage < 1 ? 0 : percentage;
-
-        return percentage;
-    }
-
-    public float fingerStartCurve(Finger finger) {
         if(finger == null || !finger.isValid() || !finger.isFinger()) return -1;
 
         float angleProxMeta = angleProximalMetacarpal(finger);
 
-        float percentProxMeta;
+        float percentProxMeta = 0;
         float percentage = 0;
 
         switch (finger.type()) {
@@ -238,13 +102,12 @@ public class FingerCurveCalculator {
 
                 //Calculate the percentage
                 percentage = 0;
-                if (distance < 180) percentage = 50; //Values have been found by test, but may not be correct
-                if (distance < 125) percentage = 100; //Values have been found by test, but may not be correct
+                if (distance < 172) percentage = 50; //Values have been found by test, but may not be correct
+                if (distance < 135) percentage = 100; //Values have been found by test, but may not be correct
                 break;
             case TYPE_INDEX:
                 //For index
                 //angleProxMeta : between 97 and 177
-                System.out.println("Index : " + angleProxMeta);
                 angleProxMeta = angleProxMeta - 97; //So between 0 and 80
 
                 percentProxMeta = angleProxMeta*100/80;
@@ -252,36 +115,33 @@ public class FingerCurveCalculator {
                 break;
             case TYPE_MIDDLE:
                 //For middle
-                //angleProxMeta : between 142 and 176
-                System.out.println("Middle : " + angleProxMeta);
-                angleProxMeta = angleProxMeta - 142; //So between 0 and 34
+                //angleProxMeta : between 110 and 177
+                angleProxMeta = angleProxMeta - 110; //So between 0 and 67
 
-                percentProxMeta = angleProxMeta*100/83;
+                percentProxMeta = angleProxMeta*100/67;
 
                 break;
             case TYPE_RING:
                 //For ring
-                //angleProxMeta : between 140 and 177
-                System.out.println("Ring : " + angleProxMeta);
-                angleProxMeta = angleProxMeta - 140; //So between 0 and 37
+                //angleProxMeta : between 110 and 177
+                angleProxMeta = angleProxMeta - 110; //So between 0 and 67
 
-                percentProxMeta = angleProxMeta*100/83;
+                percentProxMeta = angleProxMeta*100/67;
 
                 break;
             case TYPE_PINKY:
                 //For pinky
-                //angleProxMeta : between 131 and 177
-                System.out.println("Pinky : " + angleProxMeta);
-                angleProxMeta = angleProxMeta - 131; //So between 0 and 46
+                //angleProxMeta : between 115 and 177
+                angleProxMeta = angleProxMeta - 115; //So between 0 and 62
 
-                percentProxMeta = angleProxMeta*100/70;
+                percentProxMeta = angleProxMeta*100/62;
 
                 break;
             default:
                 return -1;
         }
 
-        percentage = Math.abs(100 - percentage);
+        if(finger.type() != Finger.Type.TYPE_THUMB) percentage = Math.abs(100 - percentProxMeta);
 
         //Correction of the percentage
         percentage = percentage > 100 ? 100 : percentage;
@@ -290,7 +150,13 @@ public class FingerCurveCalculator {
         return percentage;
     }
 
-    public float fingertipCurve(Finger finger) {
+    /**
+     * A function that calculates the percentage of the curve of the fingertip
+     *
+     * @param finger The finger that we want the information
+     * @return The percentage of the curve of the fingertip
+     */
+    public float fingerTip(Finger finger) {
         if(finger == null || !finger.isValid() || !finger.isFinger()) return -1;
 
         float angleDistalInter = angleDistalIntermediate(finger);

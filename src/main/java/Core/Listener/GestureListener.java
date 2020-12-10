@@ -6,6 +6,8 @@ import Core.Gesture.GestureMatcher;
 import Core.Gesture.HandPoses.HandType;
 import com.leapmotion.leap.*;
 
+import java.util.Map;
+
 public class GestureListener extends MainListener {
     String key;
     HandType handType;
@@ -28,24 +30,12 @@ public class GestureListener extends MainListener {
 
     @Override
     public void action(Frame frame) {
-        FingerList fl = frame.hands().get(0).fingers();
-        Finger finger = fl.get(0);
-        FingerCurveCalculator fcc = new FingerCurveCalculator();
-
-//        for (Finger f: fl) {
-//            System.out.println(f.type() + " : " + fcc.fingerStartCurve(f));
-//        }
-
-        for (Finger f: fl) {
-            if(f.type() == Finger.Type.TYPE_INDEX) fcc.fingerStartCurve(f);
+        for (Map.Entry<Finger.Type, Float> e: new FingerCurveCalculator().fingersCurve(frame.hands().get(0)).entrySet()) {
+            System.out.println(e.getKey() + " : " + e.getValue());
         }
 
 
-
-        //new FingerCurveCalculator().angleDistalIntermediate(finger);
-        //new FingerCurveCalculator().angleIntermediateProximal(finger);
-        //new FingerCurveCalculator().angleProximalMetacarpal(finger);
-        //isActive = GestureMatcher.getResult(this.key,frame, this.handType);
+//        isActive = GestureMatcher.getResult(this.key,frame, this.handType);
     }
 
 
