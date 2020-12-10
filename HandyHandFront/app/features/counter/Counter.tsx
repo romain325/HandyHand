@@ -1,71 +1,88 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import styles from './Counter.css';
+import { Col, Container, Row, Button, Form } from 'react-bootstrap';
+
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import SideBar from '../SideBar/SideBar';
+
 import routes from '../../constants/routes.json';
-import {
-  increment,
-  decrement,
-  incrementIfOdd,
-  incrementAsync,
-  selectCount,
-} from './counterSlice';
+import styles from './Counter.css';
+import Navperso from '../../components/Navbar/HeaderBar';
 
 export default function Counter() {
-  const dispatch = useDispatch();
-  const value = useSelector(selectCount);
+  const [isOpen, setOpen] = useState<boolean>(false);
+
+  function toggleNavBar() {
+    setOpen(!isOpen);
+    console.log(isOpen);
+  }
+
   return (
-    <div>
-      <div className={styles.backButton} data-tid="backButton">
-        <Link to={routes.HOME}>
-          <i className="fa fa-arrow-left fa-3x" />
-        </Link>
-      </div>
-      <div className={`counter ${styles.counter}`} data-tid="counter">
-        {value}
-      </div>
-      <div className={styles.btnGroup}>
-        <button
-          className={styles.btn}
-          onClick={() => {
-            dispatch(increment());
-          }}
-          data-tclass="btn"
-          type="button"
-        >
-          <i className="fa fa-plus" />
-        </button>
-        <button
-          className={styles.btn}
-          onClick={() => {
-            dispatch(decrement());
-          }}
-          data-tclass="btn"
-          type="button"
-        >
-          <i className="fa fa-minus" />
-        </button>
-        <button
-          className={styles.btn}
-          onClick={() => {
-            dispatch(incrementIfOdd());
-          }}
-          data-tclass="btn"
-          type="button"
-        >
-          odd
-        </button>
-        <button
-          className={styles.btn}
-          onClick={() => {
-            dispatch(incrementAsync());
-          }}
-          data-tclass="btn"
-          type="button"
-        >
-          async
-        </button>
-      </div>
-    </div>
+    <Container>
+      <Container>
+        <Row>
+          <Col>
+            <ButtonGroup vertical />
+          </Col>
+          <Col xs={6}>2 of 3 (wider)</Col>
+          <Col>3 of 3</Col>
+        </Row>
+      </Container>
+
+      <Container className={styles.Contain}>
+        <Row className="border border-dark ">
+          <Col className="border border-dark ">Nom</Col>
+          <Col className="border border-dark ">Description</Col>
+          <Col className="border border-dark ">
+            Date de denrière édition
+          </Col>
+        </Row>
+        <Row className="border border-dark ">
+          <Col>Nom</Col>
+          <Col>Description</Col>
+          <Col>Date de denrière édition</Col>
+        </Row>
+        <Row className="border border-dark ">
+          <Col>Nom</Col>
+          <Col>Description</Col>
+          <Col>Date de denrière édition</Col>
+        </Row>
+        <Row className="border border-dark ">
+          <Col>Nom</Col>
+          <Col>Description</Col>
+          <Col>Date de denrière édition</Col>
+        </Row>
+      </Container>
+
+      <Row>
+        <Form>
+          <Form.Row>
+            <Col>
+            <Form.Group controlId="formGridAddress1">
+              <Form.Label>Nom du script</Form.Label>
+              <Form.Control placeholder="..." />
+            </Form.Group>
+            </Col>
+            <Col>
+            <Form.Group controlId="formGridAddress1">
+              <Form.Label>Description</Form.Label>
+              <Form.Control placeholder="..." />
+            </Form.Group>
+            </Col>
+          </Form.Row>
+          <Form.Group>
+            <Form.File
+              className="position-relative"
+              required
+              name="file"
+              label="Choisissez un script"
+              id="validationFormik107"
+              feedbackTooltip
+            />
+          </Form.Group>
+          <Button variant="primary">Valider</Button>
+        </Form>
+      </Row>
+    </Container>
   );
 }
