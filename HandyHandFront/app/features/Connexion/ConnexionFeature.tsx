@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from './Counter.css';
+import styles from './ConnexionFeature.css';
 import routes from '../../constants/routes.json';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import ContentPage from '../../containers/ContentPage';
 
-export default function Counter() {
+export default function ConnexionFeature() {
   return (
+    <ContentPage>
     <div>
       <div className={styles.backButton} data-tid="backButton">
         <Link to={routes.HOME}>
@@ -38,5 +40,6 @@ export default function Counter() {
         </Form>
       </div>
     </div>
+    </ContentPage>
   );
 }

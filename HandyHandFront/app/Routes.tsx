@@ -4,7 +4,10 @@ import { Switch, Route } from 'react-router-dom';
 import * as routes from './constants/routes.json';
 import App from './containers/App';
 import HomePage from './containers/HomePage';
-
+import AjouterScriptFeature from './features/ajouterScript/AjouterScript';
+import ConnexionFeature from './features/Connexion/ConnexionFeature';
+import EnregistrementFeature from './features/enregistrement/EnregistrementFeature';
+import ScriptsFeatures from './features/script/ScriptsFeature';
 
 // Lazily load routes and code split with webpack
 const LazyCounterPage = React.lazy(() =>
@@ -24,11 +27,11 @@ export default function Routes() {
       <Switch>
         <Route exact path={routes.HOME} component={HomePage} />
         <Route path={routes.COUNTER} component={CounterPage} />
-        <Route path={routes.CONNEXION} component={CounterPage} />
-        <Route exact path={routes.SCRIPT} component={CounterPage} />
-        <Route path={routes.ADD_SCRIPT} component={CounterPage} />
-        <Route path={routes.MY_SCRIPT} component={CounterPage} />
-        <Route path={routes.ENREGISTREMENT} component={CounterPage} />
+        <Route path={routes.CONNEXION} component={ConnexionFeature} />
+        <Route exact path={routes.SCRIPT} component={ScriptsFeatures} />
+        <Route path={routes.ADD_SCRIPT} component={AjouterScriptFeature} />
+        <Route exact path={routes.MY_SCRIPT} component={EnregistrementFeature} />
+        <Route path={routes.ENREGISTREMENT} component={EnregistrementFeature} />
       </Switch>
     </App>
   );

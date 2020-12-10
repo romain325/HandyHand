@@ -1,40 +1,44 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import styles from './Counter.css';
-import routes from '../../constants/routes.json';
-import { Card, Col, Container } from 'react-bootstrap';
+import { Col, Container } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
-import { Button, Form } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import CardScript from '../../components/CardScript';
+import ContentPage from '../../containers/ContentPage';
+import routes from '../../constants/routes.json';
+import styles from './ScriptsFeature.css';
 
-export default function Counter() {
+export default function ScriptsFeatures() {
   return (
-    <Container>
-      <Row>
-        <Col>
-          <div className={styles.backButton} data-tid="backButton">
-            <Link to={routes.HOME}>
-              <i className="fa fa-arrow-left fa-3x" />
-            </Link>
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Form>
-          <Form.Row>
-            <Form.Group as={Col} md="4" >
-          </Form.Row>
-          <Form.Group>
-            <Form.File
-              className="position-relative"
-              required
-              name="file"
-              label="File"
-              id="validationFormik107"
-              feedbackTooltip
-            />
-          </Form.Group>
-        </Form>
-      </Row>
-    </Container>
+    <ContentPage>
+      <div className={styles.backButton} data-tid="backButton">
+        <Link to={routes.HOME}>
+          <i className="fa fa-arrow-left fa-3x" />
+        </Link>
+      </div>
+      <Container>
+        <Row>
+          <Col>
+            <CardScript />
+          </Col>
+          <Col>
+            <CardScript />
+          </Col>
+          <Col>
+            <CardScript />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <CardScript></CardScript>
+          </Col>
+          <Col>
+            <CardScript></CardScript>
+          </Col>
+          <Col>
+            <CardScript></CardScript>
+          </Col>
+        </Row>
+      </Container>
+    </ContentPage>
   );
 }
