@@ -16,10 +16,9 @@ public class GestureTest implements Tester {
     public void start() {
         GestureMatcher.init();
 
-
         gestureTesting();
         try {
-            Thread.sleep(10000);
+            Thread.sleep(100000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

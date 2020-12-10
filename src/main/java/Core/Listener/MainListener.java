@@ -35,7 +35,7 @@ public abstract class MainListener extends Listener {
      * @return false if you jump the frame, true if you don't
      */
     protected final boolean limitFrameRate(Frame frame){
-        return frame.id() % 2 != 0 && frame.isValid();
+        return frame.id() % 120 == 0 && frame.isValid();
     }
 
     /**
