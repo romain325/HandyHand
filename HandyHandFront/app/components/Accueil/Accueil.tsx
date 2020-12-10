@@ -1,12 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Image from 'react-bootstrap/Image';
-import Nav from '../Navbar/Navbar';
+import Nav from '../Navbar/HeaderBar';
 
 export default function Accueil(): JSX.Element {
   return (
-        <Nav />
-        <Image src="../resources/icon.png" fluid />
-
+    <p>pooua</p>
   );
 }
