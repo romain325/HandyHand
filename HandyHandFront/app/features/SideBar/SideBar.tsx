@@ -28,7 +28,7 @@ const SideBar = ({isOpen, toggleBar} : props) => {
         <Nav className="flex-column pt-2">
           <p className="ml-3">Head</p>
 
-          <Nav.Item className="active" >
+          <Nav.Item className={style.active} >
             <Nav.Link href={routes.HOME} >First Item</Nav.Link>
           </Nav.Item>
 

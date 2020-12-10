@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
 import classNames from 'classnames';
 import { Accordion } from 'react-bootstrap';
+import style from './SideBar.css'
 
 type SubItem = {
   link: string,
@@ -23,7 +24,7 @@ const SubMenu = ({title, items} : SubMenuElements) => {
   }
 
   return (
-    <Nav.Item className={classNames({open: !isCollapsed})}>
+    <Nav.Item className={`${!isCollapsed ? style.open : ""}`}>
       <Accordion>
         <Accordion.Toggle
           as={Nav.Link}
