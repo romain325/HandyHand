@@ -218,7 +218,79 @@ public class FingerCurveCalculator {
         return percentage;
     }
 
-    public float fingerTipCurve(Finger finger) {
+    public float fingerStartCurve(Finger finger) {
+        if(finger == null || !finger.isValid() || !finger.isFinger()) return -1;
+
+        float angleProxMeta = angleProximalMetacarpal(finger);
+
+        float percentProxMeta;
+        float percentage = 0;
+
+        switch (finger.type()) {
+            case TYPE_THUMB:
+                Hand hand = finger.hand(); //The hand of the thumb
+                Vector handCenter = hand.sphereCenter(); //The position of the center of the hand
+
+                Bone proxThumb = finger.bone(Bone.Type.TYPE_PROXIMAL); //The proximal bone of the thumb
+                Vector vProxThumb = proxThumb.nextJoint(); //The position of the end of proximal bone
+
+                float distance = vProxThumb.distanceTo(handCenter); //The distance between the bone and the center of the hand
+
+                //Calculate the percentage
+                percentage = 0;
+                if (distance < 180) percentage = 50; //Values have been found by test, but may not be correct
+                if (distance < 125) percentage = 100; //Values have been found by test, but may not be correct
+                break;
+            case TYPE_INDEX:
+                //For index
+                //angleProxMeta : between 97 and 177
+                System.out.println("Index : " + angleProxMeta);
+                angleProxMeta = angleProxMeta - 97; //So between 0 and 80
+
+                percentProxMeta = angleProxMeta*100/80;
+
+                break;
+            case TYPE_MIDDLE:
+                //For middle
+                //angleProxMeta : between 142 and 176
+                System.out.println("Middle : " + angleProxMeta);
+                angleProxMeta = angleProxMeta - 142; //So between 0 and 34
+
+                percentProxMeta = angleProxMeta*100/83;
+
+                break;
+            case TYPE_RING:
+                //For ring
+                //angleProxMeta : between 140 and 177
+                System.out.println("Ring : " + angleProxMeta);
+                angleProxMeta = angleProxMeta - 140; //So between 0 and 37
+
+                percentProxMeta = angleProxMeta*100/83;
+
+                break;
+            case TYPE_PINKY:
+                //For pinky
+                //angleProxMeta : between 131 and 177
+                System.out.println("Pinky : " + angleProxMeta);
+                angleProxMeta = angleProxMeta - 131; //So between 0 and 46
+
+                percentProxMeta = angleProxMeta*100/70;
+
+                break;
+            default:
+                return -1;
+        }
+
+        percentage = Math.abs(100 - percentage);
+
+        //Correction of the percentage
+        percentage = percentage > 100 ? 100 : percentage;
+        percentage = percentage < 1 ? 0 : percentage;
+
+        return percentage;
+    }
+
+    public float fingertipCurve(Finger finger) {
         if(finger == null || !finger.isValid() || !finger.isFinger()) return -1;
 
         float angleDistalInter = angleDistalIntermediate(finger);
@@ -335,6 +407,7 @@ public class FingerCurveCalculator {
 
         //TODO : Vérifier que les os soient collés et que le bone1 soit plus éloigné de la main que le bone2
         //(Genre bone1 : Distal et bone2 : Intermediate, mais pas l'inverse)
+        //Ou mettre en privé pour que seul nous avec les trois méthodes au-dessus puisse y utiliser
 
         Vector vB = bone1.nextJoint(); //B
         Vector vA = bone1.prevJoint(); //A

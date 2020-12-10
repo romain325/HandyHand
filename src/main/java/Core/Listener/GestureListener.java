@@ -32,9 +32,15 @@ public class GestureListener extends MainListener {
         Finger finger = fl.get(0);
         FingerCurveCalculator fcc = new FingerCurveCalculator();
 
+//        for (Finger f: fl) {
+//            System.out.println(f.type() + " : " + fcc.fingerStartCurve(f));
+//        }
+
         for (Finger f: fl) {
-            System.out.println(f.type() + " : " + fcc.fingerTipCurve(f));
+            if(f.type() == Finger.Type.TYPE_INDEX) fcc.fingerStartCurve(f);
         }
+
+
 
         //new FingerCurveCalculator().angleDistalIntermediate(finger);
         //new FingerCurveCalculator().angleIntermediateProximal(finger);
