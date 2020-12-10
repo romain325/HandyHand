@@ -1,0 +1,72 @@
+.sidebar {
+  min-width: 250px;
+  max-width: 250px;
+  background: #354052;
+  color: #adb5bd;
+  margin-left: -250px;
+  transition: all 0.5s;
+}
+
+.sidebar.isopen {
+  margin-left: 0;
+  transition: .5s;
+}
+
+
+.sidebarheader {
+  background: #313b4c;
+  color: #adb5bd;
+}
+
+.sidebarheader h3{
+  color: #fff;
+  padding: 1em;
+}
+
+.sidebar ul p {
+  color: #fff;
+  padding: 10px;
+}
+
+.collapse.show,
+.collapsing {
+  background: #313b4c;
+}
+
+.navitem {
+  /*color: #ced4da;*/
+  color: #adb5bd;
+  font-weight: 300;
+}
+
+.navitem.open {
+  color: #e9ecef;
+  background: #313b4c;
+}
+
+.navitem.active {
+  color: #e9ecef;
+  background: #2d3646 !important;
+}
+
+.navitem:hover {
+  background: #313b4c;
+  color: #fff;
+  transition: .2s;
+}
+
+li a.dropdowntoggle::after {
+  display: inline-flex;
+  position: relative;
+  left: 60%;
+  top: 10%
+}
+
+.sidebarheader > button {
+  position: relative;
+  float: right;
+  margin: .5em;
+  font-size: 2rem;
+  cursor: pointer;
+  display: none;
+}
