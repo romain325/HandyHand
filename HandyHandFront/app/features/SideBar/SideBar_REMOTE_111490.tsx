@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
-import { Nav } from 'react-bootstrap';
+import { Button, Nav } from 'react-bootstrap';
+
 import classNames from 'classnames';
 import routes from '../../constants/routes.json';
 import SubMenu from './SubMenu';

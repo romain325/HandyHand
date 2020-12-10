@@ -5,7 +5,7 @@ import routes from '../../constants/routes.json';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-export default function Counter() {
+export default function EnregistrementFeature() {
   return (
     <div>
       <div className={styles.backButton} data-tid="backButton">

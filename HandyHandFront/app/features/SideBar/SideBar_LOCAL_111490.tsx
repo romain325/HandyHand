@@ -6,12 +6,12 @@ import routes from '../../constants/routes.json';
 import SubMenu from './SubMenu';
 import style from './SideBar.css';
 
-type Props = {
+type props = {
   isOpen: boolean;
   toggleBar: Function;
 };
 
-const SideBar = ({ isOpen, toggleBar }: Props) => {
+const SideBar = ({ isOpen, toggleBar }: props) => {
   return (
     <div className={`${style.sidebar} ${isOpen ? style.isopen : ''}`}>
       <div className={style.sidebarheader}>

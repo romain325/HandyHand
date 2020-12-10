@@ -2,5 +2,8 @@
   "HOME": "/",
   "COUNTER": "/counter",
   "CONNEXION": "/connexion",
-  "ENREGISTREMENT": "/enregistrement"
+  "ENREGISTREMENT": "/enregistrement",
+  "SCRIPT": "/script",
+  "ADD_SCRIPT": "/script/add",
+  "MY_SCRIPT": "/script/perso"
 }
