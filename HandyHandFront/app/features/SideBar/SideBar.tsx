@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Nav } from 'react-bootstrap';
-import classNames from 'classnames';
 import routes from '../../constants/routes.json';
 import SubMenu from './SubMenu';
 import style from './SideBar.css';
@@ -25,7 +24,7 @@ const SideBar = ({ isOpen, toggleBar }: Props) => {
 
         <Nav.Item className={style.active}>
           <Nav.Link href={routes.HOME}>Accueil</Nav.Link>
-          <Nav.Link href={routes.HOME}>Scripts</Nav.Link>
+          <Nav.Link href={routes.SCRIPT}>Scripts</Nav.Link>
         </Nav.Item>
 
         <SubMenu
@@ -33,11 +32,11 @@ const SideBar = ({ isOpen, toggleBar }: Props) => {
           items={[
             {
               title: 'Consulter',
-              link: routes.COUNTER,
+              link: routes.MY_SCRIPT,
             },
             {
               title: 'Ajouter',
-              link: routes.CONNEXION,
+              link: routes.ADD_SCRIPT,
             },
           ]}
         />

@@ -1,25 +1,30 @@
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
-import { Button, Nav } from 'react-bootstrap';
+import routes from '../../constants/routes.json';
+import styles from './HeaderBar.css';
+import { Button, ButtonGroup, Col, Nav } from 'react-bootstrap';
 
 type Props = {
   toggleSidebar: Function;
-}
+};
 
-const HeaderBar = ({toggleSidebar} : Props) => {
+const HeaderBar = ({ toggleSidebar }: Props) => {
   return (
-      <Navbar bg="dark" variant="dark">
-        <Navbar.Brand>
-          <Button
-            onClick={() => toggleSidebar()}>
-            ☰HandyHand
-          </Button>
-        </Navbar.Brand>
-        <Nav className="mr-auto">
-          <p>Affiche</p>
-        </Nav>
-      </Navbar>
+    <Navbar className={styles.nav}>
+      <Navbar.Brand>
+        <Button variant="secondary" onClick={() => toggleSidebar()}>☰ HandyHand</Button>
+      </Navbar.Brand>
+      <Nav className="mr-auto">
+        <p>Mettre le chemin</p>
+      </Nav>
+      <Nav>
+        <ButtonGroup>
+          <Button variant="primary" href={routes.CONNEXION}>Connexion</Button>
+          <Button variant="secondary"  href={routes.ENREGISTREMENT}>Enregistrement</Button>
+        </ButtonGroup>
+      </Nav>
+    </Navbar>
   );
-}
+};
 
 export default HeaderBar;
