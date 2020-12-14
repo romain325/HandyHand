@@ -1,0 +1,17 @@
+[
+  {
+    "Exec": "Python3",
+    "FilePath" : "test.py",
+    "Args" : []
+  },
+  {
+    "Exec": "CMD",
+    "FilePath" : "",
+    "Args" : []
+  },
+  {
+    "Exec": "PHP",
+    "FilePath" : "test.php",
+    "Args" : []
+  }
+]

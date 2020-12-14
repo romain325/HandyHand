@@ -5,8 +5,6 @@ import processing.data.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.prefs.Preferences;
 
 public class Script implements Runnable {
     private static final int EXEC_TIME_COOLDOWN = 3000;
@@ -36,7 +34,7 @@ public class Script implements Runnable {
     @Override
     public void run() {
         try {
-            // if you want to have access to a python script on Windows you have to specify the Path to your python .exe
+
             Process process = new ProcessBuilder(this.execPath, this.file, String.join(" ", this.args)).start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuilder builder = new StringBuilder();
@@ -50,7 +48,7 @@ public class Script implements Runnable {
             Thread.sleep(EXEC_TIME_COOLDOWN);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            // TODO execption ?
+            // TODO exception ?
         }
     }
 
