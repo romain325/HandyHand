@@ -18,30 +18,26 @@ const SideBar = ({ isOpen, toggleBar }: Props) => {
         <Button variant="link" onClick={() => toggleBar()} className="mt-4">
           LOGO
         </Button>
-        <h3>Nom APP {String(isOpen)} </h3>
+        <h3>Menu</h3>
       </div>
 
       <Nav className="flex-column pt-2">
-        <p className="ml-3">Head</p>
 
         <Nav.Item className={style.active}>
-          <Nav.Link href={routes.HOME}>First Item</Nav.Link>
+          <Nav.Link href={routes.HOME}>Accueil</Nav.Link>
+          <Nav.Link href={routes.HOME}>Scripts</Nav.Link>
         </Nav.Item>
 
         <SubMenu
-          title="TheTitle"
+          title="Mes Scripts"
           items={[
             {
-              title: 'SubTitle1',
+              title: 'Consulter',
               link: routes.COUNTER,
             },
             {
-              title: 'SubTitle2',
+              title: 'Ajouter',
               link: routes.CONNEXION,
-            },
-            {
-              title: 'SubTitle3',
-              link: routes.HOME,
             },
           ]}
         />

@@ -9,7 +9,7 @@ type Props = {
 
 const ContentPage = (props: Props) => {
   const { children } = props;
-  const [isOpen, setOpen] = useState<boolean>(true);
+  const [isOpen, setOpen] = useState<boolean>(false);
 
   function toggleNavBar() {
     setOpen(!isOpen);
