@@ -1,19 +1,21 @@
 package Testing.StubTest;
 
 import Core.Script.Script;
-import Core.StubPersistence.LocalManager;
-import Core.StubPersistence.StubPersistance;
+import Core.StubPersistence.Local.*;
 import Testing.Tester;
-
-import java.util.Collection;
-import java.util.List;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class StubTesting implements Tester {
-    LocalManager localManager = new LocalManager();
     @Override
     public void start() {
-        var jsonExec = localManager.getExecJson();
-        jsonExec.put("python3","/usr/bin/python3");
-        localManager.saveExec(jsonExec);
+        JSONManager scriptManager = new ScriptManager();
+        JSONArray val = (JSONArray) scriptManager.getAll();
+
+        scriptManager.save(val);
+
+        var obj = new JSONArray();
+        obj.add(new Script("pite", new String[]{"-v", "--help"}, "iohger").toJSON());
+        System.out.println(obj.toJSONString());
     }
 }

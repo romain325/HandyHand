@@ -1,8 +1,13 @@
 package Core.Script;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 public class Script implements Runnable {
     private static final int EXEC_TIME_COOLDOWN = 3000;
@@ -48,6 +53,14 @@ public class Script implements Runnable {
             e.printStackTrace();
             // TODO exception ?
         }
+    }
+
+    public String toJSON(){
+        var val = new JSONObject();
+        val.put("exec", this.getExecType());
+        val.put("args", Arrays.asList(this.getArgs()));
+        val.put("file", this.getFile());
+        return val.toJSONString();
     }
 
 
