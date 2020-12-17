@@ -15,7 +15,9 @@ export default function Counter() {
       </div>
       <Container>
         <Row>
-          <Button className={styles.button} variant="success">Ajouter un script</Button>
+          <Button href={routes.ADD_SCRIPT} className={styles.button} variant="success">
+            Ajouter un script
+          </Button>
         </Row>
         <Row></Row>
         <Row>

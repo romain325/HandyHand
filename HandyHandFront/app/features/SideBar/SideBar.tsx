@@ -4,6 +4,7 @@ import { Nav } from 'react-bootstrap';
 import routes from '../../constants/routes.json';
 import SubMenu from './SubMenu';
 import style from './SideBar.css';
+import { Link } from 'react-router-dom';
 
 type Props = {
   isOpen: boolean;
@@ -23,23 +24,10 @@ const SideBar = ({ isOpen, toggleBar }: Props) => {
       <Nav className="flex-column pt-2">
 
         <Nav.Item className={style.active}>
-          <Nav.Link href={routes.HOME}>Accueil</Nav.Link>
-          <Nav.Link href={routes.SCRIPT}>Scripts</Nav.Link>
+          <Nav.Link><Link to={routes.CONNEXION}>Accueil</Link></Nav.Link>
+          <Nav.Link><Link to={routes.SCRIPT}>Scripts</Link></Nav.Link>
+          <Nav.Link><Link to={routes.COUNTER}>MesScripts</Link></Nav.Link>
         </Nav.Item>
-
-        <SubMenu
-          title="Mes Scripts"
-          items={[
-            {
-              title: 'Consulter',
-              link: routes.MY_SCRIPT,
-            },
-            {
-              title: 'Ajouter',
-              link: routes.ADD_SCRIPT,
-            },
-          ]}
-        />
       </Nav>
     </div>
   );
