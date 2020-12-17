@@ -1,12 +1,19 @@
 package Core.StubPersistence.Local;
 
+import Core.Script.Script;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import org.json.simple.JSONObject;
 
+import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ExecutableManager implements JSONManager {
     private final LocalManager localManager = new LocalManager();
@@ -25,6 +32,26 @@ public class ExecutableManager implements JSONManager {
     public void createFile() throws IOException {
         if(!getParent().exists()) getParent().createFile();
         Files.createFile(getPath());
-        save(new JSONObject());
+        save(new Gson().toJson(new HashMap[]{}, Map.class));
+    }
+
+    @Override
+    public Map.Entry[] getAll() {
+        try {
+            checkExistence();
+            List<Map.Entry> returnVal = new LinkedList<>();
+            var result = new Gson().fromJson(new FileReader(getPath().toString()), Map.class).entrySet().toArray();
+            for (var entry: result) {
+                returnVal.add((Map.Entry<String,String>)entry);
+            }
+            return returnVal.toArray(new Map.Entry[0]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Map getAllMap(){
+        return Arrays.stream(this.getAll()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

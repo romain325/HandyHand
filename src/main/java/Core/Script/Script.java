@@ -55,13 +55,4 @@ public class Script implements Runnable {
         }
     }
 
-    public String toJSON(){
-        var val = new JSONObject();
-        val.put("exec", this.getExecType());
-        val.put("args", Arrays.asList(this.getArgs()));
-        val.put("file", this.getFile());
-        return val.toJSONString();
-    }
-
-
 }
