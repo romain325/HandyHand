@@ -2,44 +2,41 @@ package Core.StubPersistence;
 
 import Core.Script.Script;
 import Core.StubPersistence.Local.ScriptManager;
+import com.google.gson.Gson;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import javax.naming.NameNotFoundException;
+import java.util.*;
 
 public class ScriptPersistance implements IScriptDataManager{
     ScriptManager scriptManager = new ScriptManager();
 
     @Override
     public Collection<Script> getAll() {
-        /*JSONArray scripts = (JSONArray) scriptManager.getAll();
-        Collection<Script> collection= new LinkedList<>();
-        scripts.forEach(script -> {
-            System.out.println(script.getClass());
-            collection.add(ScriptManager.scriptFactory((JSONObject) script));
-        });
-        return collection;*/
-        return null;
+        return new LinkedList<>(Arrays.asList(scriptManager.getAll()));
     }
 
     @Override
-    public Script getByName(String name) {
-        /*for(JSONObject obj : (List<JSONObject>) scriptManager.getAll()){
-            if(obj.get("file") == name)
-                return ScriptManager.scriptFactory(obj);
-        }*/
-        return null;
+    public Script getByName(String name) throws NameNotFoundException {
+        for(Script obj : scriptManager.getAll()){
+            if(obj.getFile().equals(name))
+                return obj;
+        }
+        throw new NameNotFoundException(name);
     }
 
     @Override
     public void save(Script object) {
-
+        List<Script> list = new LinkedList<>(Arrays.asList(scriptManager.getAll()));
+        list.add(object);
+        scriptManager.save(new Gson().toJson(list, List.class));
     }
 
     @Override
-    public void saveAll(Collection<Script> list) {
-
+    public void saveAll(List<Script> listScripts) {
+        List<Script> list = new LinkedList<>(Arrays.asList(scriptManager.getAll()));
+        list.addAll(listScripts);
+        scriptManager.save(new Gson().toJson(list, List.class));
     }
 }
