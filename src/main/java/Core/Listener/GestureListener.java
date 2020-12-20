@@ -2,6 +2,7 @@
 package Core.Listener;
 
 import Core.Gesture.Finger.FingerCurveCalculator;
+import Core.Gesture.Finger.FingerPositionCalculator;
 import Core.Gesture.GestureMatcher;
 import Core.Gesture.HandPoses.HandType;
 import com.leapmotion.leap.*;
@@ -30,11 +31,28 @@ public class GestureListener extends MainListener {
 
     @Override
     public void action(Frame frame) {
-        for (Map.Entry<Finger.Type, Float> e: new FingerCurveCalculator().fingersCurve(frame.hands().get(0)).entrySet()) {
-            System.out.println(e.getKey() + " : " + e.getValue());
-        }
+//        for (Map.Entry<Finger.Type, Float> e: new FingerCurveCalculator().fingersCurve(frame.hands().get(0)).entrySet()) {
+//            System.out.println(e.getKey() + " : " + e.getValue());
+//        }
 
+//        Finger.Type type1 = Finger.Type.TYPE_THUMB;
+//        Finger.Type type1 = Finger.Type.TYPE_INDEX;
+//        Finger.Type type1 = Finger.Type.TYPE_MIDDLE;
+//        Finger.Type type1 = Finger.Type.TYPE_RING;
+        Finger.Type type1 = Finger.Type.TYPE_PINKY;
+//        Finger.Type type2 = Finger.Type.TYPE_THUMB;
+//        Finger.Type type2 = Finger.Type.TYPE_INDEX;
+//        Finger.Type type2 = Finger.Type.TYPE_MIDDLE;
+//        Finger.Type type2 = Finger.Type.TYPE_RING;
+        Finger.Type type2 = Finger.Type.TYPE_PINKY;
 
+        if(!frame.hands().get(0).isValid()) return;
+        if(!frame.hands().get(1).isValid()) return;
+
+        Finger finger1 = frame.hands().get(0).fingers().fingerType(type1).get(0);
+        Finger finger2 = frame.hands().get(1).fingers().fingerType(type2).get(0);
+
+        new FingerPositionCalculator().isBonesNextDistalSticks(finger1, finger2);
 //        isActive = GestureMatcher.getResult(this.key,frame, this.handType);
     }
 

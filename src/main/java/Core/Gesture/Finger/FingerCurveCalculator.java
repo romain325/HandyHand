@@ -371,4 +371,41 @@ public class FingerCurveCalculator {
         //We calculate the degres of angle : 1 radian = 57.2958 degrés
         return (float) (radianAngle * 57.2958);
     }
+
+    /**
+     * Calculate the percentage to know if the thumb is stick to the index
+     * @param finger The thumb we want to know informations
+     * @return 100 if the thumb is stick to the index, 0 if he's at the opposite, and 50 if is between stick and at the opposite
+     */
+    public float thumbStickingIndex(Finger finger) {
+        if(finger == null || !finger.isValid() || !finger.isFinger()
+                || finger.type() != Finger.Type.TYPE_THUMB) return -1;
+
+        //The metacarpal bone of the index finger of the hand of the thumb
+        Bone indexMeta = finger.hand().fingers().fingerType(Finger.Type.TYPE_INDEX).get(0).bone(Bone.Type.TYPE_METACARPAL);
+
+        //The position of the center of the metacarpal bone of the index
+        Vector indexMetaCenter = indexMeta.center();
+
+        Bone proxThumb = finger.bone(Bone.Type.TYPE_PROXIMAL); //The proximal bone of the thumb
+        Vector vProxThumb = proxThumb.nextJoint(); //The position of the end of proximal bone
+
+        //The distance between the bone and the center of the metacarpal bone of the index
+        float distance = vProxThumb.distanceTo(indexMetaCenter);
+
+        //Calculate the percentage
+        //We found the value of distance for percentage by testing
+        //When distance was between 30 and 38, the thumb is half stick to the index
+        float percentage = 50;
+        //When distance was under 30, the thumb is curved
+        if (distance < 30) percentage = 100;
+        //When distance was above 38, the thumb is not stick to the index
+        if (distance > 38) percentage = 0;
+        return 0;
+    }
 }
+
+
+
+
+
