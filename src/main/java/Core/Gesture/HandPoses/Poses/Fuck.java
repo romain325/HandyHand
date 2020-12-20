@@ -7,6 +7,9 @@ import com.leapmotion.leap.Frame;
 
 import static Core.Gesture.HandPoses.HandType.getHand;
 
+/**
+ * A class to know if the hand is doing a fuck
+ */
 public class Fuck implements IGesture {
     @Override
     public boolean invoke(Frame frame, HandType hand) {

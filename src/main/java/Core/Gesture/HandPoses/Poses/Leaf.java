@@ -7,7 +7,10 @@ import com.leapmotion.leap.Frame;
 
 import static Core.Gesture.HandPoses.HandType.getHand;
 
-public class Leaf  implements IGesture {
+/**
+ * A class to know if the hand is doing a leaf
+ */
+public class Leaf implements IGesture {
     @Override
     public boolean invoke(Frame frame, HandType hand) {
         HandRecognizer handRecognizer = new HandRecognizer();
