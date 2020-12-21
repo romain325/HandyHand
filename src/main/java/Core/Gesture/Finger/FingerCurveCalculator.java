@@ -120,39 +120,47 @@ public class FingerCurveCalculator {
             case TYPE_INDEX:
                 //For index
                 //We found by test intervals of values when we bend the finger
-                //angleProxMeta : between 97 and 177
+                //angleProxMeta : between 97 and 170
                 //We set the angle for starting at 0
-                angleProxMeta = angleProxMeta - 97; //So between 0 and 80
+                angleProxMeta = angleProxMeta - 97; //So between 0 and 73
 
                 //Now we calculate the percentage with the maximum value of angle by cross-multiplication
-                percentProxMeta = angleProxMeta*100/80;
+                percentProxMeta = angleProxMeta*100/73;
 
                 break;
             case TYPE_MIDDLE:
                 //For middle
                 //We found by test intervals of values when we bend the finger
-                //angleProxMeta : between 110 and 177
+                //angleProxMeta : between 96 and 176
                 //Middle and Ring fingers have the same values
+                angleProxMeta = angleProxMeta - 96; //So between 0 and 80
+
+                //Now we calculate the percentage with the maximum value of angle by cross-multiplication
+                percentProxMeta = angleProxMeta*100/80;
+
+                break;
             case TYPE_RING:
                 //For ring
                 //We found by test intervals of values when we bend the finger
-                //angleProxMeta : between 110 and 177
+                //angleProxMeta : between 96 and 170
                 //We set the angle for starting at 0
-                angleProxMeta = angleProxMeta - 110; //So between 0 and 67
+
+                angleProxMeta = angleProxMeta - 96; //So between 0 and 74
 
                 //Now we calculate the percentage with the maximum value of angle by cross-multiplication
-                percentProxMeta = angleProxMeta*100/67;
+                percentProxMeta = angleProxMeta*100/74;
 
                 break;
             case TYPE_PINKY:
                 //For pinky
                 //We found by test intervals of values when we bend the finger
-                //angleProxMeta : between 115 and 177
+                //angleProxMeta : between 97 and 170
                 //We set the angle for starting at 0
-                angleProxMeta = angleProxMeta - 115; //So between 0 and 62
+
+                angleProxMeta = angleProxMeta - 97; //So between 0 and 73
 
                 //Now we calculate the percentage with the maximum value of angle by cross-multiplication
-                percentProxMeta = angleProxMeta*100/62;
+                percentProxMeta = angleProxMeta*100/73;
 
                 break;
             default:
@@ -206,14 +214,14 @@ public class FingerCurveCalculator {
             case TYPE_INDEX:
                 //For index
                 //We found by test intervals of values when we bend the finger
-                //angleDistalInter : between 110 and 177
+                //angleDistalInter : between 144 and 177
                 //angleInterProx : between 100 and 175
                 //We set angles for starting at 0
-                angleDistalInter = angleDistalInter - 110; //So between 0 and 67
+                angleDistalInter = angleDistalInter - 144; //So between 0 and 33
                 angleInterProx = angleInterProx - 100; //So between 0 and 75
 
                 //Now we calculate the percentage with the maximum value of angle by cross-multiplication
-                percentDistalInter = angleDistalInter*100/67;
+                percentDistalInter = angleDistalInter*100/33;
                 percentInterProx = angleInterProx*100/75;
 
                 break;
@@ -235,28 +243,28 @@ public class FingerCurveCalculator {
                 //For ring
                 //We found by test intervals of values when we bend the finger
                 //angleDistalInter : between 140 and 177
-                //angleInterProx : between 94 and 177
+                //angleInterProx : between 120 and 177
                 //We set angles for starting at 0
                 angleDistalInter = angleDistalInter - 140; //So between 0 and 37
-                angleInterProx = angleInterProx - 94; //So between 0 and 83
+                angleInterProx = angleInterProx - 120; //So between 0 and 57
 
                 //Now we calculate the percentage with the maximum value of angle by cross-multiplication
                 percentDistalInter = angleDistalInter*100/37;
-                percentInterProx = angleInterProx*100/83;
+                percentInterProx = angleInterProx*100/57;
 
                 break;
             case TYPE_PINKY:
                 //For pinky
                 //We found by test intervals of values when we bend the finger
-                //angleDistalInter : between 131 and 177
-                //angleInterProx : between 107 and 177
+                //angleDistalInter : between 144 and 177
+                //angleInterProx : between 107 and 176
                 //We set angles for starting at 0
-                angleDistalInter = angleDistalInter - 131; //So between 0 and 46
-                angleInterProx = angleInterProx - 107; //So between 0 and 70
+                angleDistalInter = angleDistalInter - 144; //So between 0 and 33
+                angleInterProx = angleInterProx - 107; //So between 0 and 69
 
                 //Now we calculate the percentage with the maximum value of angle by cross-multiplication
-                percentDistalInter = angleDistalInter*100/46;
-                percentInterProx = angleInterProx*100/70;
+                percentDistalInter = angleDistalInter*100/33;
+                percentInterProx = angleInterProx*100/69;
 
                 break;
             default:
@@ -285,7 +293,7 @@ public class FingerCurveCalculator {
         if(finger == null || !finger.isValid() || !finger.isFinger()) return -1;
         if(finger.type() == Finger.Type.TYPE_THUMB) return -1;
 
-        return angle2Bones(finger.bone(Bone.Type.TYPE_INTERMEDIATE), finger.bone(Bone.Type.TYPE_PROXIMAL));
+        return angle2Bones(finger.bone(Bone.Type.TYPE_PROXIMAL), finger.bone(Bone.Type.TYPE_METACARPAL));
     }
 
     /**
@@ -322,13 +330,13 @@ public class FingerCurveCalculator {
         if(bone1.length() == 0 || bone2.length() == 0) return -1;
 
         if(bone2.type() == Bone.Type.TYPE_METACARPAL) {
-            if (bone2.type() != Bone.Type.TYPE_PROXIMAL) return -1;
+            if (bone1.type() != Bone.Type.TYPE_PROXIMAL) return -1;
         }
         else if(bone2.type() == Bone.Type.TYPE_PROXIMAL) {
-            if (bone2.type() != Bone.Type.TYPE_INTERMEDIATE) return -1;
+            if (bone1.type() != Bone.Type.TYPE_INTERMEDIATE) return -1;
         }
         else if(bone2.type() == Bone.Type.TYPE_INTERMEDIATE) {
-            if (bone2.type() != Bone.Type.TYPE_DISTAL) return -1;
+            if (bone1.type() != Bone.Type.TYPE_DISTAL) return -1;
         } else {
             return -1;
         }

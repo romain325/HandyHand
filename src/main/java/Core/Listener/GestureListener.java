@@ -4,6 +4,7 @@ package Core.Listener;
 import Core.Gesture.Finger.FingerCurveCalculator;
 import Core.Gesture.Finger.FingerPositionCalculator;
 import Core.Gesture.GestureMatcher;
+import Core.Gesture.HandPoses.HandRecognizer;
 import Core.Gesture.HandPoses.HandType;
 import com.leapmotion.leap.*;
 
@@ -40,19 +41,34 @@ public class GestureListener extends MainListener {
 //        Finger.Type type1 = Finger.Type.TYPE_MIDDLE;
 //        Finger.Type type1 = Finger.Type.TYPE_RING;
         Finger.Type type1 = Finger.Type.TYPE_PINKY;
-//        Finger.Type type2 = Finger.Type.TYPE_THUMB;
+        Finger.Type type2 = Finger.Type.TYPE_THUMB;
 //        Finger.Type type2 = Finger.Type.TYPE_INDEX;
 //        Finger.Type type2 = Finger.Type.TYPE_MIDDLE;
 //        Finger.Type type2 = Finger.Type.TYPE_RING;
-        Finger.Type type2 = Finger.Type.TYPE_PINKY;
+//        Finger.Type type2 = Finger.Type.TYPE_PINKY;
 
         if(!frame.hands().get(0).isValid()) return;
-        if(!frame.hands().get(1).isValid()) return;
+//        if(!frame.hands().get(1).isValid()) return;
 
         Finger finger1 = frame.hands().get(0).fingers().fingerType(type1).get(0);
         Finger finger2 = frame.hands().get(1).fingers().fingerType(type2).get(0);
 
-        new FingerPositionCalculator().isBonesNextDistalSticks(finger1, finger2);
+//        new FingerPositionCalculator().isNextDistalSticks(finger1, finger2);
+//        new FingerPositionCalculator().isNextIntermediateSticks(finger1, finger2);
+
+//        System.out.println(new FingerCurveCalculator().fingerTip(finger1));
+//        new FingerCurveCalculator().fingerTip(finger1);
+//        System.out.println(new FingerCurveCalculator().fingerStart(finger1));
+
+//        System.out.println(new FingerCurveCalculator().fingerCurve(finger1));
+//        new FingerCurveCalculator().fingerCurve(finger1);
+
+//        System.out.println(new HandRecognizer().isHandFuck(frame.hands().get(0)));
+//        new HandRecognizer().isHandFuck(frame.hands().get(0));
+//        System.out.println(new HandRecognizer().isHandOk(frame.hands().get(0)));
+//        System.out.println(new HandRecognizer().isHandsHeart(frame.hands()));
+//        System.out.println(new HandRecognizer().isHandsO(frame.hands()));
+        System.out.println(new HandRecognizer().isHandsJull(frame.hands()));
 //        isActive = GestureMatcher.getResult(this.key,frame, this.handType);
     }
 
