@@ -10,8 +10,24 @@ import com.leapmotion.leap.Vector;
  */
 public class FingerPositionCalculator {
 
-    public boolean isFingersStick(Finger finger1, Finger finger2) {
+    /**
+     * A function to know if the middle and the index finger are stick
+     * @param finger1 The first finger
+     * @param finger2 The second finger
+     * @return Return true if fingers are stick, false otherwise
+     */
+    public boolean isIndexMiddleStick(Finger finger1, Finger finger2) {
         if(finger1 == null || !finger1.isValid() || finger2 == null || !finger2.isValid()) return false;
+        if(finger1.type() == Finger.Type.TYPE_INDEX) {
+            if(finger2.type() != Finger.Type.TYPE_MIDDLE) return false;
+        } else if(finger2.type() == Finger.Type.TYPE_MIDDLE) {
+            if(finger1.type() != Finger.Type.TYPE_INDEX) return false;
+        } else return false;
+
+        Vector vector1 = finger1.bone(Bone.Type.TYPE_PROXIMAL).nextJoint();
+        Vector vector2 = finger2.bone(Bone.Type.TYPE_PROXIMAL).nextJoint();
+
+        if(vector1.distanceTo(vector2) > 22) return false;
 
         return true;
     }

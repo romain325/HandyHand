@@ -258,6 +258,33 @@ public class HandRecognizer {
             return false;
         }
 
+        FingerPositionCalculator fpc = new FingerPositionCalculator();
+
+        Finger index1 = hand1.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
+        Finger middle1 = hand1.fingers().fingerType(Finger.Type.TYPE_MIDDLE).get(0);
+        if(!fpc.isIndexMiddleStick(index1, middle1)) {
+            System.out.println("isIndexMiddleStick 1");
+            return false;
+        }
+
+        Finger index2 = hand2.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
+        Finger middle2 = hand2.fingers().fingerType(Finger.Type.TYPE_MIDDLE).get(0);
+        if(!fpc.isIndexMiddleStick(index2, middle2)) {
+            System.out.println("isIndexMiddleStick 2");
+            return false;
+        }
+
+        HandPositionCalculator hpc = new HandPositionCalculator();
+
+        if(!hpc.isHandsStick(hands)) {
+            System.out.println("isHandsStick");
+            return false;
+        }
+
+        Finger thumb1 = hand1.fingers().fingerType(Finger.Type.TYPE_THUMB).get(0);
+        Finger thumb2 = hand2.fingers().fingerType(Finger.Type.TYPE_THUMB).get(0);
+        if(fingerCurveCalculator.thumbStickingIndex(thumb1) == 100) return false;
+        if(fingerCurveCalculator.thumbStickingIndex(thumb2) == 100) return false;
 
         return true;
     }

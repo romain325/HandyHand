@@ -4,6 +4,7 @@ package Core.Listener;
 import Core.Gesture.Finger.FingerCurveCalculator;
 import Core.Gesture.Finger.FingerPositionCalculator;
 import Core.Gesture.GestureMatcher;
+import Core.Gesture.HandPoses.HandPositionCalculator;
 import Core.Gesture.HandPoses.HandRecognizer;
 import Core.Gesture.HandPoses.HandType;
 import com.leapmotion.leap.*;
@@ -36,14 +37,14 @@ public class GestureListener extends MainListener {
 //            System.out.println(e.getKey() + " : " + e.getValue());
 //        }
 
-//        Finger.Type type1 = Finger.Type.TYPE_THUMB;
+        Finger.Type type1 = Finger.Type.TYPE_THUMB;
 //        Finger.Type type1 = Finger.Type.TYPE_INDEX;
 //        Finger.Type type1 = Finger.Type.TYPE_MIDDLE;
 //        Finger.Type type1 = Finger.Type.TYPE_RING;
-        Finger.Type type1 = Finger.Type.TYPE_PINKY;
-        Finger.Type type2 = Finger.Type.TYPE_THUMB;
+//        Finger.Type type1 = Finger.Type.TYPE_PINKY;
+//        Finger.Type type2 = Finger.Type.TYPE_THUMB;
 //        Finger.Type type2 = Finger.Type.TYPE_INDEX;
-//        Finger.Type type2 = Finger.Type.TYPE_MIDDLE;
+        Finger.Type type2 = Finger.Type.TYPE_MIDDLE;
 //        Finger.Type type2 = Finger.Type.TYPE_RING;
 //        Finger.Type type2 = Finger.Type.TYPE_PINKY;
 
@@ -51,7 +52,7 @@ public class GestureListener extends MainListener {
 //        if(!frame.hands().get(1).isValid()) return;
 
         Finger finger1 = frame.hands().get(0).fingers().fingerType(type1).get(0);
-        Finger finger2 = frame.hands().get(1).fingers().fingerType(type2).get(0);
+        Finger finger2 = frame.hands().get(0).fingers().fingerType(type2).get(0);
 
 //        new FingerPositionCalculator().isNextDistalSticks(finger1, finger2);
 //        new FingerPositionCalculator().isNextIntermediateSticks(finger1, finger2);
@@ -62,6 +63,10 @@ public class GestureListener extends MainListener {
 
 //        System.out.println(new FingerCurveCalculator().fingerCurve(finger1));
 //        new FingerCurveCalculator().fingerCurve(finger1);
+//        new FingerPositionCalculator().isIndexMiddleStick(finger1, finger2);
+//        System.out.println(new FingerCurveCalculator().thumbStickingIndex(finger1));
+
+//        new HandPositionCalculator().isHandsStick(frame.hands());
 
 //        System.out.println(new HandRecognizer().isHandFuck(frame.hands().get(0)));
 //        new HandRecognizer().isHandFuck(frame.hands().get(0));

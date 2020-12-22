@@ -401,6 +401,8 @@ public class FingerCurveCalculator {
         //The distance between the bone and the center of the metacarpal bone of the index
         float distance = vProxThumb.distanceTo(indexMetaCenter);
 
+        System.out.println(distance);
+
         //Calculate the percentage
         //We found the value of distance for percentage by testing
         //When distance was between 30 and 38, the thumb is half stick to the index
@@ -408,8 +410,8 @@ public class FingerCurveCalculator {
         //When distance was under 30, the thumb is curved
         if (distance < 30) percentage = 100;
         //When distance was above 38, the thumb is not stick to the index
-        if (distance > 38) percentage = 0;
-        return 0;
+        if (distance > 34) percentage = 0;
+        return percentage;
     }
 }
 
