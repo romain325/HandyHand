@@ -15,9 +15,21 @@ import java.util.Map;
  */
 public class HandRecognizer {
     /**
-     * The instance to calculate the different curves of the fingers
+     * The instance to calculate the different states of the fingers
      */
     private FingerStateRecognizer fingerStateRecognizer = new FingerStateRecognizer();
+    /**
+     * The instance to calculate the different positions of the fingers
+     */
+    private FingerPositionCalculator fingerPositionCalculator = new FingerPositionCalculator();
+    /**
+     * The instance to calculate the different curves of the fingers
+     */
+    private FingerCurveCalculator fingerCurveCalculator = new FingerCurveCalculator();
+    /**
+     * The instance to calculate the different positions of the hands
+     */
+    private HandPositionCalculator handPositionCalculator = new HandPositionCalculator();
 
     /**
      * A method to know if the hand is closed
@@ -122,13 +134,11 @@ public class HandRecognizer {
     public boolean isHandOk(Hand hand) {
         if(hand == null || !hand.isValid()) return false;
 
-        FingerPositionCalculator fpc = new FingerPositionCalculator();
-
         Finger thumb = hand.fingers().fingerType(Finger.Type.TYPE_THUMB).get(0);
         Finger index = hand.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
 
         //If the end of the thumb and the end of the index are stick, the hand is doing a O
-        return fpc.isNextDistalSticks(thumb, index);
+        return fingerPositionCalculator.isNextDistalSticks(thumb, index);
     }
 
     /**
@@ -142,24 +152,21 @@ public class HandRecognizer {
         Hand hand2 = hands.get(1);
         if(hand1 == null || !hand1.isValid() || hand2 == null || !hand2.isValid()) return false;
 
-
         Finger thumb1 = hand1.fingers().fingerType(Finger.Type.TYPE_THUMB).get(0);
         Finger thumb2 = hand2.fingers().fingerType(Finger.Type.TYPE_THUMB).get(0);
 
-        FingerPositionCalculator fpc = new FingerPositionCalculator();
         //If the end of both thumb aren't stick
-        if(!fpc.isNextDistalSticks(thumb1, thumb2)) return false;
+        if(!fingerPositionCalculator.isNextDistalSticks(thumb1, thumb2)) return false;
 
         Finger index1 = hand1.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
         Finger index2 = hand2.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
 
         //If the end of intermediate bones of both index aren't stick
-        if(!fpc.isNextIntermediateIndexsSticks(index1, index2)) return false;
+        if(!fingerPositionCalculator.isNextIntermediateIndexsSticks(index1, index2)) return false;
 
-        FingerCurveCalculator fcc = new FingerCurveCalculator();
         //If both thumb aren't away from the index
-        if(fcc.thumbStickingIndex(thumb1) != 0) return false;
-        if(fcc.thumbStickingIndex(thumb2) != 0) return false;
+        if(fingerCurveCalculator.thumbStickingIndex(thumb1) != 0) return false;
+        if(fingerCurveCalculator.thumbStickingIndex(thumb2) != 0) return false;
 
         //Don't work enough to use it
 /*
@@ -199,20 +206,18 @@ public class HandRecognizer {
         Finger thumb1 = hand1.fingers().fingerType(Finger.Type.TYPE_THUMB).get(0);
         Finger thumb2 = hand2.fingers().fingerType(Finger.Type.TYPE_THUMB).get(0);
 
-        FingerPositionCalculator fpc = new FingerPositionCalculator();
         //If the end of both thumb aren't stick
-        if(!fpc.isNextDistalSticks(thumb1, thumb2)) return false;
+        if(!fingerPositionCalculator.isNextDistalSticks(thumb1, thumb2)) return false;
 
         Finger index1 = hand1.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
         Finger index2 = hand2.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
 
         //If the end of both index aren't stick
-        if(!fpc.isNextDistalSticks(index1, index2)) return false;
-        FingerCurveCalculator fcc = new FingerCurveCalculator();
+        if(!fingerPositionCalculator.isNextDistalSticks(index1, index2)) return false;
 
         //If both thumb aren't away from the index
-        if(fcc.thumbStickingIndex(thumb1) != 0) return false;
-        if(fcc.thumbStickingIndex(thumb2) != 0) return false;
+        if(fingerCurveCalculator.thumbStickingIndex(thumb1) != 0) return false;
+        if(fingerCurveCalculator.thumbStickingIndex(thumb2) != 0) return false;
 
         return true;
     }
@@ -227,8 +232,6 @@ public class HandRecognizer {
         Hand hand1 = hands.get(0);
         Hand hand2 = hands.get(1);
         if(hand1 == null || !hand1.isValid() || hand2 == null || !hand2.isValid()) return false;
-
-        FingerCurveCalculator fingerCurveCalculator = new FingerCurveCalculator();
 
         Map<Finger.Type,Float> fingersCurve1 = fingerCurveCalculator.fingersCurve(hand1);
         Map<Finger.Type,Float> fingersCurve2 = fingerCurveCalculator.fingersCurve(hand2);
@@ -258,12 +261,10 @@ public class HandRecognizer {
             return false;
         }
 
-        FingerPositionCalculator fpc = new FingerPositionCalculator();
-
         //If index and middle of first hand are stick
         Finger index1 = hand1.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
         Finger middle1 = hand1.fingers().fingerType(Finger.Type.TYPE_MIDDLE).get(0);
-        if(!fpc.isIndexMiddleStick(index1, middle1)) {
+        if(!fingerPositionCalculator.isIndexMiddleStick(index1, middle1)) {
 //            System.out.println("isIndexMiddleStick 1");
             return false;
         }
@@ -271,15 +272,13 @@ public class HandRecognizer {
         //If index and middle of second hand are stick
         Finger index2 = hand2.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
         Finger middle2 = hand2.fingers().fingerType(Finger.Type.TYPE_MIDDLE).get(0);
-        if(!fpc.isIndexMiddleStick(index2, middle2)) {
+        if(!fingerPositionCalculator.isIndexMiddleStick(index2, middle2)) {
 //            System.out.println("isIndexMiddleStick 2");
             return false;
         }
 
-        HandPositionCalculator hpc = new HandPositionCalculator();
-
         //If both hands are stick
-        if(!hpc.isHandsStick(hands)) {
+        if(!handPositionCalculator.isHandsStick(hands)) {
 //            System.out.println("isHandsStick");
             return false;
         }
@@ -291,6 +290,38 @@ public class HandRecognizer {
         if(fingerCurveCalculator.thumbStickingIndex(thumb2) == 100) return false;
 
         return true;
+    }
+
+    /**
+     * To get the instance of the class of the FingerCurveCalculator in that class
+     * @return The instance of the class of the FingerCurveCalculator
+     */
+    public FingerCurveCalculator getFingerCurveCalculator() {
+        return fingerCurveCalculator;
+    }
+
+    /**
+     * To get the instance of the class of the FingerStateRecognizer in that class
+     * @return The instance of the class of the FingerStateRecognizer
+     */
+    public FingerStateRecognizer getFingerStateRecognizer() {
+        return fingerStateRecognizer;
+    }
+
+    /**
+     * To get the instance of the class of the FingerPositionCalculator in that class
+     * @return The instance of the class of the FingerPositionCalculator
+     */
+    public FingerPositionCalculator getFingerPositionCalculator() {
+        return fingerPositionCalculator;
+    }
+
+    /**
+     * To get the instance of the class of the HandPositionCalculator in that class
+     * @return The instance of the class of the HandPositionCalculator
+     */
+    public HandPositionCalculator getHandPositionCalculator() {
+        return handPositionCalculator;
     }
 
 }

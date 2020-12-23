@@ -5,7 +5,6 @@ import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.Vector;
 
-import javax.swing.text.MutableAttributeSet;
 import java.util.HashMap;
 import java.util.Map;
 
