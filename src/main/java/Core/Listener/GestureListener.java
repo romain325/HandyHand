@@ -84,7 +84,7 @@ public class GestureListener extends MainListener {
             System.out.println("Frame not valid");
             return;
         };
-        //Appelle les diffÃ©rentes mÃ©thodes d'analyse des frames..
+        //Appelle les différentes méthodes d'analyse des frames..
         //handsInfo(frame.hands());
         //FingerReconizerTest(frame.hands().get(0));
         //HandReconizerTest(frame.hands().get(0));
@@ -196,7 +196,7 @@ public class GestureListener extends MainListener {
     public void handsInfo(HandList hands) {
         if(hands == null) return;
         if(hands.isEmpty()) return;
-        //Appelle pour chaque main prÃ©sente les infos d'une seule main
+        //Appelle pour chaque main présente les infos d'une seule main
         OneHandInfo(hands.get(0));
     }
 

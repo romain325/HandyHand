@@ -1,13 +1,15 @@
 import React from 'react';
-import { Col, Row, Card, Dropdown, Container, Button } from 'react-bootstrap';
+import { Col, Container } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CardScript from '../../components/CardScript';
-import routes from '../../constants/routes.json';
 import ContentPage from '../../containers/ContentPage';
-import styles from './Counter.css';
-export default function Counter() {
+import routes from '../../constants/routes.json';
+import styles from './ScriptsFeature.css';
+
+export default function ScriptsFeatures() {
   return (
-    <div>
+    <ContentPage>
       <div className={styles.backButton} data-tid="backButton">
         <Link to={routes.HOME}>
           <i className="fa fa-arrow-left fa-3x" />
@@ -15,22 +17,28 @@ export default function Counter() {
       </div>
       <Container>
         <Row>
-          <Button className={styles.button} variant="success">Ajouter un script</Button>
+          <Col>
+            <CardScript />
+          </Col>
+          <Col>
+            <CardScript />
+          </Col>
+          <Col>
+            <CardScript />
+          </Col>
         </Row>
-        <Row></Row>
         <Row>
           <Col>
-            <CardScript />
+            <CardScript></CardScript>
           </Col>
           <Col>
-            <CardScript />
+            <CardScript></CardScript>
           </Col>
           <Col>
-            <CardScript />
+            <CardScript></CardScript>
           </Col>
         </Row>
-
       </Container>
-    </div>
+    </ContentPage>
   );
 }

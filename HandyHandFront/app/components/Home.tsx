@@ -6,9 +6,12 @@ import styles from './Home.css';
 export default function Home(): JSX.Element {
   return (
     <div className={styles.container} data-tid="container">
-      <h2>Home</h2>
-      <Link to={routes.COUNTER}>to Counter</Link>
-      <Link to={routes.CONNEXION}>to Connexion</Link>
+      <h2>DEMO N°2</h2>
+      <div><Link to={routes.CONNEXION}>Connexion</Link></div>
+      <div><Link to={routes.ENREGISTREMENT}>Enregistrement</Link></div>
+      <div><Link to={routes.SCRIPT}>Scripts</Link></div>
+      <div><Link to={routes.COUNTER}>Mes scripts</Link></div>
+      <div><Link to={routes.ADD_SCRIPT}>Ajouter script</Link></div>
     </div>
   );
 }
