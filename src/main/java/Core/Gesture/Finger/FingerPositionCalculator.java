@@ -49,8 +49,6 @@ public class FingerPositionCalculator {
         if(finger1.type() != Finger.Type.TYPE_INDEX) return false;
         if(finger2.type() != Finger.Type.TYPE_INDEX) return false;
 
-//        System.out.println(v1.distanceTo(v2));
-
         //We found values by testing
         if(v1.distanceTo(v2) > 40) return false;
         return true;
@@ -119,8 +117,6 @@ public class FingerPositionCalculator {
             default:
                 return false;
         }
-
-//        System.out.println(v1.distanceTo(v2));
 
         if(v1.distanceTo(v2) > value) return false;
         return true;

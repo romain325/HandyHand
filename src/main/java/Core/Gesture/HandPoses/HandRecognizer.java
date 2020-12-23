@@ -217,6 +217,11 @@ public class HandRecognizer {
         return true;
     }
 
+    /**
+     * A function that says if 2 hands are doing the Jull sign
+     * @param hands The HandList which contains both hands
+     * @return Return true if both hands are doing the Jull sign
+     */
     public boolean isHandsJull(HandList hands) {
         if(hands.count() != 2) return false;
         Hand hand1 = hands.get(0);
@@ -228,59 +233,58 @@ public class HandRecognizer {
         Map<Finger.Type,Float> fingersCurve1 = fingerCurveCalculator.fingersCurve(hand1);
         Map<Finger.Type,Float> fingersCurve2 = fingerCurveCalculator.fingersCurve(hand2);
 
-//        System.out.println(fingersCurve1.get(Finger.Type.TYPE_INDEX)); //60
-//        System.out.println(fingersCurve1.get(Finger.Type.TYPE_MIDDLE)); //60
-//        System.out.println(fingersCurve1.get(Finger.Type.TYPE_RING)); // > 70
-
-
+        //If index are out
         if(fingersCurve1.get(Finger.Type.TYPE_INDEX) > 60 ||
                 fingersCurve2.get(Finger.Type.TYPE_INDEX) > 60) {
-            System.out.println(Finger.Type.TYPE_INDEX);
-            System.out.println(fingersCurve1.get(Finger.Type.TYPE_INDEX));
+//            System.out.println(Finger.Type.TYPE_INDEX);
+//            System.out.println(fingersCurve1.get(Finger.Type.TYPE_INDEX));
             return false;
         }
+        //If middle are out
         if(fingersCurve1.get(Finger.Type.TYPE_MIDDLE) > 60 ||
                 fingersCurve2.get(Finger.Type.TYPE_MIDDLE) > 60) {
-            System.out.println(Finger.Type.TYPE_MIDDLE);
-            System.out.println(fingersCurve1.get(Finger.Type.TYPE_MIDDLE));
+//            System.out.println(Finger.Type.TYPE_MIDDLE);
+//            System.out.println(fingersCurve1.get(Finger.Type.TYPE_MIDDLE));
             return false;
         }
 
+        //If ring finger are bend
         if(fingersCurve1.get(Finger.Type.TYPE_RING) < 40 ||
-                fingersCurve2.get(Finger.Type.TYPE_RING) < 40) {
-            System.out.println(Finger.Type.TYPE_RING);
-            System.out.println(fingersCurve2.get(Finger.Type.TYPE_RING));
-            return false;
-        }
+                fingersCurve2.get(Finger.Type.TYPE_RING) < 40) return false;
+        //If pinky finger aren't bend
         if(fingersCurve1.get(Finger.Type.TYPE_PINKY) < 40 ||
                 fingersCurve2.get(Finger.Type.TYPE_PINKY) < 40) {
-            System.out.println(Finger.Type.TYPE_PINKY);
+//            System.out.println(Finger.Type.TYPE_PINKY);
             return false;
         }
 
         FingerPositionCalculator fpc = new FingerPositionCalculator();
 
+        //If index and middle of first hand are stick
         Finger index1 = hand1.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
         Finger middle1 = hand1.fingers().fingerType(Finger.Type.TYPE_MIDDLE).get(0);
         if(!fpc.isIndexMiddleStick(index1, middle1)) {
-            System.out.println("isIndexMiddleStick 1");
+//            System.out.println("isIndexMiddleStick 1");
             return false;
         }
 
+        //If index and middle of second hand are stick
         Finger index2 = hand2.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
         Finger middle2 = hand2.fingers().fingerType(Finger.Type.TYPE_MIDDLE).get(0);
         if(!fpc.isIndexMiddleStick(index2, middle2)) {
-            System.out.println("isIndexMiddleStick 2");
+//            System.out.println("isIndexMiddleStick 2");
             return false;
         }
 
         HandPositionCalculator hpc = new HandPositionCalculator();
 
+        //If both hands are stick
         if(!hpc.isHandsStick(hands)) {
-            System.out.println("isHandsStick");
+//            System.out.println("isHandsStick");
             return false;
         }
 
+        //If thumbs are stick to the hand
         Finger thumb1 = hand1.fingers().fingerType(Finger.Type.TYPE_THUMB).get(0);
         Finger thumb2 = hand2.fingers().fingerType(Finger.Type.TYPE_THUMB).get(0);
         if(fingerCurveCalculator.thumbStickingIndex(thumb1) == 100) return false;

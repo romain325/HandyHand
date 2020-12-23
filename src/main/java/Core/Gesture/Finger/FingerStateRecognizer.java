@@ -34,14 +34,8 @@ public class FingerStateRecognizer {
      */
     public FingerState getFingerState(Finger finger){
         FingerState state = getTipState(finger);
-//        if(finger.type() == Finger.Type.TYPE_MIDDLE) System.out.println(state);
-        if(state == getStartState(finger)){
-//            if(finger.type() == Finger.Type.TYPE_MIDDLE) System.out.println(getStartState(finger));
-            return state;
-        }else{
-//            if(finger.type() == Finger.Type.TYPE_MIDDLE) System.out.println(getStartState(finger));
-            return FingerState.NORMAL;
-        }
+        if(state == getStartState(finger)) return state;
+        else return FingerState.NORMAL;
     }
 
     /**
@@ -50,7 +44,6 @@ public class FingerStateRecognizer {
      * @return The state of the fingertip
      */
     public FingerState getTipState(Finger finger){
-//        if(finger.type() == Finger.Type.TYPE_MIDDLE) System.out.println(fingerCurveCalculator.fingerTip(finger));
         return recognizeState(fingerCurveCalculator.fingerTip(finger));
     }
 
@@ -60,7 +53,6 @@ public class FingerStateRecognizer {
      * @return The state of the beginning of the finger
      */
     public FingerState getStartState(Finger finger){
-//        if(finger.type() == Finger.Type.TYPE_MIDDLE) System.out.println(fingerCurveCalculator.fingerStart(finger));
         return recognizeState(fingerCurveCalculator.fingerStart(finger));
     }
 
