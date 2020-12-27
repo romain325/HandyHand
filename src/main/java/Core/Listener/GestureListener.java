@@ -33,6 +33,7 @@ public class GestureListener extends MainListener {
 
     @Override
     public void action(Frame frame) {
+        /*
 //        for (Map.Entry<Finger.Type, Float> e: new FingerCurveCalculator().fingersCurve(frame.hands().get(0)).entrySet()) {
 //            System.out.println(e.getKey() + " : " + e.getValue());
 //        }
@@ -72,9 +73,17 @@ public class GestureListener extends MainListener {
 //        new HandRecognizer().isHandFuck(frame.hands().get(0));
 //        System.out.println(new HandRecognizer().isHandOk(frame.hands().get(0)));
 //        System.out.println(new HandRecognizer().isHandsHeart(frame.hands()));
-//        System.out.println(new HandRecognizer().isHandsO(frame.hands()));
-        System.out.println(new HandRecognizer().isHandsJull(frame.hands()));
+        System.out.println(new HandRecognizer().isHandsO(frame.hands()));
+//        System.out.println(new HandRecognizer().isHandsJull(frame.hands()));
+
 //        isActive = GestureMatcher.getResult(this.key,frame, this.handType);
+*/
+
+//        if(new HandRecognizer().isHandFuck(frame.hands().get(0))) System.out.println("Fuck");
+//        if(new HandRecognizer().isHandOk(frame.hands().get(0))) System.out.println("Ok");
+//        if(new HandRecognizer().isHandsHeart(frame.hands())) System.out.println("Coeur");
+//        if(new HandRecognizer().isHandsO(frame.hands())) System.out.println("O");
+        if(new HandRecognizer().isHandsJull(frame.hands())) System.out.println("Jull");
     }
 
 

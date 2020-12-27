@@ -219,6 +219,9 @@ public class HandRecognizer {
         if(fingerCurveCalculator.thumbStickingIndex(thumb1) != 0) return false;
         if(fingerCurveCalculator.thumbStickingIndex(thumb2) != 0) return false;
 
+        if(fingerCurveCalculator.fingerTip(index1) > 35) return false;
+        if(fingerCurveCalculator.fingerTip(index2) > 35) return false;
+
         return true;
     }
 
@@ -239,14 +242,14 @@ public class HandRecognizer {
         //If index are out
         if(fingersCurve1.get(Finger.Type.TYPE_INDEX) > 60 ||
                 fingersCurve2.get(Finger.Type.TYPE_INDEX) > 60) {
-//            System.out.println(Finger.Type.TYPE_INDEX);
+            System.out.println(Finger.Type.TYPE_INDEX);
 //            System.out.println(fingersCurve1.get(Finger.Type.TYPE_INDEX));
             return false;
         }
         //If middle are out
         if(fingersCurve1.get(Finger.Type.TYPE_MIDDLE) > 60 ||
                 fingersCurve2.get(Finger.Type.TYPE_MIDDLE) > 60) {
-//            System.out.println(Finger.Type.TYPE_MIDDLE);
+            System.out.println(Finger.Type.TYPE_MIDDLE);
 //            System.out.println(fingersCurve1.get(Finger.Type.TYPE_MIDDLE));
             return false;
         }
@@ -257,7 +260,7 @@ public class HandRecognizer {
         //If pinky finger aren't bend
         if(fingersCurve1.get(Finger.Type.TYPE_PINKY) < 40 ||
                 fingersCurve2.get(Finger.Type.TYPE_PINKY) < 40) {
-//            System.out.println(Finger.Type.TYPE_PINKY);
+            System.out.println(Finger.Type.TYPE_PINKY);
             return false;
         }
 
@@ -265,7 +268,7 @@ public class HandRecognizer {
         Finger index1 = hand1.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
         Finger middle1 = hand1.fingers().fingerType(Finger.Type.TYPE_MIDDLE).get(0);
         if(!fingerPositionCalculator.isIndexMiddleStick(index1, middle1)) {
-//            System.out.println("isIndexMiddleStick 1");
+            System.out.println("isIndexMiddleStick 1");
             return false;
         }
 
@@ -273,13 +276,13 @@ public class HandRecognizer {
         Finger index2 = hand2.fingers().fingerType(Finger.Type.TYPE_INDEX).get(0);
         Finger middle2 = hand2.fingers().fingerType(Finger.Type.TYPE_MIDDLE).get(0);
         if(!fingerPositionCalculator.isIndexMiddleStick(index2, middle2)) {
-//            System.out.println("isIndexMiddleStick 2");
+            System.out.println("isIndexMiddleStick 2");
             return false;
         }
 
         //If both hands are stick
         if(!handPositionCalculator.isHandsStick(hands)) {
-//            System.out.println("isHandsStick");
+            System.out.println("isHandsStick");
             return false;
         }
 

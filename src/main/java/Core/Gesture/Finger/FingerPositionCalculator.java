@@ -50,7 +50,7 @@ public class FingerPositionCalculator {
         if(finger2.type() != Finger.Type.TYPE_INDEX) return false;
 
         //We found values by testing
-        if(v1.distanceTo(v2) > 40) return false;
+        if(v1.distanceTo(v2) > 35) return false;
         return true;
     }
 
