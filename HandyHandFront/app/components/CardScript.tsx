@@ -22,7 +22,7 @@ export default function CardScript(): JSX.Element {
         <Row>
           <Col sm={10}>
             <Card.Text>
-              Monter deux doigt au leap motion pour lancer spotify
+              Montrer deux doigts au leap motion pour lancer spotify
             </Card.Text>
           </Col>
         </Row>

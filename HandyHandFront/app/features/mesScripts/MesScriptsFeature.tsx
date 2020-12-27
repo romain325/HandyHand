@@ -15,7 +15,6 @@ export default function MesScripts() {
           <i className="fa fa-arrow-left fa-3x" />
         </Link>
       </div>
-
     </ContentPage>
   );
 }

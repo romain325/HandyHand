@@ -5,6 +5,7 @@ import { Card, Col, Container } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import { Button, Form } from 'react-bootstrap';
 import styles from './AjouterScripts.css';
+import ContentPage from '../../containers/ContentPage';
 
 export default function AjouterScriptFeature() {
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -15,46 +16,36 @@ export default function AjouterScriptFeature() {
   }
 
   return (
-    <Container>
-      <Row>
-        <Col>
-          <div className={styles.backButton} data-tid="backButton">
-            <Link to={routes.HOME}>
-              <i className="fa fa-arrow-left fa-3x" />
-            </Link>
-          </div>
-        </Col>
-      </Row>
-      <Row>
-        <Form>
-
-          <Form.Row>
-            <Col>
+    <ContentPage>
+      <Container>
+        <Row>
+          <Form>
             <Form.Group controlId="formGridAddress1">
               <Form.Label>Nom du script</Form.Label>
               <Form.Control placeholder="..." />
             </Form.Group>
-            </Col>
-            <Col>
+
             <Form.Group controlId="formGridAddress1">
               <Form.Label>Description</Form.Label>
-              <Form.Control placeholder="..." />
+              <Form.Control as="textarea" rows={3} />
             </Form.Group>
-            </Col>
-          </Form.Row>
-          <Form.Group>
-            <Form.File
-              className="position-relative"
-              required
-              name="file"
-              label="Choisissez un script"
-              id="validationFormik107"
-              feedbackTooltip
-            />
-          </Form.Group>
-          <Button variant="primary">Valider</Button>
-        </Form>
-      </Row>
-    </Container>
+
+            <Form.Group>
+              <Form.File
+                className="position-relative"
+                required
+                name="file"
+                label="Choisissez un script"
+                id="validationFormik107"
+                feedbackTooltip
+              />
+            </Form.Group>
+            <Link to={routes.COUNTER}>
+              <Button variant="primary">Valider</Button>
+            </Link>
+          </Form>
+        </Row>
+      </Container>
+    </ContentPage>
   );
 }

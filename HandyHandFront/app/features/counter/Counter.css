@@ -3,7 +3,10 @@
   border-color: #000000;
 }
 
-button{
-  margin: 5px;
+Button{
+  margin-bottom: 10px;
+}
 
+.button1{
+  margin: 10px;
 }
