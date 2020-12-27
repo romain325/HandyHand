@@ -1,11 +1,7 @@
 package Core.StubPersistence.Local;
 
-import Core.Script.Script;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import org.json.simple.JSONObject;
 
-import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -36,10 +32,10 @@ public class ExecutableManager implements JSONManager {
     }
 
     @Override
-    public Map.Entry[] getAll() {
+    public Map.Entry<String,String>[] getAll() {
         try {
             checkExistence();
-            List<Map.Entry> returnVal = new LinkedList<>();
+            List<Map.Entry<String,String>> returnVal = new LinkedList<>();
             var result = new Gson().fromJson(new FileReader(getPath().toString()), Map.class).entrySet().toArray();
             for (var entry: result) {
                 returnVal.add((Map.Entry<String,String>)entry);
@@ -51,7 +47,7 @@ public class ExecutableManager implements JSONManager {
         return null;
     }
 
-    public Map getAllMap(){
+    public Map<String,String> getAllMap(){
         return Arrays.stream(this.getAll()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

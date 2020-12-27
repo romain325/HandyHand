@@ -13,7 +13,7 @@ public class ScriptPersistance implements IScriptDataManager{
     ScriptManager scriptManager = new ScriptManager();
 
     @Override
-    public Collection<Script> getAll() {
+    public List<Script> getAll() {
         return new LinkedList<>(Arrays.asList(scriptManager.getAll()));
     }
 
