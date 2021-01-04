@@ -12,7 +12,7 @@ export default function EnregistrementFeature() {
       <div>
         <Form>
           <h2>Enregistrement</h2>
-          <h6>Crée un nouveau compte</h6>
+          <h6>Créer un nouveau compte</h6>
           <Form.Group controlId="formBasicEmail">
             <Form.Control type="email" placeholder="Pseudo" />
           </Form.Group>
