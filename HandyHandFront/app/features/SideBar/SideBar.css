@@ -1,7 +1,7 @@
 .sidebar {
   min-width: 250px;
   max-width: 250px;
-  background: #354052;
+  background: #3B4252;
   color: #adb5bd;
   margin-left: -250px;
   transition: all 0.5s;
@@ -14,12 +14,11 @@
 
 
 .sidebarheader {
-  background: #313b4c;
-  color: #adb5bd;
+  background:#2E3440;
 }
 
 .sidebarheader h3{
-  color: #fff;
+  color: #ffffff;
   padding: 1em;
 }
 

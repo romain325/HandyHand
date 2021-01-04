@@ -8,14 +8,13 @@ import styles from './Counter.css';
 export default function Counter() {
   return (
     <div>
-      <div className={styles.backButton} data-tid="backButton">
-        <Link to={routes.HOME}>
-          <i className="fa fa-arrow-left fa-3x" />
-        </Link>
-      </div>
       <Container>
         <Row>
-          <Button className={styles.button} variant="success">Ajouter un script</Button>
+        <Link to={routes.ADD_SCRIPT}>
+          <Button className={styles.button1} variant="success">
+            Ajouter un script
+          </Button>
+          </Link>
         </Row>
         <Row></Row>
         <Row>
@@ -29,8 +28,8 @@ export default function Counter() {
             <CardScript />
           </Col>
         </Row>
-
       </Container>
     </div>
+
   );
 }

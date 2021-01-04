@@ -8,6 +8,7 @@ import AjouterScriptFeature from './features/ajouterScript/AjouterScript';
 import ConnexionFeature from './features/Connexion/ConnexionFeature';
 import EnregistrementFeature from './features/enregistrement/EnregistrementFeature';
 import ScriptsFeatures from './features/script/ScriptsFeature';
+import SettingsFeature from './features/settings/SettingsFeature';
 
 // Lazily load routes and code split with webpack
 const LazyCounterPage = React.lazy(() =>
@@ -32,6 +33,7 @@ export default function Routes() {
         <Route path={routes.ADD_SCRIPT} component={AjouterScriptFeature} />
         <Route exact path={routes.MY_SCRIPT} component={EnregistrementFeature} />
         <Route path={routes.ENREGISTREMENT} component={EnregistrementFeature} />
+        <Route path={routes.SETTINGS} component={SettingsFeature} />
       </Switch>
     </App>
   );

@@ -14,8 +14,6 @@ type SubMenuElements = {
   items: Array<SubItem>
 }
 
-
-
 const SubMenu = ({title, items} : SubMenuElements) => {
   const [isCollapsed, setCollapsed] = useState<boolean>(true);
 
@@ -48,7 +46,6 @@ const SubMenu = ({title, items} : SubMenuElements) => {
             }
           </nav>
         </Accordion.Collapse>
-
       </Accordion>
     </Nav.Item>
   )

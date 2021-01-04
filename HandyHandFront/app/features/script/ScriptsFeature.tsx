@@ -10,13 +10,8 @@ import styles from './ScriptsFeature.css';
 export default function ScriptsFeatures() {
   return (
     <ContentPage>
-      <div className={styles.backButton} data-tid="backButton">
-        <Link to={routes.HOME}>
-          <i className="fa fa-arrow-left fa-3x" />
-        </Link>
-      </div>
       <Container>
-        <Row>
+        <Row className={styles.row} >
           <Col>
             <CardScript />
           </Col>
