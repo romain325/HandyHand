@@ -33,7 +33,7 @@ export default function Routes() {
         <Route path={routes.ADD_SCRIPT} component={AjouterScriptFeature} />
         <Route exact path={routes.MY_SCRIPT} component={EnregistrementFeature} />
         <Route path={routes.ENREGISTREMENT} component={EnregistrementFeature} />
-        <Route path={routes.SETTINGS} component={SettingsFeature} />
+        <Route exact path={routes.SETTINGS} component={SettingsFeature} />
       </Switch>
     </App>
   );

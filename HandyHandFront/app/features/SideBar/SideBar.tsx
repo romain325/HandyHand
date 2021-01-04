@@ -27,6 +27,7 @@ const SideBar = ({ isOpen, toggleBar }: Props) => {
           <Nav.Link><Link to={routes.CONNEXION}>Accueil</Link></Nav.Link>
           <Nav.Link><Link to={routes.SCRIPT}>Scripts</Link></Nav.Link>
           <Nav.Link><Link to={routes.COUNTER}>MesScripts</Link></Nav.Link>
+          <Nav.Link><Link to={routes.SETTINGS}>Paramètres</Link></Nav.Link>
         </Nav.Item>
       </Nav>
     </div>
