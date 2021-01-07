@@ -8,12 +8,7 @@ import styles from './AjouterScripts.css';
 import ContentPage from '../../containers/ContentPage';
 
 export default function AjouterScriptFeature() {
-  const [isOpen, setOpen] = useState<boolean>(false);
 
-  function toggleNavBar() {
-    setOpen(!isOpen);
-    console.log(isOpen);
-  }
 
   return (
     <ContentPage>
