@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.LinkedList;
 
 public class Script implements Runnable {
@@ -55,4 +56,9 @@ public class Script implements Runnable {
         }
     }
 
+    public String getId() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(execType).append("-").append(file);
+        return new String(Base64.getEncoder().encode(stringBuilder.toString().toLowerCase().getBytes()));
+    }
 }
