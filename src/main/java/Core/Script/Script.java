@@ -52,7 +52,6 @@ public class Script implements Runnable {
             Thread.sleep(EXEC_TIME_COOLDOWN);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            // TODO exception ?
         }
     }
 

@@ -17,24 +17,21 @@ public class ScriptRestController {
 
     @GetMapping("/all")
     public List<String> allId(){
-        ScriptPersistance scriptPersistance = new ScriptPersistance();
         List<String> ids = new LinkedList<>();
-        List<Script> scripts =  scriptPersistance.getAll();
-        for (Script s: scripts) {
+        for (Script s: new ScriptPersistance().getAll()) {
             ids.add(s.getId());
         }
         return ids;
     }
 
     @GetMapping("/script/{id}")
-    public String getByiD(@PathVariable String id){
-        ScriptPersistance scriptPersistance = new ScriptPersistance();
+    public Script getById(@PathVariable String id){
         try {
-            return scriptPersistance.getById("id").getId();
+            return new ScriptPersistance().getById(id);
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
-        return "This id is not corresponding to any script";
+        return null;
     }
 
 }
