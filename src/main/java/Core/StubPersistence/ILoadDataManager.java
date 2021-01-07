@@ -1,11 +1,15 @@
 package Core.StubPersistence;
 
+import Core.Script.Script;
+
+import javax.naming.NameNotFoundException;
 import java.util.Collection;
+import java.util.List;
 
 public interface ILoadDataManager<T extends Object>  {
 
-    Collection<T> getAll();
-    Collection<T> getByName();
+    List<T> getAll();
+    T getByName(String name) throws NameNotFoundException;
 
 }
 
