@@ -2,10 +2,7 @@ package Api.ApiApp;
 
 import Core.Script.Script;
 import Core.StubPersistence.ScriptPersistance;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.naming.NameNotFoundException;
 import java.util.LinkedList;
@@ -24,7 +21,7 @@ public class ScriptRestController {
         return ids;
     }
 
-    @GetMapping("/script/{id}")
+    @GetMapping("/{id}")
     public Script getById(@PathVariable String id){
         try {
             return new ScriptPersistance().getById(id);
@@ -32,6 +29,16 @@ public class ScriptRestController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteScript(@PathVariable String id){
+        try{
+            ScriptPersistance scriptPersistance = new ScriptPersistance();
+            scriptPersistance.remove(scriptPersistance.getById(id));
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 }

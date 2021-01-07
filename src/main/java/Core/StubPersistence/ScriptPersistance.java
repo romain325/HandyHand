@@ -43,8 +43,15 @@ public class ScriptPersistance implements IScriptDataManager{
 
     @Override
     public void saveAll(List<Script> listScripts) {
-        List<Script> list = new LinkedList<>(Arrays.asList(scriptManager.getAll()));
-        list.addAll(listScripts);
-        scriptManager.save(new Gson().toJson(list, List.class));
+        scriptManager.save(new Gson().toJson(listScripts, List.class));
     }
+
+    public void remove(Script script){
+        List<Script> list = new LinkedList<>(Arrays.asList(scriptManager.getAll()));
+        list.remove(script);
+        System.out.println(list.contains(script));
+        scriptManager.save(new Gson().toJson(list,List.class));
+    }
+
+
 }

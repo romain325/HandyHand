@@ -60,4 +60,9 @@ public class Script implements Runnable {
         stringBuilder.append(execType).append("_").append(file);
         return new String(Base64.getEncoder().encode(stringBuilder.toString().toLowerCase().getBytes()));
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj.getClass() == Script.class && ((Script) obj).getId().equals(this.getId());
+    }
 }
