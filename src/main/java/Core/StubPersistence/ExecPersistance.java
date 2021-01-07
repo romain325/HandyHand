@@ -3,6 +3,7 @@ package Core.StubPersistence;
 import Core.Script.Script;
 import Core.StubPersistence.Local.ExecutableManager;
 import com.google.gson.Gson;
+import jdk.jshell.spi.ExecutionControl;
 
 import javax.naming.NameNotFoundException;
 import java.util.*;
@@ -42,5 +43,10 @@ public class ExecPersistance implements IExecDataManager{
             throw new NameNotFoundException("Name not found");
         }
         return new AbstractMap.SimpleEntry<String,String>(name, values.get(name));
+    }
+
+    @Override
+    public Map.Entry<String, String> getById(String Id) throws NameNotFoundException {
+        return null;
     }
 }

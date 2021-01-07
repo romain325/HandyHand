@@ -10,6 +10,7 @@ public interface ILoadDataManager<T extends Object>  {
 
     List<T> getAll();
     T getByName(String name) throws NameNotFoundException;
+    T getById(String Id) throws  NameNotFoundException;
 
 }
 

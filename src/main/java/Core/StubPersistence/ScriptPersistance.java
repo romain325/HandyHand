@@ -27,6 +27,15 @@ public class ScriptPersistance implements IScriptDataManager{
     }
 
     @Override
+    public Script getById(String id) throws NameNotFoundException {
+        for(Script obj : scriptManager.getAll()){
+            if(obj.getId().equals(id))
+                return obj;
+        }
+        throw new NameNotFoundException(id);
+    }
+
+    @Override
     public void save(Script object) {
         List<Script> list = new LinkedList<>(Arrays.asList(scriptManager.getAll()));
         list.add(object);

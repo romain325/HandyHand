@@ -58,7 +58,7 @@ public class Script implements Runnable {
 
     public String getId() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(execType).append("-").append(file);
+        stringBuilder.append(execType).append("_").append(file);
         return new String(Base64.getEncoder().encode(stringBuilder.toString().toLowerCase().getBytes()));
     }
 }
