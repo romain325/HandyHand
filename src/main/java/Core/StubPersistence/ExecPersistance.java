@@ -27,6 +27,12 @@ public class ExecPersistance implements IExecDataManager{
         executableManager.save(new Gson().toJson(map));
     }
 
+    public void remove(String id){
+        var map = executableManager.getAllMap();
+        map.remove(new String(Base64.getDecoder().decode(id.getBytes())));
+        executableManager.save(new Gson().toJson(map));
+    }
+
     @Override
     public List<Map.Entry<String,String>> getAll() {
         return Arrays.asList(executableManager.getAll().clone());
@@ -46,7 +52,14 @@ public class ExecPersistance implements IExecDataManager{
     }
 
     @Override
-    public Map.Entry<String, String> getById(String Id) throws NameNotFoundException {
-        return null;
+    public Map.Entry<String, String> getById(String id) throws NameNotFoundException {
+        for(var obj : executableManager.getAll()){
+            if(getId(obj).equals(id)) return obj;
+        }
+        throw new NameNotFoundException(id);
+    }
+
+    public static String getId(Map.Entry<String,String> entry){
+        return new String(Base64.getEncoder().encode(entry.getKey().getBytes()));
     }
 }

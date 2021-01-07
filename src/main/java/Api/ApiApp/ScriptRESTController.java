@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/script")
-public class ScriptRestController {
+public class ScriptRESTController {
 
     @GetMapping("/all")
     public List<String> allId(){
