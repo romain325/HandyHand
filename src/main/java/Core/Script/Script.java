@@ -1,20 +1,24 @@
 package Core.Script;
 
-import processing.data.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.LinkedList;
 
 public class Script implements Runnable {
     private static final int EXEC_TIME_COOLDOWN = 3000;
     private static String userOS = System.getProperty("os.name");
-    private final String execPath;
+    private final String execType;
     private final String[] args;
     private final String file;
 
-    public String getExecPath() {
-        return execPath;
+    public String getExecType() {
+        return execType;
     }
 
     public String[] getArgs() {
@@ -26,7 +30,7 @@ public class Script implements Runnable {
     }
 
     public Script(String execPath, String[] args, String file) {
-        this.execPath = execPath;
+        this.execType = execPath;
         this.args = args;
         this.file = file;
     }
@@ -35,7 +39,7 @@ public class Script implements Runnable {
     public void run() {
         try {
 
-            Process process = new ProcessBuilder(this.execPath, this.file, String.join(" ", this.args)).start();
+            Process process = new ProcessBuilder(this.execType, this.file, String.join(" ", this.args)).start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuilder builder = new StringBuilder();
             String line = null;
@@ -48,9 +52,17 @@ public class Script implements Runnable {
             Thread.sleep(EXEC_TIME_COOLDOWN);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            // TODO exception ?
         }
     }
 
+    public String getId() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(execType).append("_").append(file);
+        return new String(Base64.getEncoder().encode(stringBuilder.toString().toLowerCase().getBytes()));
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj.getClass() == Script.class && ((Script) obj).getId().equals(this.getId());
+    }
 }
