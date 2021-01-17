@@ -19,7 +19,6 @@ public class CameraView extends SketchCallback {
     }
 
     public void getImage(Frame frame){
-        int cameraOffset = 20;
         if(frame == null || !frame.isValid())return;
 
         ImageList images = frame.images();
@@ -35,8 +34,6 @@ public class CameraView extends SketchCallback {
             }
             camera.updatePixels();
             getSketch().image(camera, 640 * img.id(),0);
-
-
         }
     }
 
