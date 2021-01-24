@@ -1,31 +1,34 @@
 package Api.ApiApp;
 
+import Core.Script.Script;
 import Core.StubPersistence.ExecPersistance;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.NameNotFoundException;
-import java.util.Base64;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.security.KeyStore;
+import java.util.*;
 
 @RestController
 @RequestMapping("/exec")
 public class ExecRESTController {
 
-    //TODO faire la même méthode pour les exec + gestion erreur en plus
-
     @GetMapping("/all")
     public List<String> getAllId(){
         List<String> ids = new LinkedList<>();
-        for (var val: new ExecPersistance().getAll()) {
-            ids.add(new String(Base64.getEncoder().encode(val.getKey().getBytes())));
+        try {
+            for (var val: new ExecPersistance().getAll()) {
+                ids.add(new String(Base64.getEncoder().encode(val.getKey().getBytes())));
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting all execs",e);
         }
+        if(ids.isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No exec");
         return ids;
-        //catch exception et nouvelle throw new ResponseStatusException(
-        //                HttpStatus.NOT_FOUND, "Pas de scripts !");
     }
 
     @GetMapping("/{id}")
@@ -35,12 +38,55 @@ public class ExecRESTController {
         } catch (NameNotFoundException e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Script not found !",e);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting exec",e);
         }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteScript(@PathVariable String id){
+    public void deleteExec(@PathVariable String id){
         ExecPersistance execPersistance = new ExecPersistance();
-        execPersistance.remove(id);
+        try {
+            execPersistance.remove(id);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while removing exec",e);
+        }
     }
+
+    @PostMapping("/modify")
+    public void modifyExec(HttpServletRequest req, @RequestBody String data) {
+        //TODO Verify Identity
+
+        var objNew = new Gson().fromJson(data, JsonObject.class);
+        String name = objNew.get("name").getAsString();
+        String newPath = objNew.get("execPath").getAsString();
+
+        if(name.isBlank() || name.isEmpty() || newPath.isEmpty() || newPath.isBlank()) throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Error while modifying Exec, bad arguments");
+
+        ExecPersistance execPersistance = new ExecPersistance();
+        Map.Entry<String, String> oldExec;
+        try {
+            oldExec = execPersistance.getByName(name);
+        } catch (NameNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Script not found",e);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying Exec : Error occurred while getting old exec",e);
+        }
+
+        Map.Entry<String, String> newExec = new AbstractMap.SimpleEntry<String, String>(oldExec.getKey(), newPath);
+
+        try {
+            execPersistance.remove(oldExec.getKey());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying Exec : Error occurred while removing old exec",e);
+        }
+
+        try {
+            execPersistance.save(newExec);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying Exec : Error occurred while saving new exec",e);
+        }
+    }
+
 }

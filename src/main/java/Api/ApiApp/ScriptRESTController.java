@@ -11,10 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.NameNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/script")
@@ -23,11 +20,15 @@ public class ScriptRESTController {
     @GetMapping("/all")
     public List<String> allId(){
         List<String> ids = new LinkedList<>();
-        for (Script s: new ScriptPersistance().getAll()) {
-            ids.add(s.getId());
+        try {
+            for (Script s: new ScriptPersistance().getAll()) {
+                ids.add(s.getId());
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting all scripts",e);
         }
+        if(ids.isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No script");
         return ids;
-        //TODO erreur si pas de scripts
     }
 
     @GetMapping("/{id}")
@@ -36,6 +37,8 @@ public class ScriptRESTController {
             return new ScriptPersistance().getById(id);
         } catch (NameNotFoundException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting script by id",e);
         }
         throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "Script not found !");
@@ -49,12 +52,14 @@ public class ScriptRESTController {
             return true;
         } catch (NameNotFoundException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while deleting script",e);
         }
         throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "Script not found !");
     }
 
-
+    @PostMapping("/add")
     public String addScript(HttpServletRequest req, @RequestBody String data) {
         //TODO Verify Identity
 
@@ -78,25 +83,67 @@ public class ScriptRESTController {
                 new ScriptPersistance().save(script);
                 return script.getId();
             }catch (Exception e1){
+                e.printStackTrace();
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "Error while adding the script !", e1);
             }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while adding script : Error occurred while verifying id script",e);
         }
         return "Error while adding the script !";
     }
 
-    //TODO modifier un script
+    @PostMapping("/modify")
+    public void modifyScript(HttpServletRequest req, @RequestBody String data) {
+        //TODO Verify Identity
 
-    /*
-     *  @PostMapping("/modify")
-     *
-     *  {"oldId" : *ancienId* ,"execPath":  "test", "args":  ["-h"], "file":  "john2reaper"}
-     *  if null pas de modification
-     *
-     *  si tu trouve pas : throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "mess");
-    *
-    * Tu récupére le script,tu créer le nouveau, tu supprime l'ancien et t'ajoute le nouveau
-     */
+        var objNew = new Gson().fromJson(data, JsonObject.class);
+        List<String> argsNew = new ArrayList<>();
+        for (var elem : objNew.getAsJsonArray("args")){
+            argsNew.add(elem.getAsString());
+        }
+        String fileNew = objNew.get("file").getAsString();
+        String execPathNew = objNew.get("execPath").getAsString();
+        String idToModify = objNew.get("oldId").getAsString();
+
+        Script oldScript;
+        ScriptPersistance scriptPersistance = new ScriptPersistance();
+        try{
+            oldScript = scriptPersistance.getById(idToModify);
+        } catch (NameNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while modifying script, script not found");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Error occurred while getting old script",e);
+        }
+
+        if(fileNew.isEmpty() || fileNew.isBlank()) fileNew = oldScript.getFile();
+
+        if(execPathNew.isEmpty() || execPathNew.isBlank()) execPathNew = oldScript.getExecType();
+
+        if(argsNew.isEmpty()) argsNew = Arrays.asList(oldScript.getArgs());
+
+        Script newScript = new Script(execPathNew, argsNew.toArray(new String[0]), fileNew);
+
+        try {
+            scriptPersistance.remove(oldScript);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Error occurred while removing script",e);
+        }
+
+        try {
+            scriptPersistance.getById(newScript.getId());
+        } catch (NameNotFoundException e) {
+            try {
+                new ScriptPersistance().save(newScript);
+            }catch (Exception e1){
+                e.printStackTrace();
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Error while adding the script !", e1);
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Error occurred while verifying id script",e);
+        }
+    }
+
 
 }
