@@ -8,12 +8,7 @@ import styles from './Counter.css';
 export default function Counter() {
   return (
     <div>
-      <Container fluid style={{
-          overflow: 'scroll',
-          overflowX: 'hidden',
-          height: '70vh',
-        }}
-      >
+      <Container >
         <Row>
         <Link to={routes.ADD_SCRIPT}>
           <Button className={styles.button1} variant="success">
@@ -35,6 +30,5 @@ export default function Counter() {
         </Row>
       </Container>
     </div>
-
   );
 }
