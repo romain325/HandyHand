@@ -5,7 +5,9 @@ import Core.StubPersistence.ScriptPersistance;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.json.simple.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.NameNotFoundException;
 import javax.servlet.http.HttpServletRequest;
@@ -34,21 +36,25 @@ public class ScriptRESTController {
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
-        return null;
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Script not found !");
     }
 
     @DeleteMapping("/{id}")
-    public void deleteScript(@PathVariable String id){
+    public boolean deleteScript(@PathVariable String id){
         try{
             ScriptPersistance scriptPersistance = new ScriptPersistance();
             scriptPersistance.remove(scriptPersistance.getById(id));
+            return true;
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
+        throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Script not found !");
     }
 
     @PostMapping("/add")
-    public boolean addScript(HttpServletRequest req, @RequestBody String data) {
+    public String addScript(HttpServletRequest req, @RequestBody String data) {
         //TODO Verify Identity
 
         var obj = new Gson().fromJson(data, JsonObject.class);
@@ -59,17 +65,21 @@ public class ScriptRESTController {
         String file = obj.get("file").getAsString();
         String execPath = obj.get("execPath").getAsString();
 
-        if(file.isEmpty() || file.isBlank() || execPath.isEmpty() || execPath.isBlank()) return false;
+        if(file.isEmpty() || file.isBlank() || execPath.isEmpty() || execPath.isBlank())  throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Error while adding the script, bad arguments !");
 
         Script script = new Script(execPath, args.toArray(new String[0]), file);
         try {
             new ScriptPersistance().getById(script.getId());
         } catch (NameNotFoundException e) {
-            new ScriptPersistance().save(script);
-            return true;
+            try {
+                new ScriptPersistance().save(script);
+                return script.getId();
+            }catch (Exception e1){
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Error while adding the script !", e1);
+            }
         }
-
-        return false;
+        return "Error while adding the script !";
     }
-
 }

@@ -1,12 +1,8 @@
 package Api.ApiApp;
 
 import Core.StubPersistence.ExecPersistance;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.springframework.web.bind.annotation.*;
-
 import javax.naming.NameNotFoundException;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,22 +35,5 @@ public class ExecRESTController {
     public void deleteScript(@PathVariable String id){
         ExecPersistance execPersistance = new ExecPersistance();
         execPersistance.remove(id);
-    }
-
-    @PostMapping("/add")
-    public boolean addExec(HttpServletRequest req, @RequestBody String data) {
-        //TODO Verify Identity
-
-        var obj = new Gson().fromJson(data, JsonObject.class);
-        String file = obj.get("name").getAsString();
-        String execPath = obj.get("path").getAsString();
-
-        if(file.isEmpty() || file.isBlank() || execPath.isEmpty() || execPath.isBlank()) return false;
-
-        Map.Entry<String,String> entry = Map.entry(file,execPath);
-
-        new ExecPersistance().save(entry);
-
-        return true;
     }
 }
