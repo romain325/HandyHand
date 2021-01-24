@@ -27,6 +27,7 @@ public class ScriptRESTController {
             ids.add(s.getId());
         }
         return ids;
+        //TODO erreur si pas de scripts
     }
 
     @GetMapping("/{id}")
@@ -53,10 +54,11 @@ public class ScriptRESTController {
                 HttpStatus.NOT_FOUND, "Script not found !");
     }
 
-    @PostMapping("/add")
+
     public String addScript(HttpServletRequest req, @RequestBody String data) {
         //TODO Verify Identity
 
+        //Methods in order to get args
         var obj = new Gson().fromJson(data, JsonObject.class);
         List<String> args = new ArrayList<>();
         for (var elem : obj.getAsJsonArray("args")){
@@ -82,4 +84,19 @@ public class ScriptRESTController {
         }
         return "Error while adding the script !";
     }
+
+    //TODO modifier un script
+
+    /*
+     *  @PostMapping("/modify")
+     *
+     *  {"oldId" : *ancienId* ,"execPath":  "test", "args":  ["-h"], "file":  "john2reaper"}
+     *  if null pas de modification
+     *
+     *  si tu trouve pas : throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "mess");
+    *
+    * Tu récupére le script,tu créer le nouveau, tu supprime l'ancien et t'ajoute le nouveau
+     */
+
 }
