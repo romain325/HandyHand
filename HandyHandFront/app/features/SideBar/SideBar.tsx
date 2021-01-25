@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { Nav } from 'react-bootstrap';
-import classNames from 'classnames';
 import routes from '../../constants/routes.json';
 import SubMenu from './SubMenu';
 import style from './SideBar.css';
+import { Link } from 'react-router-dom';
 
 type Props = {
   isOpen: boolean;
@@ -24,23 +24,11 @@ const SideBar = ({ isOpen, toggleBar }: Props) => {
       <Nav className="flex-column pt-2">
 
         <Nav.Item className={style.active}>
-          <Nav.Link href={routes.HOME}>Accueil</Nav.Link>
-          <Nav.Link href={routes.HOME}>Scripts</Nav.Link>
+          <Nav.Link><Link to={routes.ACCUEIL}>Accueil</Link></Nav.Link>
+          <Nav.Link><Link to={routes.SCRIPT}>Scripts</Link></Nav.Link>
+          <Nav.Link><Link to={routes.COUNTER}>MesScripts</Link></Nav.Link>
+          <Nav.Link><Link to={routes.SETTINGS}>Paramètres</Link></Nav.Link>
         </Nav.Item>
-
-        <SubMenu
-          title="Mes Scripts"
-          items={[
-            {
-              title: 'Consulter',
-              link: routes.COUNTER,
-            },
-            {
-              title: 'Ajouter',
-              link: routes.CONNEXION,
-            },
-          ]}
-        />
       </Nav>
     </div>
   );

@@ -10,14 +10,9 @@ export default function EnregistrementFeature() {
   return (
     <ContentPage>
       <div>
-        <div className={styles.backButton} data-tid="backButton">
-          <Link to={routes.HOME}>
-            <i className="fa fa-arrow-left fa-3x" />
-          </Link>
-        </div>
         <Form>
           <h2>Enregistrement</h2>
-          <h6>Crée un nouveau compte</h6>
+          <h6>Créer un nouveau compte</h6>
           <Form.Group controlId="formBasicEmail">
             <Form.Control type="email" placeholder="Pseudo" />
           </Form.Group>
@@ -32,12 +27,13 @@ export default function EnregistrementFeature() {
               placeholder="Confirmer mot de passe"
             />
           </Form.Group>
-
-          <Button type="submit" variant="primary" block>
-            Crée un compte
-          </Button>
+          <Link to={routes.HOME}>
+            <Button type="submit" variant="primary" block>
+              Créer un compte
+            </Button>
+          </Link>
           <Form.Text className="text-muted">
-            Si vous avez déja un compte cliquez-<a>ici</a>
+            Si vous avez déja un compte cliquez-<Link to={routes.CONNEXION}>ici</Link>
           </Form.Text>
         </Form>
       </div>

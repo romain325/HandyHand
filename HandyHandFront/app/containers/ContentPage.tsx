@@ -19,14 +19,14 @@ const ContentPage = (props: Props) => {
     <div className="fullHeight">
       <HeaderBar toggleSidebar={toggleNavBar} />
       <Row className="fullHeight">
-        <Col md={4}
+        <Col md={isOpen ? 4 : 0}
           style={{
             display:`${isOpen ? 'inherit' : 'none'}`
           }}
         >
           <SideBar isOpen={isOpen} toggleBar={toggleNavBar}/>
         </Col>
-        <Col>
+        <Col md={isOpen ? 8 : 12}>
           {children}
         </Col>
       </Row>

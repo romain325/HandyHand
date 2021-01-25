@@ -1,9 +1,11 @@
 {
   "HOME": "/",
+  "ACCUEIL": "/accueil",
   "COUNTER": "/counter",
   "CONNEXION": "/connexion",
   "ENREGISTREMENT": "/enregistrement",
   "SCRIPT": "/script",
   "ADD_SCRIPT": "/script/add",
-  "MY_SCRIPT": "/script/perso"
+  "MY_SCRIPT": "/script/perso",
+  "SETTINGS": "/settings"
 }
