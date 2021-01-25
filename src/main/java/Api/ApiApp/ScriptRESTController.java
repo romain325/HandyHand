@@ -17,7 +17,7 @@ import java.util.*;
 @RequestMapping("/script")
 public class ScriptRESTController {
 
-    @GetMapping("/all")
+    @GetMapping("/allId")
     public List<String> allId(){
         List<String> ids = new LinkedList<>();
         try {
@@ -29,6 +29,15 @@ public class ScriptRESTController {
         }
         if(ids.isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No script");
         return ids;
+    }
+
+    @GetMapping("/all")
+    public List<Map<String,String>> all() throws Exception {
+        List<Map<String,String>> elems = new ArrayList<>();
+        for (var e : new ScriptPersistance().getAll()){
+            elems.add(new HashMap<>(){{put("file", e.getFile()); put("description", e.getDescription()); put("id", e.getId());}});
+        }
+        return elems;
     }
 
     @GetMapping("/{id}")
@@ -69,13 +78,16 @@ public class ScriptRESTController {
         for (var elem : obj.getAsJsonArray("args")){
             args.add(elem.getAsString());
         }
-        String file = obj.get("file").getAsString();
-        String execPath = obj.get("execPath").getAsString();
 
-        if(file.isEmpty() || file.isBlank() || execPath.isEmpty() || execPath.isBlank())  throw new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, "Error while adding the script, bad arguments !");
+        Script script;
 
-        Script script = new Script(execPath, args.toArray(new String[0]), file);
+        try{
+            script = new Script(obj.get("execPath").getAsString(), args.toArray(new String[0]), obj.get("file").getAsString(), (obj.get("description") == null ? "" : obj.get("description").getAsString()));
+        }catch (Exception e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error adding: Bad Arguments");
+        }
+
+
         try {
             new ScriptPersistance().getById(script.getId());
         } catch (NameNotFoundException e) {
@@ -96,6 +108,29 @@ public class ScriptRESTController {
         //TODO Verify Identity
 
         var objNew = new Gson().fromJson(data, JsonObject.class);
+        Script oldScript;
+        ScriptPersistance scriptPersistance = new ScriptPersistance();
+
+        try{
+            oldScript = scriptPersistance.getById(objNew.get("oldId").getAsString());
+        } catch (NameNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while modifying script, script not found");
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Error occurred while getting old script",e);
+        }
+
+        Map<String, String> elements = new HashMap<>(){{
+            put("file",oldScript.getFile());
+            put("execPath",oldScript.getExecType());
+            put("description", oldScript.getDescription());
+        }};
+
+        for(var elem : elements.keySet()){
+            try{
+                elements.put(elem, objNew.get(elem).getAsString());
+            }catch (Exception ignored){}
+        }
+
         List<String> argsNew = new ArrayList<>();
         try {
             for (var elem : objNew.getAsJsonArray("args")){
@@ -103,64 +138,20 @@ public class ScriptRESTController {
             }
         } catch (Exception ignored) {}
 
-        String fileNew;
-        try {
-            fileNew = objNew.get("file").getAsString();
-        } catch (Exception ignored) {
-            fileNew = "";
-        }
-
-        String execPathNew;
-        try {
-            execPathNew = objNew.get("execPath").getAsString();
-        } catch (Exception ignored) {
-            execPathNew = "";
-        }
-
-        String idToModify;
-        try {
-            idToModify = objNew.get("oldId").getAsString();
-        } catch (Exception ignored) {
-            idToModify = "";
-        }
-
-        Script oldScript;
-        ScriptPersistance scriptPersistance = new ScriptPersistance();
-        try{
-            oldScript = scriptPersistance.getById(idToModify);
-        } catch (NameNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error while modifying script, script not found");
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Error occurred while getting old script",e);
-        }
-
-        if(fileNew.isEmpty() || fileNew.isBlank()) fileNew = oldScript.getFile();
-
-        if(execPathNew.isEmpty() || execPathNew.isBlank()) execPathNew = oldScript.getExecType();
-
         if(argsNew.isEmpty()) argsNew = Arrays.asList(oldScript.getArgs());
 
-        Script newScript = new Script(execPathNew, argsNew.toArray(new String[0]), fileNew);
+        Script newScript = new Script(elements.get("execPath"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"));
 
-        try {
-            scriptPersistance.remove(oldScript);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Error occurred while removing script",e);
-        }
-
-        try {
-            scriptPersistance.getById(newScript.getId());
-        } catch (NameNotFoundException e) {
+        try{
             try {
-                scriptPersistance.save(newScript);
-                return newScript.getId();
-            }catch (Exception e1){
-                e.printStackTrace();
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, "Error while adding the script !", e1);
+                scriptPersistance.remove(oldScript);
+                scriptPersistance.getById(newScript.getId());
+            } catch (NameNotFoundException e) {
+                    scriptPersistance.save(newScript);
+                    return newScript.getId();
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Error occurred while verifying id script",e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Error while saving",e);
         }
         return "Error during modifying !";
     }

@@ -3,11 +3,11 @@ package Core.StubPersistence;
 import Core.Script.Script;
 import Core.StubPersistence.Local.ScriptManager;
 import com.google.gson.Gson;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 
 import javax.naming.NameNotFoundException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ScriptPersistance implements IScriptDataManager{
     ScriptManager scriptManager = new ScriptManager();
