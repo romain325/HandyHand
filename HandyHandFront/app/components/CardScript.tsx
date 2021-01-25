@@ -2,18 +2,25 @@ import React from 'react';
 import { Card, Form } from 'react-bootstrap';
 import { Row, Col } from 'react-bootstrap';
 
+interface Props {
+  title : string;
+  description : string;
+  isActive? : boolean;
+}
 
-export default function CardScript(): JSX.Element {
+export default function CardScript(props : Props): JSX.Element {
+
+
   return (
     <Card text="dark" style={{ width: '20rem' }} className="mb-2">
       <Card.Header>
         <Row>
           <Col sm={9}>
-            <Card.Text>Spotify</Card.Text>
+            <Card.Text>{props.title}</Card.Text>
           </Col>
           <Col sm={1}>
             <Form >
-              <Form.Switch/> {/*//TODO ADD AN ID BASED ON PARAM, as to be uniq */}
+              <Form.Switch value={props.isActive == null ? false : props.isActive}/> {/*//TODO ADD AN ID BASED ON PARAM, as to be uniq */}
             </Form>
           </Col>
         </Row>
@@ -22,7 +29,7 @@ export default function CardScript(): JSX.Element {
         <Row>
           <Col sm={10}>
             <Card.Text>
-              Montrer deux doigts au leap motion pour lancer spotify
+              {props.description}
             </Card.Text>
           </Col>
         </Row>

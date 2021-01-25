@@ -1,14 +1,47 @@
-import React from 'react';
-import { Col, Row, Card, Dropdown, Container, Button } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Col, Row, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CardScript from '../../components/CardScript';
 import routes from '../../constants/routes.json';
-import ContentPage from '../../containers/ContentPage';
 import styles from './Counter.css';
+
+
+interface ItemAPI {
+  execType : string;
+  args : string[];
+  file : string;
+  id : string;
+}
+
+
 export default function Counter() {
+
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [items, setItems] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/script/all")
+      .then( rep => rep.json())
+      .then(json => {
+        setItems(json);
+        console.log(json);
+        setIsLoaded(true);
+      })
+  }, [])
+
+
+  if(!isLoaded){
+    return <div>Loading</div>
+  }
+
   return (
     <div>
-      <Container >
+      <Container fluid style={{
+          overflow: 'scroll',
+          overflowX: 'hidden',
+          height: '70vh',
+        }}
+      >
         <Row>
         <Link to={routes.ADD_SCRIPT}>
           <Button className={styles.button1} variant="success">
@@ -16,19 +49,25 @@ export default function Counter() {
           </Button>
           </Link>
         </Row>
-        <Row></Row>
+        <Row>TEST</Row>
         <Row>
-          <Col>
-            <CardScript />
-          </Col>
-          <Col>
-            <CardScript />
-          </Col>
-          <Col>
-            <CardScript />
-          </Col>
+          { items.length == 0 ?
+              <Col>
+                Nothing Found ...
+              </Col>
+
+              :
+
+              items.map( item => (
+                <Col>
+                  <CardScript title={item} description="rien" />
+                  {console.log(item)}
+                </Col>
+              ))
+          }
         </Row>
       </Container>
     </div>
+
   );
 }

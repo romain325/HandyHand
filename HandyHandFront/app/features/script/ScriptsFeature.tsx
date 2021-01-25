@@ -22,7 +22,7 @@ export default function ScriptsFeatures() {
       for (let j = 0; j < iter; j++) {
         subElements.push(
           <Col>
-            <CardScript />
+            <CardScript title="test" description="test" />
           </Col>
         );
       }
