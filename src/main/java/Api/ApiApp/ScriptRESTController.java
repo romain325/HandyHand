@@ -88,7 +88,7 @@ public class ScriptRESTController {
                         HttpStatus.BAD_REQUEST, "Error while adding the script !", e1);
             }
         }
-        return "Error while adding scripts !";
+        return "Error while adding scripts : Name already exist";
     }
 
     @PostMapping("/modify")

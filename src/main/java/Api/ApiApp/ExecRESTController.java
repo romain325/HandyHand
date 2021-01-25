@@ -85,16 +85,16 @@ public class ExecRESTController {
         } catch (NameNotFoundException e) {
             try {
                 execPersistance.save(newExec);
-                return newExec.getKey();
+                return ExecPersistance.getId(newExec);
             } catch (Exception exception) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while adding Exec : during saving");
             }
         }
-        return "Error while adding exec !";
+        return "Error while adding exec : Exec already exist";
     }
 
     @PostMapping("/modify")
-    public void modifyExec(HttpServletRequest req, @RequestBody String data) {
+    public String modifyExec(HttpServletRequest req, @RequestBody String data) {
         //TODO Verify Identity
 
         var objNew = new Gson().fromJson(data, JsonObject.class);
@@ -135,6 +135,7 @@ public class ExecRESTController {
 
         try {
             execPersistance.save(newExec);
+            return ExecPersistance.getId(newExec);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying Exec : Error occurred while saving new exec",e);
         }
