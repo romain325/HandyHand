@@ -3,9 +3,7 @@ import {  Col, Container } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import CardScript from '../../components/CardScript';
 import ContentPage from '../../containers/ContentPage';
-import styles from './ScriptsFeature.css';
 import LineScript from '../../components/LineScript';
-import src from 'electron-log';
 
 export default function ScriptsFeatures() {
   const [isGrid, setIsGrid] = useState(true);
@@ -49,28 +47,15 @@ export default function ScriptsFeatures() {
 
     return <div>{elements}</div>;
   }
- /*
-      <Form className={styles.row}>
-        <Form.Check
-          type="switch"
-          id="isgridswitch"
-          label="Mode grille"
-          checked={isGrid}
-          onClick={(e) => {
-            console.log(e);
-            setIsGrid(!isGrid);
-          }}
-        />
-      </Form>
-      */
+
+
   return (
     <ContentPage>
       <Container fluid>
-        <img src="C:\Users\thoma\Documents\Projets\HandyHand\HandyHandFront\resources\img\grid.png"
+        <img src={isGrid ? "../resources/img/grid.png" : "../resources/img/list.png"}
         height="30px"
         width="30px"
-        onClick={(e) => {
-            console.log(e);
+        onClick={ _e => {
             setIsGrid(!isGrid);
           }}/>
       </Container>
