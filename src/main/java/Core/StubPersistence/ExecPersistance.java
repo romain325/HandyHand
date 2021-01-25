@@ -14,13 +14,14 @@ public class ExecPersistance implements IExecDataManager{
 
     @Override
     public void save(Map.Entry<String,String> object) throws Exception {
+        Map<String, String> map;
         try {
-            var map = executableManager.getAllMap();
-            map.put(object.getKey(),object.getValue());
-            executableManager.save(new Gson().toJson(map));
+            map = executableManager.getAllMap();
         } catch (Exception e) {
-            throw new Exception("Error save ExecPersistance");
+            map = new HashMap<String, String>();
         }
+        map.put(object.getKey(),object.getValue());
+        executableManager.save(new Gson().toJson(map));
     }
 
     @Override
@@ -64,38 +65,29 @@ public class ExecPersistance implements IExecDataManager{
     }
 
     @Override
-    public Map.Entry<String,String> getByName(String name) throws Exception, NameNotFoundException {
+    public Map.Entry<String,String> getByName(String name) throws NameNotFoundException {
+        Map<String, String> values;
         try {
-            Map<String, String> values = executableManager.getAllMap();
-            if(!values.containsKey(name)){
-                throw new NameNotFoundException("Name not found");
-            }
-            return new AbstractMap.SimpleEntry<String,String>(name, values.get(name));
+            values = executableManager.getAllMap();
         } catch (Exception e) {
-            throw new Exception("Error getByName ExecPersistance");
+            throw new NameNotFoundException("Name not found");
         }
+
+        if(!values.containsKey(name)){
+            throw new NameNotFoundException("Name not found");
+        }
+        return new AbstractMap.SimpleEntry<String,String>(name, values.get(name));
     }
 
     @Override
-    public Map.Entry<String, String> getById(String id) throws Exception {
-        try{
-            for(var obj : executableManager.getAll()){
-                try{
-                    if(getId(obj).equals(id)) return obj;
-                } catch (NameNotFoundException ignored) {}
-            }
-            throw new NameNotFoundException(id);
-        } catch (Exception e) {
-            throw new Exception("Error getById ExecPersistance");
+    public Map.Entry<String, String> getById(String id) throws NameNotFoundException {
+        for(var obj : executableManager.getAll()){
+            if(getId(obj).equals(id)) return obj;
         }
-
+        throw new NameNotFoundException(id);
     }
 
-    public static String getId(Map.Entry<String,String> entry) throws NameNotFoundException {
-        try {
-            return new String(Base64.getEncoder().encode(entry.getKey().getBytes()));
-        } catch (Exception e) {
-            throw new NameNotFoundException("Exec not found");
-        }
+    public static String getId(Map.Entry<String,String> entry) {
+        return new String(Base64.getEncoder().encode(entry.getKey().getBytes()));
     }
 }

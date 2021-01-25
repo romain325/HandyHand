@@ -2,6 +2,7 @@ package Api.ApiApp;
 
 import Core.Script.Script;
 import Core.StubPersistence.ExecPersistance;
+import Core.StubPersistence.ScriptPersistance;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.http.HttpStatus;
@@ -53,13 +54,63 @@ public class ExecRESTController {
         }
     }
 
+    @PostMapping("/add")
+    public String addExec(HttpServletRequest req, @RequestBody String data) {
+        //TODO Verify Identity
+
+        var objNew = new Gson().fromJson(data, JsonObject.class);
+        String name;
+        try {
+            name = objNew.get("name").getAsString();
+        } catch (Exception ignored) {
+            name = "";
+        }
+
+        String path;
+        try {
+            path = objNew.get("execPath").getAsString();
+        } catch (Exception ignored) {
+            path = "";
+        }
+
+        if(name.isBlank() || name.isEmpty() || path.isEmpty() || path.isBlank()) throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Error while adding Exec, bad arguments");
+
+
+        Map.Entry<String, String> newExec = new AbstractMap.SimpleEntry<String, String>(name, path);
+
+        ExecPersistance execPersistance = new ExecPersistance();
+        try {
+            execPersistance.getByName(name);
+        } catch (NameNotFoundException e) {
+            try {
+                execPersistance.save(newExec);
+                return newExec.getKey();
+            } catch (Exception exception) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while adding Exec : during saving");
+            }
+        }
+        return "Error while adding exec !";
+    }
+
     @PostMapping("/modify")
     public void modifyExec(HttpServletRequest req, @RequestBody String data) {
         //TODO Verify Identity
 
         var objNew = new Gson().fromJson(data, JsonObject.class);
-        String name = objNew.get("name").getAsString();
-        String newPath = objNew.get("execPath").getAsString();
+        String name;
+        try {
+            name = objNew.get("name").getAsString();
+        } catch (Exception ignored) {
+            name = "";
+        }
+
+        String newPath;
+        try {
+            newPath = objNew.get("execPath").getAsString();
+        } catch (Exception ignored) {
+            newPath = "";
+        }
 
         if(name.isBlank() || name.isEmpty() || newPath.isEmpty() || newPath.isBlank()) throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST, "Error while modifying Exec, bad arguments");

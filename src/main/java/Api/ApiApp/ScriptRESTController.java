@@ -92,17 +92,37 @@ public class ScriptRESTController {
     }
 
     @PostMapping("/modify")
-    public void modifyScript(HttpServletRequest req, @RequestBody String data) {
+    public String modifyScript(HttpServletRequest req, @RequestBody String data) {
         //TODO Verify Identity
 
         var objNew = new Gson().fromJson(data, JsonObject.class);
         List<String> argsNew = new ArrayList<>();
-        for (var elem : objNew.getAsJsonArray("args")){
-            argsNew.add(elem.getAsString());
+        try {
+            for (var elem : objNew.getAsJsonArray("args")){
+                argsNew.add(elem.getAsString());
+            }
+        } catch (Exception ignored) {}
+
+        String fileNew;
+        try {
+            fileNew = objNew.get("file").getAsString();
+        } catch (Exception ignored) {
+            fileNew = "";
         }
-        String fileNew = objNew.get("file").getAsString();
-        String execPathNew = objNew.get("execPath").getAsString();
-        String idToModify = objNew.get("oldId").getAsString();
+
+        String execPathNew;
+        try {
+            execPathNew = objNew.get("execPath").getAsString();
+        } catch (Exception ignored) {
+            execPathNew = "";
+        }
+
+        String idToModify;
+        try {
+            idToModify = objNew.get("oldId").getAsString();
+        } catch (Exception ignored) {
+            idToModify = "";
+        }
 
         Script oldScript;
         ScriptPersistance scriptPersistance = new ScriptPersistance();
@@ -132,7 +152,8 @@ public class ScriptRESTController {
             scriptPersistance.getById(newScript.getId());
         } catch (NameNotFoundException e) {
             try {
-                new ScriptPersistance().save(newScript);
+                scriptPersistance.save(newScript);
+                return newScript.getId();
             }catch (Exception e1){
                 e.printStackTrace();
                 throw new ResponseStatusException(
@@ -141,6 +162,7 @@ public class ScriptRESTController {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Error occurred while verifying id script",e);
         }
+        return "Error during modifying !";
     }
 
 
