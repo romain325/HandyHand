@@ -82,15 +82,13 @@ public class ScriptRESTController {
             try {
                 new ScriptPersistance().save(script);
                 return script.getId();
-            }catch (Exception e1){
+            } catch (Exception e1) {
                 e.printStackTrace();
                 throw new ResponseStatusException(
                         HttpStatus.BAD_REQUEST, "Error while adding the script !", e1);
             }
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while adding script : Error occurred while verifying id script",e);
         }
-        return "Error while adding the script !";
+        return "Error while adding scripts !";
     }
 
     @PostMapping("/modify")

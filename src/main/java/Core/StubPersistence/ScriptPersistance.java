@@ -22,42 +22,30 @@ public class ScriptPersistance implements IScriptDataManager{
     }
 
     @Override
-    public Script getByName(String name) throws Exception, NameNotFoundException {
-        try{
-            for(Script obj : scriptManager.getAll()){
-                if(obj.getFile().equals(name))
-                    return obj;
-            }
-            throw new NameNotFoundException(name);
-        } catch (Exception e) {
-            throw new Exception("Error getByName ScriptPersistance");
+    public Script getByName(String name) throws NameNotFoundException {
+        for(Script obj : scriptManager.getAll()){
+            if(obj.getFile().equals(name))
+                return obj;
         }
+        throw new NameNotFoundException(name);
     }
 
     @Override
-    public Script getById(String id) throws Exception, NameNotFoundException {
-        try{
-            for(Script obj : scriptManager.getAll()){
-                if(obj.getId().equals(id)) return obj;
-            }
-            throw new NameNotFoundException(id);
-        } catch (Exception e) {
-            throw new Exception("Error getById ScriptPersistance");
+    public Script getById(String id) throws NameNotFoundException {
+        for(Script obj : scriptManager.getAll()){
+            if(obj.getId().equals(id)) return obj;
         }
+        throw new NameNotFoundException(id);
     }
 
     @Override
     public void save(Script object) throws Exception {
+        List<Script> list = new LinkedList<>(Arrays.asList(scriptManager.getAll()));
+        list.add(object);
         try{
-            List<Script> list = new LinkedList<>(Arrays.asList(scriptManager.getAll()));
-            list.add(object);
-            try{
-                scriptManager.save(new Gson().toJson(list, List.class));
-            }catch (Exception e){
-                throw new Exception(object.getId());
-            }
-        } catch (Exception e) {
-            throw new Exception("Error save ScriptPersistance");
+            scriptManager.save(new Gson().toJson(list, List.class));
+        }catch (Exception e){
+            throw new Exception(object.getId());
         }
     }
 
