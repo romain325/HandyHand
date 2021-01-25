@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { Button, Form, Row, Container } from 'react-bootstrap';
 import routes from '../../constants/routes.json';
-import { Card, Col, Container } from 'react-bootstrap';
-import { Row } from 'react-bootstrap';
-import { Button, Form } from 'react-bootstrap';
-import styles from './AjouterScripts.css';
 import ContentPage from '../../containers/ContentPage';
 
 export default function AjouterScriptFeature() {
