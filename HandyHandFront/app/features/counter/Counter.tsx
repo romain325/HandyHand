@@ -5,10 +5,8 @@ import CardScript from '../../components/CardScript';
 import routes from '../../constants/routes.json';
 import styles from './Counter.css';
 
-
 interface ItemAPI {
-  execType : string;
-  args : string[];
+  description : string;
   file : string;
   id : string;
 }
@@ -17,12 +15,12 @@ interface ItemAPI {
 export default function Counter() {
 
   const [isLoaded, setIsLoaded] = useState(false);
-  const [items, setItems] = useState<string[]>([]);
+  const [items, setItems] = useState<ItemAPI[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:8080/script/all")
       .then( rep => rep.json())
-      .then(json => {
+      .then((json) => {
         setItems(json);
         setIsLoaded(true);
       })
@@ -59,7 +57,7 @@ export default function Counter() {
 
               items.map( item => (
                 <Col>
-                  <CardScript title={item} description="rien" />
+                  <CardScript title={item.file} description={item.description} />
                 </Col>
               ))
           }
