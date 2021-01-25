@@ -1,14 +1,9 @@
 package Core.Script;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.LinkedList;
 
 public class Script implements Runnable {
     private static final int EXEC_TIME_COOLDOWN = 3000;
@@ -16,6 +11,11 @@ public class Script implements Runnable {
     private final String execType;
     private final String[] args;
     private final String file;
+    private final String description;
+
+    public String getDescription() {
+        return description;
+    }
 
     public String getExecType() {
         return execType;
@@ -30,9 +30,14 @@ public class Script implements Runnable {
     }
 
     public Script(String execPath, String[] args, String file) {
+        this(execPath,args,file,"");
+    }
+
+    public Script(String execPath, String[] args, String file, String description) {
         this.execType = execPath;
         this.args = args;
         this.file = file;
+        this.description = description;
     }
 
     @Override
@@ -42,7 +47,7 @@ public class Script implements Runnable {
             Process process = new ProcessBuilder(this.execType, this.file, String.join(" ", this.args)).start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             StringBuilder builder = new StringBuilder();
-            String line = null;
+            String line;
             while ( (line = reader.readLine()) != null) {
                 builder.append(line);
                 builder.append(System.getProperty("line.separator"));
@@ -56,13 +61,12 @@ public class Script implements Runnable {
     }
 
     public String getId() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(execType).append("_").append(file);
-        return new String(Base64.getEncoder().encode(stringBuilder.toString().toLowerCase().getBytes()));
+        return new String(Base64.getEncoder().encode((execType + "_" + file).toLowerCase().getBytes()));
     }
 
     @Override
     public boolean equals(Object obj) {
         return obj.getClass() == Script.class && ((Script) obj).getId().equals(this.getId());
     }
+
 }
