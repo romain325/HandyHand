@@ -11,17 +11,6 @@ import ScriptsFeatures from './features/scripts/ScriptsFeature';
 import SettingsFeature from './features/settings/SettingsFeature';
 import MyScriptsFeature from './features/myScripts/myScriptsFeature';
 
-// Lazily load routes and code split with webpack
-const LazyCounterPage = React.lazy(() =>
-  import(/* webpackChunkName: "CounterPage" */ './containers/CounterPage')
-);
-
-const CounterPage = (props: Record<string, any>) => (
-  <React.Suspense fallback={<h1>Loading...</h1>}>
-    <LazyCounterPage {...props} />
-  </React.Suspense>
-);
-
 
 export default function Routes() {
   return (
