@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import CardScript from '../../components/CardScript';
 import routes from '../../constants/routes.json';
 import styles from './Counter.css';
-import { ScriptCard } from '../../utils/HandyHandAPIType';
-import HandyHandAPI from '../../utils/HandyHandAPI';
+import { ScriptCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
+import HandyHandAPI from '../../utils/HandyHandAPI/HandyHandAPI';
 
 export default function Counter() {
   const [isLoaded, setIsLoaded] = useState(false);
