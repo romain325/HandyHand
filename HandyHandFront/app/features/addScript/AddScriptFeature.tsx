@@ -12,7 +12,7 @@ interface FormElements {
   description: string;
 }
 
-export default function AjouterScriptFeature() {
+export default function AddScriptFeature() {
   const { register, handleSubmit, errors } = useForm<FormElements>();
 
   const onSubmit = (data: FormElements) => {

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import ContentPage from '../../containers/ContentPage';
 
-export default function AccueilFeature() {
+export default function HomeFeature() {
   const [seconds, setSeconds] = useState(0);
 
   function getCurrentImage(): JSX.Element {
