@@ -1,12 +1,14 @@
 import { ScriptCard } from './HandyHandAPIType';
 
-const link = 'http://localhost:8080/';
+export default class HandyHandAPI {
+  private link = 'http://localhost:8080';
 
-async function getFromAPI<T>(urlArg: string): Promise<T> {
-  const rep = await fetch(link + urlArg);
-  return await rep.json();
-}
+  private async getFromAPI<T>(urlArg: string): Promise<T> {
+    const rep = await fetch(this.link + urlArg);
+    return await rep.json();
+  }
 
-export default async function getScriptCards(): Promise<ScriptCard[]> {
-  return await getFromAPI<ScriptCard[]>('/script/all');
+  public async getScriptCards(): Promise<ScriptCard[]> {
+    return await this.getFromAPI<ScriptCard[]>('/script/all');
+  }
 }

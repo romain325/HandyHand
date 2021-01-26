@@ -4,15 +4,15 @@ import { Link } from 'react-router-dom';
 import CardScript from '../../components/CardScript';
 import routes from '../../constants/routes.json';
 import styles from './Counter.css';
-import getScriptCards from '../../utils/HandyHandAPI';
 import { ScriptCard } from '../../utils/HandyHandAPIType';
+import HandyHandAPI from '../../utils/HandyHandAPI';
 
 export default function Counter() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState<ScriptCard[]>([]);
 
   useEffect(() => {
-    getScriptCards().then((data) => {
+    new HandyHandAPI().getScriptCards().then((data) => {
       setItems(data);
       setIsLoaded(true);
     });
