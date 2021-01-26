@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import HeaderBar from '../components/Navbar/HeaderBar';
-import SideBar from '../features/SideBar/SideBar';
+import SideBar from '../features/sideBar/SideBar';
 
 type Props = {
   children: ReactNode;

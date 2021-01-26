@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Container, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import CardScript from '../../components/CardScript';
-import routes from '../../constants/routes.json';
-import styles from './Counter.css';
 import { ScriptCard } from '../../utils/HandyHandAPIType';
 import HandyHandAPI from '../../utils/HandyHandAPI';
+import ContentPage from '../../containers/ContentPage';
 
 export default function Counter() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -23,35 +19,8 @@ export default function Counter() {
   }
 
   return (
-    <div>
-      <Container
-        fluid
-        style={{
-          overflow: 'scroll',
-          overflowX: 'hidden',
-          height: '70vh',
-        }}
-      >
-        <Row>
-          <Link to={routes.ADD_SCRIPT}>
-            <Button className={styles.button1} variant="success">
-              Ajouter un script
-            </Button>
-          </Link>
-        </Row>
-        <Row />
-        <Row>
-          {items.length == 0 ? (
-            <Col>Nothing Found ...</Col>
-          ) : (
-            items.map((item) => (
-              <Col>
-                <CardScript title={item.file} description={item.description} />
-              </Col>
-            ))
-          )}
-        </Row>
-      </Container>
-    </div>
+    <ContentPage>
+
+    </ContentPage>
   );
 }

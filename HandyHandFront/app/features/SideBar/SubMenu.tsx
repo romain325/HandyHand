@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Nav } from 'react-bootstrap';
-import classNames from 'classnames';
 import { Accordion } from 'react-bootstrap';
 import style from './SideBar.css'
 

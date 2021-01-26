@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import routes from '../../constants/routes.json';
 import styles from './HeaderBar.css';
-import { Button, ButtonGroup, Col, Nav, Row } from 'react-bootstrap';
+import { Button, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -21,11 +21,11 @@ const HeaderBar = ({ toggleSidebar }: Props) => {
         <p>Mettre le chemin</p>
       </Nav>
       <Nav>
-        <Link to={routes.CONNEXION}>
+        <Link to={routes.CONNECTION}>
           <Button variant="primary" >Connexion</Button>
         </Link>
 
-        <Link to={routes.ENREGISTREMENT}>
+        <Link to={routes.REGISTER}>
           <Button variant="secondary">Enregistrement</Button>
         </Link>
       </Nav>

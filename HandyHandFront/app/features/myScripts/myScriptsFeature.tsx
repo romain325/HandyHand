@@ -3,23 +3,21 @@ import { Col, Row, Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import CardScript from '../../components/CardScript';
 import routes from '../../constants/routes.json';
-import styles from './Counter.css';
-
+import ContentPage from '../../containers/ContentPage';
+import styles from './myScriptsFeature.css';
 
 interface ItemAPI {
-  description : string;
-  file : string;
-  id : string;
+  description: string;
+  file: string;
+  id: string;
 }
 
-
-export default function Counter() {
-
+export default function MyScriptsFeature() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState<ItemAPI[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8080/script/all")
+    fetch('http://localhost:8080/script/all')
       .then((rep) => rep.json())
       .then((json) => {
         setItems(json);
@@ -28,44 +26,44 @@ export default function Counter() {
       });
   }, []);
 
-
-  if(!isLoaded){
-    return <div>Loading</div>
+  if (!isLoaded) {
+    return (
+      <ContentPage>
+        <Col>Loading...</Col>
+      </ContentPage>
+    );
   }
 
   return (
-    <div>
-      <Container fluid style={{
+    <ContentPage>
+      <Container
+        fluid
+        style={{
           overflow: 'scroll',
           overflowX: 'hidden',
           height: '70vh',
         }}
       >
         <Row>
-        <Link to={routes.ADD_SCRIPT}>
-          <Button className={styles.button1} variant="success">
-            Ajouter un script
-          </Button>
+          <Link to={routes.ADD_SCRIPT}>
+            <Button className={styles.button1} variant="success">
+              Ajouter un script
+            </Button>
           </Link>
         </Row>
         <Row>TEST</Row>
         <Row>
-          { items.length == 0 ?
+          {items.length == 0 ? (
+            <Col>Nothing Found ...</Col>
+          ) : (
+            items.map((item) => (
               <Col>
-                Nothing Found ...
+                <CardScript title={item.file} description={item.description} />
               </Col>
-
-              :
-
-              items.map( item => (
-                <Col>
-                  <CardScript title={item.file} description={item.description} />
-                </Col>
-              ))
-          }
+            ))
+          )}
         </Row>
       </Container>
-    </div>
-
+    </ContentPage>
   );
 }

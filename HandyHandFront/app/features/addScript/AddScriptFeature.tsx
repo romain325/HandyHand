@@ -4,7 +4,7 @@ import { Button, Form, Row, Container } from 'react-bootstrap';
 import routes from '../../constants/routes.json';
 import ContentPage from '../../containers/ContentPage';
 
-export default function AjouterScriptFeature() {
+export default function AddScriptFeature() {
 
 
   return (

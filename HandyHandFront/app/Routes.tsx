@@ -3,13 +3,13 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import * as routes from './constants/routes.json';
 import App from './containers/App';
-import HomePage from './containers/HomePage';
-import AccueilFeature from './features/accueil/AccueilFeature';
-import AjouterScriptFeature from './features/ajouterScript/AjouterScript';
-import ConnexionFeature from './features/Connexion/ConnexionFeature';
-import EnregistrementFeature from './features/enregistrement/EnregistrementFeature';
-import ScriptsFeatures from './features/script/ScriptsFeature';
+import HomeFeature from './features/home/HomeFeature';
+import AddScriptFeature from './features/addScript/AddScriptFeature';
+import ConnectionFeature from './features/connection/ConnectionFeature';
+import RegisterFeature from './features/register/RegisterFeature';
+import ScriptsFeatures from './features/scripts/ScriptsFeature';
 import SettingsFeature from './features/settings/SettingsFeature';
+import MyScriptsFeature from './features/myScripts/myScriptsFeature';
 
 // Lazily load routes and code split with webpack
 const LazyCounterPage = React.lazy(() =>
@@ -27,16 +27,15 @@ export default function Routes() {
   return (
     <App>
       <Switch>
-        <Route exact path={routes.ACCUEIL} component={AccueilFeature} />
-        <Route exact path={routes.HOME} component={HomePage} />
-        <Route path={routes.COUNTER} component={CounterPage} />
-        <Route path={routes.CONNEXION} component={ConnexionFeature} />
-        <Route exact path={routes.SCRIPT} component={ScriptsFeatures} />
-        <Route path={routes.ADD_SCRIPT} component={AjouterScriptFeature} />
-        <Route exact path={routes.MY_SCRIPT} component={EnregistrementFeature} />
-        <Route path={routes.ENREGISTREMENT} component={EnregistrementFeature} />
-        <Route exact path={routes.SETTINGS} component={SettingsFeature} />
+        <Route exact path={routes.HOME} component={HomeFeature} />
+        <Route path={routes.CONNECTION} component={ConnectionFeature} />
+        <Route path={routes.REGISTER} component={RegisterFeature} />
+        <Route path={routes.SCRIPTS} component={ScriptsFeatures} />
+        <Route path={routes.MY_SCRIPT} component={MyScriptsFeature} />
+        <Route path={routes.ADD_SCRIPT} component={AddScriptFeature} />
+        <Route path={routes.SETTINGS} component={SettingsFeature} />
       </Switch>
     </App>
   );
+
 }

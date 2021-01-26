@@ -1,11 +1,10 @@
 {
   "HOME": "/",
-  "ACCUEIL": "/accueil",
   "COUNTER": "/counter",
-  "CONNEXION": "/connexion",
-  "ENREGISTREMENT": "/enregistrement",
-  "SCRIPT": "/script",
+  "CONNECTION": "/connection",
+  "REGISTER": "/register",
+  "SCRIPTS": "/scripts",
   "ADD_SCRIPT": "/script/add",
-  "MY_SCRIPT": "/script/perso",
+  "MY_SCRIPT": "/myScripts",
   "SETTINGS": "/settings"
 }
