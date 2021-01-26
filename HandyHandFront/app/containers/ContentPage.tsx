@@ -24,7 +24,7 @@ const ContentPage = (props: Props) => {
             display:`${isOpen ? 'inherit' : 'none'}`
           }}
         >
-          <SideBar isOpen={isOpen} toggleBar={toggleNavBar}/>
+          <SideBar isOpen={isOpen} toggleBar={toggleNavBar} />
         </Col>
         <Col md={isOpen ? 8 : 12}>
           {children}

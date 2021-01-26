@@ -41,7 +41,7 @@ export default function Counter() {
         </Row>
         <Row />
         <Row>
-          {items.length == 0 ? (
+          {items.length === 0 ? (
             <Col>Nothing Found ...</Col>
           ) : (
             items.map((item) => (
