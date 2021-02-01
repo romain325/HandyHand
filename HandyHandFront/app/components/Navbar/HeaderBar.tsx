@@ -18,9 +18,7 @@ const HeaderBar = ({ toggleSidebar }: Props) => {
           ☰ HandyHand
         </Button>
       </Navbar.Brand>
-      <Nav className="mr-auto">
-          url
-      </Nav>
+      <Nav className="mr-auto"/>
       <Nav>
         <Link to={routes.CONNECTION}>
           <Button variant="primary">Connexion</Button>

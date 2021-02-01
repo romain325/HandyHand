@@ -27,7 +27,7 @@ export default function ConnectionFeature() {
               <Form.Check type="checkbox" label="Se souvenir de moi" />
             </Form.Group>
             <Link to={routes.HOME}>
-              <Button type="submit" variant="primary" block>
+              <Button type="submit" variant="primary" block >
                 Connexion
               </Button>
             </Link>

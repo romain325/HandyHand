@@ -29,7 +29,21 @@ export default function MyScriptsFeature() {
   if (!isLoaded) {
     return (
       <ContentPage>
-        <Col>Loading...</Col>
+        <Row>
+          <Col>
+            <Link to={routes.ADD_SCRIPT}>
+              <img
+                src='../resources/img/ajouterIcon.png'
+                height="25px"
+                width="25px"
+                style={{margin: '10px'}}
+              />
+            </Link>
+          </Col>
+        </Row>
+        <Row>
+          <Col xs="10">Loading...</Col>
+        </Row>
       </ContentPage>
     );
   }
@@ -46,12 +60,14 @@ export default function MyScriptsFeature() {
       >
         <Row>
           <Link to={routes.ADD_SCRIPT}>
-            <Button className={styles.button1} variant="success">
-              Ajouter un script
-            </Button>
+          <img
+                src='../resources/img/ajouterIcon.png'
+                height="25px"
+                width="25px"
+                style={{margin: '15px'}}
+              />
           </Link>
         </Row>
-        <Row>TEST</Row>
         <Row>
           {items.length == 0 ? (
             <Col>Nothing Found ...</Col>

@@ -70,7 +70,7 @@ export default function AddScriptFeature() {
               )}
             </Form.Group>
             <Button type="submit" variant="primary">SUBMIT</Button>
-            <Link to={routes.COUNTER}>
+            <Link to={routes.MY_SCRIPT}>
               <Button variant="primary">Valider</Button>
             </Link>
           </Form>
