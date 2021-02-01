@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {  Col, Container } from 'react-bootstrap';
+import { Col, Container } from 'react-bootstrap';
 import { Row } from 'react-bootstrap';
 import CardScript from '../../components/CardScript';
 import ContentPage from '../../containers/ContentPage';
@@ -40,7 +40,9 @@ export default function ScriptsFeatures() {
     for (let i = 0; i < nbElement; i++) {
       elements.push(
         <Row>
-          <LineScript />
+          <Col>
+            <LineScript />
+          </Col>
         </Row>
       );
     }
@@ -48,19 +50,26 @@ export default function ScriptsFeatures() {
     return <div>{elements}</div>;
   }
 
-
   return (
     <ContentPage>
       <Container fluid>
-        <img src={isGrid ? "../resources/img/grid.png" : "../resources/img/list.png"}
-        height="30px"
-        width="30px"
-        onClick={ _e => {
+        <img
+          src={
+            isGrid ? '../resources/img/grid.png' : '../resources/img/list.png'
+          }
+          height="25px"
+          width="25px"
+          style={{
+            margin:'10px',
+          }}
+          onClick={(_e) => {
             setIsGrid(!isGrid);
-          }}/>
+          }}
+        />
       </Container>
 
-      <Container fluid
+      <Container
+        fluid
         style={{
           overflow: 'scroll',
           overflowX: 'hidden',

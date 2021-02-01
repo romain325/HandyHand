@@ -10,6 +10,7 @@ type Props = {
 };
 
 const HeaderBar = ({ toggleSidebar }: Props) => {
+
   return (
     <Navbar className={styles.nav}>
       <Navbar.Brand>
@@ -18,11 +19,11 @@ const HeaderBar = ({ toggleSidebar }: Props) => {
         </Button>
       </Navbar.Brand>
       <Nav className="mr-auto">
-        <p>Mettre le chemin</p>
+          url
       </Nav>
       <Nav>
         <Link to={routes.CONNECTION}>
-          <Button variant="primary" >Connexion</Button>
+          <Button variant="primary">Connexion</Button>
         </Link>
 
         <Link to={routes.REGISTER}>

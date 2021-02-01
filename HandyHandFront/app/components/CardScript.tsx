@@ -12,7 +12,7 @@ export default function CardScript(props : Props): JSX.Element {
 
 
   return (
-    <Card text="dark" style={{ width: '20rem' }} className="mb-2">
+    <Card text="dark" className="mb-2">
       <Card.Header>
         <Row>
           <Col sm={9}>
