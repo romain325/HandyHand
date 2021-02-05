@@ -31,7 +31,7 @@ public class SkeletonNormalizedView extends SketchCallback {
             } catch (BadAttributeValueExpException e) {
                 continue;
             }
-            SimpleMatrix normaliser = matrixNormalizer.getNormalizer();
+            SimpleMatrix normalizer = matrixNormalizer.getNormalizer();
 
             // Palm
             palmX = hand.palmPosition().getX();
@@ -41,15 +41,7 @@ public class SkeletonNormalizedView extends SketchCallback {
             SimpleMatrix palm = new SimpleMatrix(4,1);
             palm.set(0,0,palmX); palm.set(1,0,palmY); palm.set(2,0,palmZ); palm.set(3,0,1);
 
-//            System.out.println("////////////////////////////////////////////");
-//            MatrixNormalizer.displayMatrix(palm);
-            palm = matrixNormalizer.getTranslator().mult(palm);
-            palm = matrixNormalizer.getRotator().mult(palm);
-//            palm = matrixNormalizer.rotator1.mult(palm);
-//            palm = matrixNormalizer.rotator2.mult(palm);
-//            palm = matrixNormalizer.rotator3.mult(palm);
-//            MatrixNormalizer.displayMatrix(normaliser);
-//            MatrixNormalizer.displayMatrix(palm);
+            palm = normalizer.mult(palm);
 
             palmX = (float) palm.get(0,0);
             palmY = (float) palm.get(1,0);
@@ -72,11 +64,7 @@ public class SkeletonNormalizedView extends SketchCallback {
 
                     bone.set(0,0,boneX); bone.set(1,0,boneY); bone.set(2,0,boneZ); bone.set(3,0,1);
 
-                    bone = matrixNormalizer.getTranslator().mult(bone);
-                    bone = matrixNormalizer.getRotator().mult(bone);
-//                    bone = matrixNormalizer.rotator1.mult(bone);
-//                    bone = matrixNormalizer.rotator2.mult(bone);
-//                    bone = matrixNormalizer.rotator3.mult(bone);
+                    bone = normalizer.mult(bone);
 
                     boneX = (float) bone.get(0,0);
                     boneY = (float) bone.get(1,0);
@@ -88,11 +76,7 @@ public class SkeletonNormalizedView extends SketchCallback {
 
                     bone2.set(0,0,bone2X); bone2.set(1,0,bone2Y); bone2.set(2,0,bone2Z); bone2.set(3,0,1);
 
-                    bone2 = matrixNormalizer.getTranslator().mult(bone2);
-                    bone2 = matrixNormalizer.getRotator().mult(bone2);
-//                    bone2 = matrixNormalizer.rotator1.mult(bone2);
-//                    bone2 = matrixNormalizer.rotator2.mult(bone2);
-//                    bone2 = matrixNormalizer.rotator3.mult(bone2);
+                    bone2 = normalizer.mult(bone2);
 
                     bone2X = (float) bone2.get(0,0);
                     bone2Y = (float) bone2.get(1,0);
@@ -111,31 +95,31 @@ public class SkeletonNormalizedView extends SketchCallback {
                 }
             }
 
-//            SimpleMatrix toolVector = new SimpleMatrix(4,1);
-//            // Tools
-//            for(Tool tool : frame.tools()){
-//                toolX = (int) (tool.tipPosition().getX());
-//                toolY = (int) (tool.tipPosition().getY());
-//                toolZ = (int) (tool.tipPosition().getZ());
-//
-//                toolVector.set(0,0,toolX); toolVector.set(1,0,toolY); toolVector.set(2,0,toolZ); toolVector.set(3,0,1);
-//
-//                toolVector = normaliser.mult(toolVector);
-//
-//                toolX = (float) toolVector.get(0,0);
-//                toolY = (float) toolVector.get(1,0);
-//                toolZ = (float) toolVector.get(2,0);
-//
-//                toolX += 250;
-//                toolY += 250;
-//                toolZ += 250;
-//
-//                g.ellipse(toolX,toolZ,20,20);
-//                if(vectorList.size() > 100){
-//                    vectorList.removeLast();
-//                }
-//                vectorList.push(tool.tipPosition());
-//            }
+            SimpleMatrix toolVector = new SimpleMatrix(4,1);
+            // Tools
+            for(Tool tool : frame.tools()){
+                toolX = (int) (tool.tipPosition().getX());
+                toolY = (int) (tool.tipPosition().getY());
+                toolZ = (int) (tool.tipPosition().getZ());
+
+                toolVector.set(0,0,toolX); toolVector.set(1,0,toolY); toolVector.set(2,0,toolZ); toolVector.set(3,0,1);
+
+                toolVector = normalizer.mult(toolVector);
+
+                toolX = (float) toolVector.get(0,0);
+                toolY = (float) toolVector.get(1,0);
+                toolZ = (float) toolVector.get(2,0);
+
+                toolX += 250;
+                toolY += 250;
+                toolZ += 250;
+
+                g.ellipse(toolX,toolZ,20,20);
+                if(vectorList.size() > 100){
+                    vectorList.removeLast();
+                }
+                vectorList.push(tool.tipPosition());
+            }
         }
     }
 }
