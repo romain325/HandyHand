@@ -150,7 +150,7 @@ public class MatrixNormalizer {
         boolean isHandupSideDown = Math.abs(handPalmNormalLeap.roll()) > Math.PI/2;
 
         //Get the rotation of the hand around the vector of the palm, to re-axe the hand
-        SimpleMatrix firstRotation = rotationMatrixByAnyAxis2d(handDirectionLeap.yaw() * (isHandupSideDown ? 0 : -1), vectorPalmNormal);
+        SimpleMatrix firstRotation = rotationMatrixByAnyAxis2d(handDirectionLeap.yaw() * (isHandupSideDown ? 1 : -1), vectorPalmNormal);
 
         //We change different vectors with the new rotation
         vectorDirection = firstRotation.mult(vectorDirection);
@@ -177,14 +177,14 @@ public class MatrixNormalizer {
 
 
 
-        /**
-         * A method to get a normalisation matrix from a translation and some rotations matrix
-         * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
-         * @param translation The translation we want in the normalisation
-         * @param rotations Some rotations we want in the normalisation
-         * @return The matrix normalizer produce
-         * @throws BadAttributeValueExpException If the matrix normalizer couldn't be produce because of bad values
-         */
+    /**
+     * A method to get a normalisation matrix from a translation and some rotations matrix
+     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * @param translation The translation we want in the normalisation
+     * @param rotations Some rotations we want in the normalisation
+     * @return The matrix normalizer produce
+     * @throws BadAttributeValueExpException If the matrix normalizer couldn't be produce because of bad values
+     */
     public SimpleMatrix getNewNormalisationMatrix(SimpleMatrix translation, SimpleMatrix... rotations) throws BadAttributeValueExpException {
         if(rotations.length < 1) return translation;
         SimpleMatrix rotation = SimpleMatrix.identity(rotations[0].numRows());
