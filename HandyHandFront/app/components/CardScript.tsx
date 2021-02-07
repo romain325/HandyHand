@@ -17,11 +17,11 @@ export default function CardScript(props: Props): JSX.Element {
     <Card text="dark" className="mb-2">
       <Card.Header>
         <Row>
-          <Col sm={9}>
+          <Col sm={8}>
             <Card.Text>{propsNameToDisplayName(props.title)}</Card.Text>
           </Col>
           <Col sm={1}>
-            <Form >
+            <Form>
               <Form.Switch value={props.isActive == null ? false : props.isActive}/> {/*//TODO ADD AN ID BASED ON PARAM, as to be uniq */}
             </Form>
           </Col>

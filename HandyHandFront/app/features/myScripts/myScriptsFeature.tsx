@@ -33,10 +33,10 @@ export default function MyScriptsFeature() {
           <Col>
             <Link to={routes.ADD_SCRIPT}>
               <img
-                src='../resources/img/ajouterIcon.png'
+                src="../resources/img/ajouterIcon.png"
                 height="25px"
                 width="25px"
-                style={{margin: '10px'}}
+                style={{ margin: '10px' }}
               />
             </Link>
           </Col>
@@ -60,12 +60,13 @@ export default function MyScriptsFeature() {
       >
         <Row>
           <Link to={routes.ADD_SCRIPT}>
-          <img
-                src='../resources/img/ajouterIcon.png'
-                height="25px"
-                width="25px"
-                style={{margin: '15px'}}
-              />
+            <img
+              src="../resources/img/ajouterIcon.png"
+              height="25px"
+              width="25px"
+              style={{ margin: '15px' }}
+              alt="Add"
+            />
           </Link>
         </Row>
         <Row>TEST</Row>
