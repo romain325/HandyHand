@@ -7,12 +7,12 @@ export default function HomeFeature() {
 
   function getCurrentImage(): JSX.Element {
     return (
-      <img
-        src={`http://localhost:8080/leap/view?rdm=${seconds}`}
-        alt={`Img ${seconds}`}
-        height={100}
-        width={100}
-      />
+        <img
+          src={`http://localhost:8080/leap/view?rdm=${seconds}`}
+          alt={`Img ${seconds}`}
+          height={700}
+          width={700}
+        />
     );
   }
 
@@ -36,11 +36,9 @@ export default function HomeFeature() {
           </Col>
         </Row>
         <Row>
-          <Col/>
-          <Col md={10}>
-          {getCurrentImage()}
-          </Col>
-          <Col/>
+          <Col />
+          <Col >{getCurrentImage()}</Col>
+          <Col />
         </Row>
       </Container>
     </ContentPage>

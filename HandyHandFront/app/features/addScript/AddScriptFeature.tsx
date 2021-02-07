@@ -27,6 +27,7 @@ export default function AddScriptFeature() {
       args: [],
     };
 
+    console.log(returnData);
     new HandyHandAPI()
       .addNewScript(returnData)
       .then((r) => console.log(r))

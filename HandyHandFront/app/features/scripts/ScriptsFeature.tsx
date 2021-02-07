@@ -40,7 +40,9 @@ export default function ScriptsFeatures() {
     for (let i = 0; i < nbElement; i++) {
       elements.push(
         <Row>
-          <LineScript />
+          <Col>
+            <LineScript />
+          </Col>
         </Row>
       );
     }
@@ -55,8 +57,11 @@ export default function ScriptsFeatures() {
           src={
             isGrid ? '../resources/img/grid.png' : '../resources/img/list.png'
           }
-          height="30px"
-          width="30px"
+          height="25px"
+          width="25px"
+          style={{
+            margin:'10px',
+          }}
           onClick={(_e) => {
             setIsGrid(!isGrid);
           }}
