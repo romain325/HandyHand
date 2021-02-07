@@ -5,10 +5,11 @@ import SideBar from '../features/sideBar/SideBar';
 
 type Props = {
   children: ReactNode;
+  childrenName?: string;
 };
 
 const ContentPage = (props: Props) => {
-  const { children } = props;
+  const { children, childrenName } = props;
   const [isOpen, setOpen] = useState<boolean>(false);
 
   function toggleNavBar() {
@@ -17,7 +18,7 @@ const ContentPage = (props: Props) => {
 
   return (
     <div className="fullHeight">
-      <HeaderBar toggleSidebar={toggleNavBar} />
+      <HeaderBar toggleSidebar={toggleNavBar} childrenName={childrenName} />
       <Row className="fullHeight">
         <Col md={isOpen ? 4 : 0}
           style={{

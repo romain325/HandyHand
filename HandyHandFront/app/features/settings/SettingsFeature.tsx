@@ -1,11 +1,10 @@
 import React from 'react';
 import { Card, Col, Form, Row } from 'react-bootstrap';
 import ContentPage from '../../containers/ContentPage';
-import styles from './SettingsFeature.css';
 
 export default function SettingsFeature() {
   return (
-    <ContentPage>
+    <ContentPage childrenName="Settings">
       <Row>
         <Col ></Col>
         <Col md="10">

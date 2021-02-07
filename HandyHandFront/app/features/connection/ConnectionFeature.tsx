@@ -8,7 +8,7 @@ import ContentPage from '../../containers/ContentPage';
 
 export default function ConnectionFeature() {
   return (
-    <ContentPage>
+    <ContentPage childrenName="Connexion">
       <div>
         <div className={styles.form}>
           <Form>

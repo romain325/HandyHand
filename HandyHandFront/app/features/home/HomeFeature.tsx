@@ -25,7 +25,7 @@ export default function HomeFeature() {
   }, [seconds]);
 
   return (
-    <ContentPage>
+    <ContentPage childrenName={'Home'}>
       <Container fluid >
         <Row>
           <Col sm={9} />

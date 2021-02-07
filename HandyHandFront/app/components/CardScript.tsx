@@ -3,20 +3,22 @@ import { Card, Form } from 'react-bootstrap';
 import { Row, Col } from 'react-bootstrap';
 
 interface Props {
-  title : string;
-  description : string;
-  isActive? : boolean;
+  title: string;
+  description: string;
+  isActive?: boolean;
 }
 
-export default function CardScript(props : Props): JSX.Element {
+function propsNameToDisplayName(name: string): string {
+  return name.split('/').reverse()[0].split('.')[0];
+}
 
-
+export default function CardScript(props: Props): JSX.Element {
   return (
     <Card text="dark" style={{ width: '20rem' }} className="mb-2">
       <Card.Header>
         <Row>
           <Col sm={9}>
-            <Card.Text>{props.title}</Card.Text>
+            <Card.Text>{propsNameToDisplayName(props.title)}</Card.Text>
           </Col>
           <Col sm={1}>
             <Form >

@@ -28,14 +28,14 @@ export default function MyScriptsFeature() {
 
   if (!isLoaded) {
     return (
-      <ContentPage>
+      <ContentPage childrenName="Loading..">
         <Col>Loading...</Col>
       </ContentPage>
     );
   }
 
   return (
-    <ContentPage>
+    <ContentPage childrenName="My Scripts">
       <Container
         fluid
         style={{
@@ -51,7 +51,6 @@ export default function MyScriptsFeature() {
             </Button>
           </Link>
         </Row>
-        <Row>TEST</Row>
         <Row>
           {items.length == 0 ? (
             <Col>Nothing Found ...</Col>

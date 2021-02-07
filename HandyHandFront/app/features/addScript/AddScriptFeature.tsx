@@ -1,8 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Button, Form, Row, Container } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import routes from '../../constants/routes.json';
 import ContentPage from '../../containers/ContentPage';
 import { NewScript } from '../../utils/HandyHandAPI/HandyHandAPIType';
 import HandyHandAPI from '../../utils/HandyHandAPI/HandyHandAPI';
@@ -14,6 +13,7 @@ interface FormElements {
 
 export default function AddScriptFeature() {
   const { register, handleSubmit, errors } = useForm<FormElements>();
+  const history = useHistory();
 
   const onSubmit = (data: FormElements) => {
     const file: File | null = data.file.item(0);
@@ -27,34 +27,19 @@ export default function AddScriptFeature() {
       args: [],
     };
 
-    console.log(returnData);
     new HandyHandAPI()
       .addNewScript(returnData)
       .then((r) => console.log(r))
       .catch((err) => console.log(err));
+
+    history.goBack();
   };
 
   return (
-    <ContentPage>
+    <ContentPage childrenName="Add Script">
       <Container>
         <Row>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <Form.Group controlId="formGridAddress1">
-              <Form.Label>Nom du script</Form.Label>
-              <Form.Control placeholder="..." />
-            </Form.Group>
-
-            <Form.Group controlId="formGridAddress1">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                id="description"
-                name="description"
-                ref={register}
-              />
-            </Form.Group>
-
             <Form.Group>
               <Form.File
                 className="position-relative"
@@ -69,10 +54,20 @@ export default function AddScriptFeature() {
                 <div className="error">The file is mandatory</div>
               )}
             </Form.Group>
+
+            <Form.Group controlId="formGridAddress1">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows={3}
+                id="description"
+                name="description"
+                ref={register}
+              />
+            </Form.Group>
+
+
             <Button type="submit" variant="primary">SUBMIT</Button>
-            <Link to={routes.COUNTER}>
-              <Button variant="primary">Valider</Button>
-            </Link>
           </Form>
         </Row>
       </Container>

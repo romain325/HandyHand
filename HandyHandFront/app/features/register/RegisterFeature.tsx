@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from './RegisterFeature.css';
-import routes from '../../constants/routes.json';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import routes from '../../constants/routes.json';
 import ContentPage from '../../containers/ContentPage';
 
 export default function RegisterFeature() {
   return (
-    <ContentPage>
+    <ContentPage childrenName="Register">
       <div>
         <Form>
           <h2>Enregistrement</h2>
