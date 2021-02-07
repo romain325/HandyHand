@@ -15,13 +15,13 @@ public class HelloWorld {
 
     @GetMapping(value = "/helloworld")
     public String test(){
-        new MongoConnexion().test().insert(new Script("test", new String[]{} , "test", "test"));
+        new MongoConnexion().handyDB().insert(new Script("test", new String[]{} , "test", "test"));
         return "yes";
     }
 
     @GetMapping(value = "/helloworld2")
     public String test2(){
-        return new MongoConnexion().getMongoClient().getDatabase("testDb").getCollection("script").find().toString();
+        return new MongoConnexion().getMongoClient().getDatabase("testDB").getCollection("script").toString();
     }
 
 }
