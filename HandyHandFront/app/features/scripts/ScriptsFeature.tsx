@@ -1,33 +1,31 @@
 import React, { useState } from 'react';
-import {  Col, Container } from 'react-bootstrap';
-import { Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
+
 import CardScript from '../../components/CardScript';
 import ContentPage from '../../containers/ContentPage';
-import styles from './ScriptsFeature.css';
 import LineScript from '../../components/LineScript';
-import src from 'electron-log';
 
 export default function ScriptsFeatures() {
   const [isGrid, setIsGrid] = useState(true);
-  const nbElement: number = 15;
+  const nbElement = 15;
 
   function allCards(): JSX.Element {
-    var elements: JSX.Element[] = [];
+    const elements: JSX.Element[] = [];
 
     let i: number = nbElement;
     while (i > 0) {
-      var subElements: JSX.Element[] = [];
-      var iter: number = i < 3 ? i : 3;
+      const subElements: JSX.Element[] = [];
+      const iter: number = i < 3 ? i : 3;
 
       for (let j = 0; j < iter; j++) {
         subElements.push(
           <Col>
-            <CardScript />
+            <CardScript title="test" description="test" />
           </Col>
         );
       }
       if (iter == 2) {
-        subElements.push(<Col></Col>);
+        subElements.push(<Col />);
       }
 
       elements.push(<Row>{subElements}</Row>);
@@ -38,44 +36,40 @@ export default function ScriptsFeatures() {
   }
 
   function allList(): JSX.Element {
-    var elements: JSX.Element[] = [];
+    const elements: JSX.Element[] = [];
     for (let i = 0; i < nbElement; i++) {
       elements.push(
         <Row>
-          <LineScript />
+          <Col>
+            <LineScript />
+          </Col>
         </Row>
       );
     }
 
     return <div>{elements}</div>;
   }
- /*
-      <Form className={styles.row}>
-        <Form.Check
-          type="switch"
-          id="isgridswitch"
-          label="Mode grille"
-          checked={isGrid}
-          onClick={(e) => {
-            console.log(e);
+
+  return (
+    <ContentPage childrenName="Scripts">
+      <Container fluid>
+        <img
+          src={
+            isGrid ? '../resources/img/grid.png' : '../resources/img/list.png'
+          }
+          height="25px"
+          width="25px"
+          style={{
+            margin:'10px',
+          }}
+          onClick={(_e) => {
             setIsGrid(!isGrid);
           }}
         />
-      </Form>
-      */
-  return (
-    <ContentPage>
-      <Container fluid>
-        <img src="C:\Users\thoma\Documents\Projets\HandyHand\HandyHandFront\resources\img\grid.png"
-        height="30px"
-        width="30px"
-        onClick={(e) => {
-            console.log(e);
-            setIsGrid(!isGrid);
-          }}/>
       </Container>
 
-      <Container fluid
+      <Container
+        fluid
         style={{
           overflow: 'scroll',
           overflowX: 'hidden',

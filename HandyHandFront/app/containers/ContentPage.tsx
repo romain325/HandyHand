@@ -1,14 +1,15 @@
 import React, { ReactNode, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import HeaderBar from '../components/Navbar/HeaderBar';
-import SideBar from '../features/SideBar/SideBar';
+import SideBar from '../features/sideBar/SideBar';
 
 type Props = {
   children: ReactNode;
+  childrenName?: string;
 };
 
 const ContentPage = (props: Props) => {
-  const { children } = props;
+  const { children, childrenName } = props;
   const [isOpen, setOpen] = useState<boolean>(false);
 
   function toggleNavBar() {
@@ -17,14 +18,14 @@ const ContentPage = (props: Props) => {
 
   return (
     <div className="fullHeight">
-      <HeaderBar toggleSidebar={toggleNavBar} />
+      <HeaderBar toggleSidebar={toggleNavBar} childrenName={childrenName} />
       <Row className="fullHeight">
         <Col md={isOpen ? 4 : 0}
           style={{
             display:`${isOpen ? 'inherit' : 'none'}`
           }}
         >
-          <SideBar isOpen={isOpen} toggleBar={toggleNavBar}/>
+          <SideBar isOpen={isOpen} toggleBar={toggleNavBar} />
         </Col>
         <Col md={isOpen ? 8 : 12}>
           {children}

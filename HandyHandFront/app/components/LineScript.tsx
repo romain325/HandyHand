@@ -6,7 +6,6 @@ import { Row, Col } from 'react-bootstrap';
 export default function LineScript(): JSX.Element {
   return (
     <Card text="dark" style={{
-      width: "150vh",
       margin: "8px"
     }}>
       <Card.Header>

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from './ConnexionFeature.css';
+import styles from './ConnectionFeature.css';
 import routes from '../../constants/routes.json';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import ContentPage from '../../containers/ContentPage';
 
-export default function ConnexionFeature() {
+export default function ConnectionFeature() {
   return (
-    <ContentPage>
+    <ContentPage childrenName="Connexion">
       <div>
         <div className={styles.form}>
           <Form>
@@ -27,11 +27,11 @@ export default function ConnexionFeature() {
               <Form.Check type="checkbox" label="Se souvenir de moi" />
             </Form.Group>
             <Link to={routes.HOME}>
-              <Button type="submit" variant="primary" block>
+              <Button type="submit" variant="primary" block >
                 Connexion
               </Button>
             </Link>
-            <Link to={routes.ENREGISTREMENT}>
+            <Link to={routes.REGISTER}>
               <Button type="submit" variant="outline-primary" block>
                 Crée un compte
               </Button>

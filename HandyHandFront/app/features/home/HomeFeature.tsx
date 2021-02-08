@@ -2,17 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import ContentPage from '../../containers/ContentPage';
 
-export default function AccueilFeature() {
+export default function HomeFeature() {
   const [seconds, setSeconds] = useState(0);
 
   function getCurrentImage(): JSX.Element {
     return (
-      <img
-        src={`http://localhost:8080/leap/view?rdm=${seconds}`}
-        alt={`Img ${seconds}`}
-        height={100}
-        width={100}
-      />
+        <img
+          src={`http://localhost:8080/leap/view?rdm=${seconds}`}
+          alt={`Img ${seconds}`}
+          height={700}
+          width={700}
+        />
     );
   }
 
@@ -25,7 +25,7 @@ export default function AccueilFeature() {
   }, [seconds]);
 
   return (
-    <ContentPage>
+    <ContentPage childrenName={'Home'}>
       <Container fluid >
         <Row>
           <Col sm={9} />
@@ -36,11 +36,9 @@ export default function AccueilFeature() {
           </Col>
         </Row>
         <Row>
-          <Col/>
-          <Col md={10}>
-          {getCurrentImage()}
-          </Col>
-          <Col/>
+          <Col />
+          <Col >{getCurrentImage()}</Col>
+          <Col />
         </Row>
       </Container>
     </ContentPage>

@@ -1,15 +1,17 @@
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
+import { Link } from 'react-router-dom';
+import { Button, Nav } from 'react-bootstrap';
 import routes from '../../constants/routes.json';
 import styles from './HeaderBar.css';
-import { Button, ButtonGroup, Col, Nav, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 
 type Props = {
   toggleSidebar: Function;
+  childrenName?: string;
 };
 
-const HeaderBar = ({ toggleSidebar }: Props) => {
+const HeaderBar = ({ toggleSidebar, childrenName }: Props) => {
+
   return (
     <Navbar className={styles.nav}>
       <Navbar.Brand>
@@ -18,14 +20,14 @@ const HeaderBar = ({ toggleSidebar }: Props) => {
         </Button>
       </Navbar.Brand>
       <Nav className="mr-auto">
-        <p>Mettre le chemin</p>
+        <p>{ (childrenName == "" || childrenName == null )? "" : `=> ${ childrenName}` } </p>
       </Nav>
       <Nav>
-        <Link to={routes.CONNEXION}>
-          <Button variant="primary" >Connexion</Button>
+        <Link to={routes.CONNECTION}>
+          <Button variant="primary">Connexion</Button>
         </Link>
 
-        <Link to={routes.ENREGISTREMENT}>
+        <Link to={routes.REGISTER}>
           <Button variant="secondary">Enregistrement</Button>
         </Link>
       </Nav>

@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import styles from './EnregistrementFeature.css';
-import routes from '../../constants/routes.json';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import routes from '../../constants/routes.json';
 import ContentPage from '../../containers/ContentPage';
 
-export default function EnregistrementFeature() {
+export default function RegisterFeature() {
   return (
-    <ContentPage>
+    <ContentPage childrenName="Register">
       <div>
         <Form>
           <h2>Enregistrement</h2>
@@ -33,7 +32,7 @@ export default function EnregistrementFeature() {
             </Button>
           </Link>
           <Form.Text className="text-muted">
-            Si vous avez déja un compte cliquez-<Link to={routes.CONNEXION}>ici</Link>
+            Si vous avez déja un compte cliquez-<Link to={routes.CONNECTION}>ici</Link>
           </Form.Text>
         </Form>
       </div>
