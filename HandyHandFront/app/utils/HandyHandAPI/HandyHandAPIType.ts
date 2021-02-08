@@ -11,3 +11,7 @@ export interface NewScript {
   execType: string;
 }
 
+export interface NewUser {
+  mail: string;
+  password: string;
+}

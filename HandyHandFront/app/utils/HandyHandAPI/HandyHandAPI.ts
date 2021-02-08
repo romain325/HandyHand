@@ -1,4 +1,4 @@
-import { ScriptCard, NewScript } from './HandyHandAPIType';
+import {ScriptCard, NewScript, NewUser} from './HandyHandAPIType';
 
 export default class HandyHandAPI {
   private link = 'http://localhost:8080';
@@ -24,5 +24,9 @@ export default class HandyHandAPI {
 
   public async addNewScript(elem: NewScript): Promise<string> {
     return await this.postToAPI('/script/add', elem);
+  }
+
+  public async createNewUser(elem: NewUser): Promise<string> {
+    return await this.postToAPI('/user/add', elem);
   }
 }

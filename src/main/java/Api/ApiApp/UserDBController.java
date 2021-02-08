@@ -21,6 +21,12 @@ import java.util.*;
 @RequestMapping("/user")
 public class UserDBController {
 
+    /*
+    {
+        "mail": "",
+        "password": ""
+    }
+     */
     @PostMapping(value = "/add")
     public String add(HttpServletRequest req, @RequestBody String data) {
         var obj = new Gson().fromJson(data, JsonObject.class);
@@ -35,10 +41,10 @@ public class UserDBController {
         try {
             new MongoConnexion().handyDB().insert(user);
         } catch (Exception e) {
-            return "The user is already in our database and his ID is " + user.getId();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The user is already in our database and his ID is " + user.getId());
         }
 
-        return "The user have been added to the DB";
+        return "{\"status\":\"200\",\"message\":\"The user have been added to the DB\"}";
     }
 
 
