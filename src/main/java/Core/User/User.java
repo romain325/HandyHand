@@ -21,18 +21,20 @@ public class User {
 
     public User(String mail,String mdp) throws NoSuchAlgorithmException, InvalidKeySpecException {
         this.mail=mail;
+        password=hash_password(mdp);
+        scriptsId=new ArrayList<>();
+        id=getId();
+    }
 
+    private String hash_password(String mdp) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] salt = new byte[16];
-        Random random = new Random();
+        Random random = new Random(2);
         random.nextBytes(salt);
         KeySpec spec = new PBEKeySpec(mdp.toCharArray(), salt, 65536, 128);
         SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         byte[] hash = f.generateSecret(spec).getEncoded();
         Base64.Encoder enc = Base64.getEncoder();
-        password=enc.encodeToString(hash);
-
-        scriptsId=new ArrayList<>();
-        id=getId();
+        return enc.encodeToString(hash);
     }
 
     public String getId() {
@@ -52,5 +54,9 @@ public class User {
 
     public void addScript(String scriptId) {
         scriptsId.add(scriptId);
+    }
+
+    public void removeScript(String s) {
+        scriptsId.remove(s);
     }
 }
