@@ -1,15 +1,12 @@
 import React from 'react';
 import { Card, Form } from 'react-bootstrap';
 import { Row, Col } from 'react-bootstrap';
+import {propsNameToDisplayName} from "../utils/display/scriptDisplay";
 
 interface Props {
   title: string;
   description: string;
   isActive?: boolean;
-}
-
-function propsNameToDisplayName(name: string): string {
-  return name.split('/').reverse()[0].split('.')[0];
 }
 
 export default function CardScript(props: Props): JSX.Element {
@@ -22,7 +19,7 @@ export default function CardScript(props: Props): JSX.Element {
           </Col>
           <Col sm={1}>
             <Form>
-              <Form.Switch value={props.isActive == null ? false : props.isActive}/> {/*//TODO ADD AN ID BASED ON PARAM, as to be uniq */}
+              <Form.Switch value={props.isActive == null ? false : props.isActive}/>
             </Form>
           </Col>
         </Row>

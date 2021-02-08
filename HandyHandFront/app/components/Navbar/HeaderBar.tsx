@@ -11,24 +11,24 @@ type Props = {
 };
 
 const HeaderBar = ({ toggleSidebar, childrenName }: Props) => {
-
   return (
     <Navbar className={styles.nav}>
       <Navbar.Brand>
         <Button variant="secondary" onClick={() => toggleSidebar()}>
           ☰ HandyHand
+          {childrenName == '' || childrenName == null
+            ? ''
+            : `/${childrenName}`}
         </Button>
       </Navbar.Brand>
-      <Nav className="mr-auto">
-        <p>{ (childrenName == "" || childrenName == null )? "" : `=> ${ childrenName}` } </p>
-      </Nav>
+      <Nav className="mr-auto" />
       <Nav>
-        <Link to={routes.CONNECTION}>
-          <Button variant="primary">Connexion</Button>
+        <Link to={routes.CONNECTION} className="btn btn-primary">
+          Connexion
         </Link>
 
-        <Link to={routes.REGISTER}>
-          <Button variant="secondary">Enregistrement</Button>
+        <Link to={routes.REGISTER} className="btn btn-secondary">
+          Register
         </Link>
       </Nav>
     </Navbar>

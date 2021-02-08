@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
-import { Nav } from 'react-bootstrap';
-import routes from '../../constants/routes.json';
-import SubMenu from './SubMenu';
-import style from './SideBar.css';
+import React from 'react';
+import { Button, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import routes from '../../constants/routes.json';
+import style from './SideBar.css';
 
 type Props = {
   isOpen: boolean;
@@ -22,12 +20,19 @@ const SideBar = ({ isOpen, toggleBar }: Props) => {
       </div>
 
       <Nav className="flex-column pt-2">
-
         <Nav.Item className={style.active}>
-          <Nav.Link><Link to={routes.HOME}>Accueil</Link></Nav.Link>
-          <Nav.Link><Link to={routes.SCRIPTS}>Scripts</Link></Nav.Link>
-          <Nav.Link><Link to={routes.MY_SCRIPT}>Mes Scripts</Link></Nav.Link>
-          <Nav.Link><Link to={routes.SETTINGS}>Paramètres</Link></Nav.Link>
+          <Nav.Link>
+            <Link to={routes.HOME}>Home</Link>
+          </Nav.Link>
+          <Nav.Link>
+            <Link to={routes.SCRIPTS}>Scripts</Link>
+          </Nav.Link>
+          <Nav.Link>
+            <Link to={routes.MY_SCRIPT}>My Scripts</Link>
+          </Nav.Link>
+          <Nav.Link>
+            <Link to={routes.SETTINGS}>Settings</Link>
+          </Nav.Link>
         </Nav.Item>
       </Nav>
     </div>

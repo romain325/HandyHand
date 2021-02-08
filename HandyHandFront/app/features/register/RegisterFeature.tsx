@@ -10,29 +10,29 @@ export default function RegisterFeature() {
     <ContentPage childrenName="Register">
       <div>
         <Form>
-          <h2>Enregistrement</h2>
-          <h6>Créer un nouveau compte</h6>
+          <h2>Register</h2>
+          <h6>Create a new account</h6>
           <Form.Group controlId="formBasicEmail">
-            <Form.Control type="email" placeholder="Pseudo" />
+            <Form.Control type="email" placeholder="Mail" />
           </Form.Group>
 
           <Form.Group controlId="formBasicPassword">
-            <Form.Control type="password" placeholder="Mot de passe" />
+            <Form.Control type="password" placeholder="Password please" />
           </Form.Group>
 
           <Form.Group controlId="formBasicPassword">
             <Form.Control
               type="password"
-              placeholder="Confirmer mot de passe"
+              placeholder="Password again, just to be sure"
             />
           </Form.Group>
           <Link to={routes.HOME}>
             <Button type="submit" variant="primary" block>
-              Créer un compte
+              register now!
             </Button>
           </Link>
           <Form.Text className="text-muted">
-            Si vous avez déja un compte cliquez-<Link to={routes.CONNECTION}>ici</Link>
+            If you already have an account, <Link to={routes.CONNECTION}>Click Here !</Link>
           </Form.Text>
         </Form>
       </div>

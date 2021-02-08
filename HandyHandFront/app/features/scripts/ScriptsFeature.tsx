@@ -1,53 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 
-import CardScript from '../../components/CardScript';
 import ContentPage from '../../containers/ContentPage';
-import LineScript from '../../components/LineScript';
+import { allCards, allList } from '../../utils/display/scriptDisplay';
+import { ScriptCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
 
 export default function ScriptsFeatures() {
   const [isGrid, setIsGrid] = useState(true);
-  const nbElement = 15;
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [items, setItems] = useState<ScriptCard[]>([]);
 
-  function allCards(): JSX.Element {
-    const elements: JSX.Element[] = [];
+  useEffect(() => {
+    fetch('http://localhost:8080/scriptDB/all')
+      .then((rep) => rep.json())
+      .then((json) => {
+        setItems(json);
+        console.log(json);
+        setIsLoaded(true);
+      });
+  }, []);
 
-    let i: number = nbElement;
-    while (i > 0) {
-      const subElements: JSX.Element[] = [];
-      const iter: number = i < 3 ? i : 3;
-
-      for (let j = 0; j < iter; j++) {
-        subElements.push(
-          <Col>
-            <CardScript title="test" description="test" />
-          </Col>
-        );
-      }
-      if (iter == 2) {
-        subElements.push(<Col />);
-      }
-
-      elements.push(<Row>{subElements}</Row>);
-      i -= 3;
-    }
-
-    return <div>{elements}</div>;
-  }
-
-  function allList(): JSX.Element {
-    const elements: JSX.Element[] = [];
-    for (let i = 0; i < nbElement; i++) {
-      elements.push(
+  if (!isLoaded) {
+    return (
+      <ContentPage childrenName="Loading..">
         <Row>
-          <Col>
-            <LineScript />
-          </Col>
+          <Col xs="10">Loading...</Col>
         </Row>
-      );
-    }
-
-    return <div>{elements}</div>;
+      </ContentPage>
+    );
   }
 
   return (
@@ -60,7 +40,7 @@ export default function ScriptsFeatures() {
           height="25px"
           width="25px"
           style={{
-            margin:'10px',
+            margin: '10px',
           }}
           onClick={(_e) => {
             setIsGrid(!isGrid);
@@ -76,7 +56,13 @@ export default function ScriptsFeatures() {
           height: '70vh',
         }}
       >
-        {isGrid ? allCards() : allList()}
+        { items.length == 0 ? (
+          <Col>Nothing Found ...</Col>
+        ) : isGrid ? (
+          allCards(items)
+        ) : (
+          allList(items)
+        ) }
       </Container>
     </ContentPage>
   );
