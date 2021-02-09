@@ -5,11 +5,12 @@ import com.leapmotion.leap.Vector;
 import org.ejml.simple.SimpleMatrix;
 
 import javax.management.BadAttributeValueExpException;
+import java.io.Serializable;
 
 /**
  * The class of the structure of a bone, to save positions of this one
  */
-public class BoneStructure {
+public class BoneStructure implements Serializable {
     /**
      * The position of the end of the bone
      */
@@ -94,7 +95,7 @@ public class BoneStructure {
      */
     private void setNextJoint(SimpleMatrix nextJoint) throws BadAttributeValueExpException {
         if(nextJoint == null) throw new BadAttributeValueExpException("The vector as to be not null");
-        if(nextJoint.numCols() != 1 || nextJoint.numCols() != 4) throw new BadAttributeValueExpException("The vector as to be of size (4,1)");
+        if(nextJoint.numRows() != 4 || nextJoint.numCols() != 1) throw new BadAttributeValueExpException("The vector as to be of size (4,1)");
         this.nextJoint = nextJoint;
     }
 
@@ -104,8 +105,8 @@ public class BoneStructure {
      * @throws BadAttributeValueExpException If the position is null or not of size (4,1)
      */
     private void setPrevJoint(SimpleMatrix prevJoint) throws BadAttributeValueExpException {
-        if(nextJoint == null) throw new BadAttributeValueExpException("The vector as to be not null");
-        if(nextJoint.numCols() != 1 || nextJoint.numCols() != 4) throw new BadAttributeValueExpException("The vector as to be of size (4,1)");
+        if(prevJoint == null) throw new BadAttributeValueExpException("The vector as to be not null");
+        if(prevJoint.numRows() != 4 || prevJoint.numCols() != 1) throw new BadAttributeValueExpException("The vector as to be of size (4,1)");
         this.prevJoint = prevJoint;
     }
 
@@ -115,7 +116,7 @@ public class BoneStructure {
      * @throws BadAttributeValueExpException If the type is null
      */
     private void setType(Bone.Type type) throws BadAttributeValueExpException {
-        if(nextJoint == null) throw new BadAttributeValueExpException("The type as to be not null");
+        if(type == null) throw new BadAttributeValueExpException("The type as to be not null");
         this.type = type;
     }
 }

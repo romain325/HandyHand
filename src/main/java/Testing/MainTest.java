@@ -3,6 +3,7 @@ package Testing;
 import Core.Listener.GestureListener;
 import Testing.GestureTest.GestureTest;
 import Testing.GestureTest.NormalisationTest;
+import Testing.GestureTest.StructureTest;
 import Testing.ListenerTest.ListenerTest;
 import Testing.StubTest.StubTesting;
 import Testing.VisualTest.CameraTest.CameraViewTest;
@@ -16,7 +17,8 @@ public class MainTest {
         // new ListenerTest().start();
         // new GestureTest().start();
 //        new StubTesting().start();
-        new NormalisationTest().start();
+//        new NormalisationTest().start();
+        new StructureTest().start();
     }
 }
 

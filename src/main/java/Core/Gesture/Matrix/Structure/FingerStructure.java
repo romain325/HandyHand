@@ -4,11 +4,14 @@ import com.leapmotion.leap.Bone;
 import com.leapmotion.leap.Finger;
 
 import javax.management.BadAttributeValueExpException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The class of the structure of a Finger, to save positions of this one
  */
-public class FingerStructure {
+public class FingerStructure implements Serializable {
     /**
      * The structure for the bone distal
      */
@@ -60,6 +63,21 @@ public class FingerStructure {
         setIntermediate(intermediate);
         setProximal(proximal);
         setMetacarpals(metacarpals);
+    }
+
+    /**
+     * A method to get all the bones structure of this hand structure
+     * @return All the bones structure of this hand structure
+     */
+    public List<BoneStructure> getBonesStructure() {
+        List<BoneStructure> lb = new ArrayList<>();
+
+        lb.add(getDistal());
+        lb.add(getIntermediate());
+        lb.add(getProximal());
+        lb.add(getMetacarpals());
+
+        return lb;
     }
 
     /**
@@ -127,8 +145,8 @@ public class FingerStructure {
      * @throws BadAttributeValueExpException If the BoneStructure is null or not of the good type
      */
     private void setIntermediate(BoneStructure intermediate) throws BadAttributeValueExpException {
-        if(distal.getType() == null) throw new BadAttributeValueExpException("The bone as to be not null");
-        if(distal.getType() != Bone.Type.TYPE_INTERMEDIATE) throw new BadAttributeValueExpException("The bone as to be of type intermediate");
+        if(intermediate.getType() == null) throw new BadAttributeValueExpException("The bone as to be not null");
+        if(intermediate.getType() != Bone.Type.TYPE_INTERMEDIATE) throw new BadAttributeValueExpException("The bone as to be of type intermediate");
         this.intermediate = intermediate;
     }
 
@@ -138,8 +156,8 @@ public class FingerStructure {
      * @throws BadAttributeValueExpException If the BoneStructure is null or not of the good type
      */
     private void setProximal(BoneStructure proximal) throws BadAttributeValueExpException {
-        if(distal.getType() == null) throw new BadAttributeValueExpException("The bone as to be not null");
-        if(distal.getType() != Bone.Type.TYPE_PROXIMAL) throw new BadAttributeValueExpException("The bone as to be of type proximal");
+        if(proximal.getType() == null) throw new BadAttributeValueExpException("The bone as to be not null");
+        if(proximal.getType() != Bone.Type.TYPE_PROXIMAL) throw new BadAttributeValueExpException("The bone as to be of type proximal");
         this.proximal = proximal;
     }
 
@@ -149,8 +167,8 @@ public class FingerStructure {
      * @throws BadAttributeValueExpException If the BoneStructure is null or not of the good type
      */
     private void setMetacarpals(BoneStructure metacarpals) throws BadAttributeValueExpException {
-        if(distal.getType() == null) throw new BadAttributeValueExpException("The bone as to be not null");
-        if(distal.getType() != Bone.Type.TYPE_METACARPAL) throw new BadAttributeValueExpException("The bone as to be of type metacarpals");
+        if(metacarpals.getType() == null) throw new BadAttributeValueExpException("The bone as to be not null");
+        if(metacarpals.getType() != Bone.Type.TYPE_METACARPAL) throw new BadAttributeValueExpException("The bone as to be of type metacarpals");
         this.metacarpals = metacarpals;
     }
 }

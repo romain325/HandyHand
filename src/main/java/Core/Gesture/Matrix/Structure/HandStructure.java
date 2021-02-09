@@ -3,15 +3,19 @@ package Core.Gesture.Matrix.Structure;
 import Core.Gesture.Matrix.Normalization.MatrixNormalizer;
 import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Hand;
+import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
 import org.ejml.simple.SimpleMatrix;
 
 import javax.management.BadAttributeValueExpException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The class of the structure of a Hand, to save positions and the normalizer matrix of this one
  */
-public class HandStructure {
+public class HandStructure implements Serializable {
     /**
      * The structure for the thumb
      */
@@ -82,6 +86,22 @@ public class HandStructure {
         setPalmNormal(palmNoraml);
 
         setNormaliser(new MatrixNormalizer(hand).getNormalizer());
+    }
+
+    /**
+     * A method to get all the fingers structure of this hand structure
+     * @return All the fingers structure of this hand structure
+     */
+    public List<FingerStructure> getFingersStructure() {
+        List<FingerStructure> lf = new ArrayList<>();
+
+        lf.add(getThumb());
+        lf.add(getIndex());
+        lf.add(getMiddle());
+        lf.add(getRing());
+        lf.add(getPinky());
+
+        return lf;
     }
 
     /**
