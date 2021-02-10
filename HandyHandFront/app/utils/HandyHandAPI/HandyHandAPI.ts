@@ -1,4 +1,4 @@
-import {ScriptCard, NewScript, NewUser} from './HandyHandAPIType';
+import {NewScript, ScriptCard, UserCreds} from './HandyHandAPIType';
 
 export default class HandyHandAPI {
   private link = 'http://localhost:8080';
@@ -8,14 +8,13 @@ export default class HandyHandAPI {
     return await rep.json();
   }
 
-  private async postToAPI<T>(urlArg: string, data : T) : Promise<any> {
+  private async postToAPI<T>(urlArg: string, data : T) : Promise<Response> {
     const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     };
-    const rep = await fetch(this.link + urlArg, options);
-    return await rep.json();
+    return await fetch(this.link + urlArg, options);
   }
 
   public async getScriptCards(): Promise<ScriptCard[]> {
@@ -23,10 +22,14 @@ export default class HandyHandAPI {
   }
 
   public async addNewScript(elem: NewScript): Promise<string> {
-    return await this.postToAPI('/script/add', elem);
+    return (await this.postToAPI('/script/add', elem)).text();
   }
 
-  public async createNewUser(elem: NewUser): Promise<string> {
-    return await this.postToAPI('/user/add', elem);
+  public async createNewUser(elem: UserCreds): Promise<string> {
+    return( await this.postToAPI('/user/add', elem)).json();
+  }
+
+  public async connectUser(elem: UserCreds): Promise<string> {
+    return (await this.postToAPI('/user/connect', elem)).text();
   }
 }

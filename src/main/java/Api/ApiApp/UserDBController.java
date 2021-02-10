@@ -10,6 +10,7 @@ import com.google.gson.JsonObject;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -100,13 +101,19 @@ public class UserDBController {
 
      */
 
+    /**
+     {
+        "mail":"",
+        "password":""
+     }
+     **/
     @PostMapping(value = "/connect")
-    public String connect(HttpServletRequest req, @RequestBody String data) {
+    public ResponseEntity<String> connect(HttpServletRequest req, @RequestBody String data) {
         var obj = new Gson().fromJson(data, JsonObject.class);
 
         User user,userBD;
         try {
-            user = new User(obj.get("mail").getAsString(),obj.get("passwd").getAsString());
+            user = new User(obj.get("mail").getAsString(),obj.get("password").getAsString());
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The email or the password is missing !");
         }
@@ -124,17 +131,17 @@ public class UserDBController {
                     System.out.println(tokenfound.getId()+tokenfound.getToken());
                     new MongoConnexion().handyDB().remove(tokenfound,"tokens");
                     new MongoConnexion().handyDB().insert(token,"tokens");
-                    return token.getToken();
+                    return new ResponseEntity<>(token.getToken(), HttpStatus.OK);
                 }
             }catch (Exception e){
-                return "Error while trying to refine your token !";
+                return new ResponseEntity<>("Error while trying to refine your token !", HttpStatus.INTERNAL_SERVER_ERROR);
             }
             new MongoConnexion().handyDB().insert(token,"tokens");
         }else{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The email or the password not valid!");
         }
 
-        return token.getToken();
+        return new ResponseEntity<>(token.getToken(), HttpStatus.OK);
     }
 
 

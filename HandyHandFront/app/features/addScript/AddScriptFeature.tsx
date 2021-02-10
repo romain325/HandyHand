@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import ContentPage from '../../containers/ContentPage';
 import { NewScript } from '../../utils/HandyHandAPI/HandyHandAPIType';
 import HandyHandAPI from '../../utils/HandyHandAPI/HandyHandAPI';
+import routes from '../../constants/routes.json';
 
 interface FormElements {
   file: FileList;
@@ -27,13 +28,10 @@ export default function AddScriptFeature() {
       args: [],
     };
 
-    console.log(returnData);
     new HandyHandAPI()
       .addNewScript(returnData)
-      .then((r) => console.log(r))
+      .then((r) => history.push(routes.MY_SCRIPT))
       .catch((err) => console.log(err));
-
-    history.goBack();
   };
 
   return (

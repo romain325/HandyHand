@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { useForm } from 'react-hook-form';
 import routes from '../../constants/routes.json';
 import ContentPage from '../../containers/ContentPage';
-import { NewUser } from '../../utils/HandyHandAPI/HandyHandAPIType';
+import { UserCreds } from '../../utils/HandyHandAPI/HandyHandAPIType';
 import HandyHandAPI from '../../utils/HandyHandAPI/HandyHandAPI';
 
 interface FormElements {
@@ -25,7 +25,7 @@ export default function RegisterFeature() {
       return;
     }
 
-    const returnData: NewUser = {
+    const returnData: UserCreds = {
       mail: data.mail,
       password: data.password,
     };
@@ -37,7 +37,7 @@ export default function RegisterFeature() {
           setError(r?.error);
           return;
         }
-        history.goBack();
+        history.push(routes.CONNECTION);
       })
       .catch((err) => {
         console.log(err);
