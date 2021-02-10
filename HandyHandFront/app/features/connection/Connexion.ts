@@ -10,6 +10,10 @@ export function readToken(): string {
   return fs.readFileSync(tokenFile, 'utf8');
 }
 
+export function removeToken() {
+  fs.unlinkSync(tokenFile);
+}
+
 export function hasToken(): boolean {
   return fs.existsSync(tokenFile);
 }
