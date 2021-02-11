@@ -16,17 +16,15 @@ import javax.management.BadAttributeValueExpException;
 public class StructureTest implements Tester {
     @Override
     public void start() {
-        Controller controller = new Controller();
-        structureTest(controller);
+        structureTest(new Controller());
     }
 
     private void structureTest(Controller controller){
         Hand hand = null;
-        String file = "testHandStructure";
+        String file = "testHandStructure.obj";
 
         while(hand == null || !hand.isValid()) {
-            Frame frame = controller.frame();
-            hand = frame.hands().get(0);
+            hand = controller.frame().hands().get(0);
         }
 
         try {
@@ -35,8 +33,6 @@ public class StructureTest implements Tester {
             e.printStackTrace();
         }
 
-        HandStructure handStructure = (HandStructure) new InPutStructure().ReadObjectInFile(file);
-
-        new SkeletonStructureView().render(handStructure);
+        new ProcessingRenderer(controller, new SkeletonStructureView((HandStructure) new InPutStructure().ReadObjectInFile(file))).show();
     }
 }

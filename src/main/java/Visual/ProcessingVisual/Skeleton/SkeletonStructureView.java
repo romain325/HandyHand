@@ -4,29 +4,34 @@ import Core.Gesture.Matrix.Normalization.MatrixNormalizer;
 import Core.Gesture.Matrix.Structure.BoneStructure;
 import Core.Gesture.Matrix.Structure.FingerStructure;
 import Core.Gesture.Matrix.Structure.HandStructure;
+import Utils.CallBack.SketchCallback;
 import com.leapmotion.leap.*;
 import org.ejml.simple.SimpleMatrix;
 import processing.core.PApplet;
 
 import java.util.LinkedList;
 
-public class SkeletonStructureView {
-    PApplet g;
+public class SkeletonStructureView extends SketchCallback {
     LinkedList<Vector> vectorList = new LinkedList<>();
+    HandStructure handStructure;
 
-    public void render(HandStructure handStructure) {
+    public SkeletonStructureView(HandStructure handStructure) {
+        this.handStructure = handStructure;
+    }
+
+    @Override
+    public void render(Frame frame) {
         float palmX, palmY, palmZ;
 
-        g = new PApplet();
-        g.size(500,500);
-        g.background(55);
+        getSketch().size(500,500);
+        getSketch().background(55);
 
         for (Vector v: vectorList) {
-            g.fill(148,0,211);
-            g.ellipse(v.getX() +250,v.getZ()+250,5,5);
+            getSketch().fill(148,0,211);
+            getSketch().ellipse(v.getX() +250,v.getZ()+250,5,5);
         }
 
-        g.fill(255,255,255);
+        getSketch().fill(255,255,255);
 
         if(handStructure == null) return;
 
@@ -45,7 +50,7 @@ public class SkeletonStructureView {
         palmY += 250;
         palmZ += 250;
 
-        g.ellipse( palmX,palmZ,30,30);
+        getSketch().ellipse( palmX,palmZ,30,30);
 
         // Finger
         float boneNextX,boneNextY,boneNextZ,bonePrevX,bonePrevY,bonePrevZ;
@@ -70,11 +75,9 @@ public class SkeletonStructureView {
                 boneNextX += 250; boneNextY += 250; boneNextZ += 250;
                 bonePrevX += 250; bonePrevY += 250; bonePrevZ += 250;
 
-                g.ellipse(boneNextX,boneNextZ, 10,10);
-                g.line(boneNextX,boneNextZ, bonePrevX, bonePrevZ);
+                getSketch().ellipse(boneNextX,boneNextZ, 10,10);
+                getSketch().line(boneNextX,boneNextZ, bonePrevX, bonePrevZ);
             }
         }
-
-        g.draw();
     }
 }
