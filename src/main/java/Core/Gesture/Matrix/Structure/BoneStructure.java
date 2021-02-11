@@ -6,6 +6,7 @@ import org.ejml.simple.SimpleMatrix;
 
 import javax.management.BadAttributeValueExpException;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * The class of the structure of a bone, to save positions of this one
@@ -118,5 +119,42 @@ public class BoneStructure implements Serializable {
     private void setType(Bone.Type type) throws BadAttributeValueExpException {
         if(type == null) throw new BadAttributeValueExpException("The type as to be not null");
         this.type = type;
+    }
+
+    /**
+     * A method to know if two BoneStructure are equals
+     * @param o The Object that we want to compare with
+     * @return Return true if they are equals, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoneStructure that = (BoneStructure) o;
+        return Objects.equals(nextJoint, that.nextJoint) && Objects.equals(prevJoint, that.prevJoint) && type == that.type;
+    }
+
+    /**
+     * A method to compare two BoneStructure to know if they are similar
+     * @param boneStructure The BoneStructure that we want to compare with
+     * @param divergence The divergence that we accept between both BoneStructure
+     * @return Return true if they are similar, false otherwise
+     */
+    public boolean compare(BoneStructure boneStructure, float divergence) {
+        if (boneStructure == null || boneStructure.getType() != this.getType()) return false;
+
+        divergence = Math.abs(divergence);
+
+        SimpleMatrix prev = boneStructure.getPrevJoint();
+        for(int i = 0; i < 3; i++) {
+            if(Math.abs(prev.get(i) - this.prevJoint.get(i)) > divergence ) return false;
+        }
+
+        SimpleMatrix next = boneStructure.getNextJoint();
+        for(int i = 0; i < 3; i++) {
+            if(Math.abs(next.get(i) - this.nextJoint.get(i)) > divergence ) return false;
+        }
+
+        return true;
     }
 }

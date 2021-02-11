@@ -3,7 +3,6 @@ package Core.Gesture.Matrix.Structure;
 import Core.Gesture.Matrix.Normalization.MatrixNormalizer;
 import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Hand;
-import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Vector;
 import org.ejml.simple.SimpleMatrix;
 
@@ -11,6 +10,7 @@ import javax.management.BadAttributeValueExpException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The class of the structure of a Hand, to save positions and the normalizer matrix of this one
@@ -44,6 +44,10 @@ public class HandStructure implements Serializable {
      * The vector of the palm normal of hand
      */
     private SimpleMatrix palmNormal;
+    /**
+     * The type of the hand. If it is a right or left hand
+     */
+    private HandType handType;
     /**
      * The matrix normalizer of the hand
      */
@@ -84,6 +88,8 @@ public class HandStructure implements Serializable {
         palmNoraml.set(3,0, 1);
 
         setPalmNormal(palmNoraml);
+
+        handType = hand.isRight() ? HandType.RIGHT : HandType.LEFT;
 
         setNormaliser(new MatrixNormalizer(hand).getNormalizer());
     }
@@ -161,6 +167,14 @@ public class HandStructure implements Serializable {
     }
 
     /**
+     * The getter of the type of the hand
+     * @return The type of the hand
+     */
+    public HandType getHandType() {
+        return handType;
+    }
+
+    /**
      * The getter of the matrix normalizer of the hand
      * @return The matrix normalizer of the hand
      */
@@ -225,10 +239,61 @@ public class HandStructure implements Serializable {
     }
 
     /**
+     * The setter of the type of the hand
+     * @param handType The type of the hand
+     */
+    public void setHandType(HandType handType) {
+        this.handType = handType;
+    }
+
+    /**
      * The setter of the matrix normalizer of the hand
      * @param normaliser The matrix normalizer of the hand
      */
     private void setNormaliser(SimpleMatrix normaliser) {
         this.normaliser = normaliser;
+    }
+
+    /**
+     * A method to know if two HandStructure are equals
+     * @param o The Object that we want to compare with
+     * @return Return true if they are equals, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HandStructure that = (HandStructure) o;
+        return Objects.equals(thumb, that.thumb) && Objects.equals(index, that.index) && Objects.equals(middle, that.middle) && Objects.equals(ring, that.ring) && Objects.equals(pinky, that.pinky) && Objects.equals(direction, that.direction) && Objects.equals(palmNormal, that.palmNormal) && handType == that.handType && Objects.equals(normaliser, that.normaliser);
+    }
+
+    /**
+     * A method to compare two HandStructure to know if they are similar
+     * @param handStructure The HandStructure that we want to compare with
+     * @param divergence The divergence that we accept between both HandStructure
+     * @return Return true if they are similar, false otherwise
+     */
+    public boolean compare(HandStructure handStructure, float divergence) {
+        if (handStructure == null || handStructure.getHandType() != this.getHandType()) return false;
+
+        divergence = Math.abs(divergence);
+
+        if(!this.getThumb().compare(handStructure.getThumb(), divergence)) return false;
+        if(!this.getIndex().compare(handStructure.getIndex(), divergence)) return false;
+        if(!this.getMiddle().compare(handStructure.getMiddle(), divergence)) return false;
+        if(!this.getRing().compare(handStructure.getRing(), divergence)) return false;
+        if(!this.getPinky().compare(handStructure.getPinky(), divergence)) return false;
+
+        SimpleMatrix direct = handStructure.getDirection();
+        for(int i = 0; i < 3; i++) {
+            if(Math.abs(direct.get(i) - this.getDirection().get(i)) > divergence ) return false;
+        }
+
+        SimpleMatrix palm = handStructure.getPalmNormal();
+        for(int i = 0; i < 3; i++) {
+            if(Math.abs(palm.get(i) - this.getPalmNormal().get(i)) > divergence ) return false;
+        }
+
+        return true;
     }
 }

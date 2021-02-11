@@ -2,11 +2,13 @@ package Core.Gesture.Matrix.Structure;
 
 import com.leapmotion.leap.Bone;
 import com.leapmotion.leap.Finger;
+import org.ejml.simple.SimpleMatrix;
 
 import javax.management.BadAttributeValueExpException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The class of the structure of a Finger, to save positions of this one
@@ -170,5 +172,37 @@ public class FingerStructure implements Serializable {
         if(metacarpals.getType() == null) throw new BadAttributeValueExpException("The bone as to be not null");
         if(metacarpals.getType() != Bone.Type.TYPE_METACARPAL) throw new BadAttributeValueExpException("The bone as to be of type metacarpals");
         this.metacarpals = metacarpals;
+    }
+
+    /**
+     * A method to know if two FingerStructure are equals
+     * @param o The Object that we want to compare with
+     * @return Return true if they are equals, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FingerStructure that = (FingerStructure) o;
+        return Objects.equals(distal, that.distal) && Objects.equals(intermediate, that.intermediate) && Objects.equals(proximal, that.proximal) && Objects.equals(metacarpals, that.metacarpals) && type == that.type;
+    }
+
+    /**
+     * A method to compare two FingerStructure to know if they are similar
+     * @param fingerStructure The FingerStructure that we want to compare with
+     * @param divergence The divergence that we accept between both FingerStructure
+     * @return Return true if they are similar, false otherwise
+     */
+    public boolean compare(FingerStructure fingerStructure, float divergence) {
+        if (fingerStructure == null || fingerStructure.getType() != this.getType()) return false;
+
+        divergence = Math.abs(divergence);
+
+        if(!this.getDistal().compare(fingerStructure.getDistal(), divergence)) return false;
+        if(!this.getIntermediate().compare(fingerStructure.getIntermediate(), divergence)) return false;
+        if(!this.getProximal().compare(fingerStructure.getProximal(), divergence)) return false;
+        if(!this.getMetacarpals().compare(fingerStructure.getMetacarpals(), divergence)) return false;
+
+        return true;
     }
 }

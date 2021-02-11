@@ -1,6 +1,5 @@
 package Visual.ProcessingVisual.Skeleton;
 
-import Core.Gesture.Matrix.Normalization.MatrixNormalizer;
 import Core.Gesture.Matrix.Structure.BoneStructure;
 import Core.Gesture.Matrix.Structure.FingerStructure;
 import Core.Gesture.Matrix.Structure.HandStructure;

@@ -4,9 +4,7 @@ import Core.Gesture.Matrix.SaveLoad.InPutStructure;
 import Core.Gesture.Matrix.SaveLoad.OutPutStructure;
 import Core.Gesture.Matrix.Structure.HandStructure;
 import Testing.Tester;
-import Visual.ProcessingVisual.Skeleton.SkeletonNormalizedView;
 import Visual.ProcessingVisual.Skeleton.SkeletonStructureView;
-import Visual.Renderer.ProcessingRenderer;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Hand;
@@ -22,10 +20,11 @@ public class StructureTest implements Tester {
 
     private void structureTest(Controller controller){
         Hand hand = null;
+        Frame frame = null;
         String file = "testHandStructure";
 
         while(hand == null || !hand.isValid()) {
-            Frame frame = controller.frame();
+            frame = controller.frame();
             hand = frame.hands().get(0);
         }
 
@@ -37,6 +36,25 @@ public class StructureTest implements Tester {
 
         HandStructure handStructure = (HandStructure) new InPutStructure().ReadObjectInFile(file);
 
-        new SkeletonStructureView().render(handStructure);
+//        new SkeletonStructureView().render(handStructure);
+
+        HandStructure secondHandStructure;
+        while(true) {
+            frame = controller.frame();
+            hand = frame.hands().get(0);
+            if(hand == null || !hand.isValid()) continue;
+
+            try {
+                secondHandStructure = new HandStructure(hand);
+            } catch (BadAttributeValueExpException e) {
+                continue;
+            }
+
+            float divergence = 80;
+
+            boolean comparison = handStructure.compare(secondHandStructure, divergence);
+
+            System.out.println(comparison);
+        }
     }
 }
