@@ -63,11 +63,21 @@ public class HandStructure implements Serializable {
 
         for(Finger f : hand.fingers()) {
             switch (f.type()) {
-                case TYPE_THUMB -> setThumb(new FingerStructure(f));
-                case TYPE_INDEX -> setIndex(new FingerStructure(f));
-                case TYPE_MIDDLE -> setMiddle(new FingerStructure(f));
-                case TYPE_RING -> setRing(new FingerStructure(f));
-                case TYPE_PINKY -> setPinky(new FingerStructure(f));
+                case TYPE_THUMB:
+                    setThumb(new FingerStructure(f));
+                    break;
+                case TYPE_INDEX:
+                    setIndex(new FingerStructure(f));
+                    break;
+                case TYPE_MIDDLE:
+                    setMiddle(new FingerStructure(f));
+                    break;
+                case TYPE_RING:
+                    setRing(new FingerStructure(f));
+                    break;
+                case TYPE_PINKY:
+                    setPinky(new FingerStructure(f));
+                    break;
             }
         }
 
