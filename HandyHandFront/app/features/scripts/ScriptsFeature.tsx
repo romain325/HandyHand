@@ -4,6 +4,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 import ContentPage from '../../containers/ContentPage';
 import { allCards, allList } from '../../utils/display/scriptDisplay';
 import { ScriptCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
+import { getAuthedHeader } from '../connection/Connexion';
 
 export default function ScriptsFeatures() {
   const [isGrid, setIsGrid] = useState(true);
@@ -11,7 +12,11 @@ export default function ScriptsFeatures() {
   const [items, setItems] = useState<ScriptCard[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/scriptDB/all')
+
+    fetch('http://localhost:8080/scriptDB/all', {
+      method: 'GET',
+      headers: getAuthedHeader(),
+    })
       .then((rep) => rep.json())
       .then((json) => {
         setItems(json);

@@ -1,30 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
 import { Button, Nav } from 'react-bootstrap';
 import routes from '../../constants/routes.json';
 import styles from './HeaderBar.css';
-import { hasToken, removeToken } from '../../features/connection/Connexion';
 
 type Props = {
   toggleSidebar: Function;
+  disconnect: Function;
   childrenName?: string;
+  isConnected: boolean;
 };
 
-const HeaderBar = ({ toggleSidebar, childrenName }: Props) => {
-  const [connected, setConnected] = useState(hasToken());
-
+const HeaderBar = (props: Props) => {
   return (
     <Navbar className={styles.nav}>
       <Navbar.Brand>
-        <Button variant="secondary" onClick={() => toggleSidebar()}>
+        <Button variant="secondary" onClick={() => props.toggleSidebar()}>
           ☰ HandyHand
-          {childrenName == '' || childrenName == null ? '' : `/${childrenName}`}
+          { props.childrenName == '' || props.childrenName == null ? '' : `/${props.childrenName}`}
         </Button>
       </Navbar.Brand>
       <Nav className="mr-auto" />
       <Nav>
-        { !connected ? (
+        { !props.isConnected ? (
           <div>
             <Link to={routes.CONNECTION} className="btn btn-primary">
               Connexion
@@ -35,10 +34,7 @@ const HeaderBar = ({ toggleSidebar, childrenName }: Props) => {
           </div>
         ) : (
           <Button
-            onClick={() => {
-              removeToken();
-              setConnected(hasToken());
-            }}
+            onClick={() => props.disconnect()}
             className="btn btn-primary"
           >
             Disconnect

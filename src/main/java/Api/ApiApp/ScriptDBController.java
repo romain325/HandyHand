@@ -5,6 +5,7 @@ import Api.ApiApp.Database.ScriptRepo;
 import Core.Script.Script;
 import Core.StubPersistence.ExecPersistance;
 import Core.StubPersistence.ScriptPersistance;
+import Core.User.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,9 @@ import java.util.*;
 public class ScriptDBController {
 
     @GetMapping("/allId")
-    public List<String> allId(){
+    public List<String> allId(HttpServletRequest req){
+        UserDBController.validAuth(req);
+
         List<String> ids = new LinkedList<>();
         try {
             for (Script s: new MongoConnexion().handyDB().findAll(Script.class)) {
@@ -38,7 +41,8 @@ public class ScriptDBController {
     }
 
     @GetMapping("/all")
-    public List<Map<String,String>> all() {
+    public List<Map<String,String>> all(HttpServletRequest req) {
+        UserDBController.validAuth(req);
         List<Map<String,String>> elems = new ArrayList<>();
         for (var e : new MongoConnexion().handyDB().findAll(Script.class)){
             elems.add(new HashMap<>(){{put("file", e.getFile()); put("description", e.getDescription()); put("id", e.getId());}});
@@ -47,7 +51,8 @@ public class ScriptDBController {
     }
 
     @GetMapping("/{id}")
-    public Script getById(@PathVariable String id){
+    public Script getById(HttpServletRequest req, @PathVariable String id){
+        UserDBController.validAuth(req);
         try {
             return new MongoConnexion().handyDB().findById(id,Script.class);
         } catch (Exception e) {
@@ -56,7 +61,8 @@ public class ScriptDBController {
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteScript(@PathVariable String id){
+    public boolean deleteScript(HttpServletRequest req, @PathVariable String id){
+        UserDBController.validAuth(req);
         try{
             Script script = new MongoConnexion().handyDB().findById(id,Script.class);
             new MongoConnexion().handyDB().remove(script);
@@ -69,6 +75,8 @@ public class ScriptDBController {
 
     @PostMapping(value = "/add")
     public String add(HttpServletRequest req, @RequestBody String data){
+        UserDBController.validAuth(req);
+
         var obj = new Gson().fromJson(data, JsonObject.class);
         List<String> args = new ArrayList<>();
         for (var elem : obj.getAsJsonArray("args")){
@@ -95,7 +103,8 @@ public class ScriptDBController {
 
     @PostMapping("/modify")
     public String modifyScript(HttpServletRequest req, @RequestBody String data) {
-        //TODO Verify Identity
+        UserDBController.validAuth(req);
+
         var objNew = new Gson().fromJson(data, JsonObject.class);
 
         Script oldScript= new MongoConnexion().handyDB().findById(objNew.get("oldId").getAsString(),Script.class);

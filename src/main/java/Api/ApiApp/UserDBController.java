@@ -51,6 +51,8 @@ public class UserDBController {
 
     @PostMapping(value = "/addScript")
     public String addScript(HttpServletRequest req, @RequestBody String data) {
+        validAuth(req);
+
         var obj = new Gson().fromJson(data, JsonObject.class);
 
         User user;
@@ -73,7 +75,9 @@ public class UserDBController {
     }
 
     @GetMapping("/{id}")
-    public List<Script> allScripts(@PathVariable String id){
+    public List<Script> allScripts(HttpServletRequest req,@PathVariable String id){
+        UserDBController.validAuth(req);
+
         ScriptDBController scriptDBController= new ScriptDBController();
         List<Script> scripts= new LinkedList<>();
         User user = new MongoConnexion().handyDB().findById(id,User.class);
@@ -85,7 +89,7 @@ public class UserDBController {
         }
 
         for (String s : strings ) {
-            scripts.add(scriptDBController.getById(s));
+            scripts.add(scriptDBController.getById(req, s));
         }
         if (scripts.isEmpty()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user doesnt have scripts yes !");
@@ -106,6 +110,7 @@ public class UserDBController {
         "mail":"",
         "password":""
      }
+     * @return Token
      **/
     @PostMapping(value = "/connect")
     public ResponseEntity<String> connect(HttpServletRequest req, @RequestBody String data) {
@@ -131,7 +136,7 @@ public class UserDBController {
                     System.out.println(tokenfound.getId()+tokenfound.getToken());
                     new MongoConnexion().handyDB().remove(tokenfound,"tokens");
                     new MongoConnexion().handyDB().insert(token,"tokens");
-                    return new ResponseEntity<>(token.getToken(), HttpStatus.OK);
+                    return new ResponseEntity<>(Base64.getEncoder().encodeToString((token.getId() + ":" + token.getToken()).getBytes()), HttpStatus.OK);
                 }
             }catch (Exception e){
                 return new ResponseEntity<>("Error while trying to refine your token !", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -141,12 +146,13 @@ public class UserDBController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The email or the password not valid!");
         }
 
-        return new ResponseEntity<>(token.getToken(), HttpStatus.OK);
+        return new ResponseEntity<>(Base64.getEncoder().encodeToString((token.getId() + ":" + token.getToken()).getBytes()), HttpStatus.OK);
     }
 
 
     @PostMapping(value = "/removeScript")
     public String removeScript(HttpServletRequest req, @RequestBody String data) {
+        validAuth(req);
         var obj = new Gson().fromJson(data, JsonObject.class);
 
         User user;
@@ -164,16 +170,24 @@ public class UserDBController {
             return e.getMessage();
         }
 
-        return "The script have been disassociated from the user !";
+        return "Success: The script have been disassociated from the user !";
     }
 
-    private boolean checkAuth(String id,String token){
-        Token tokenDB;
+    static boolean checkAuth(String authorization){
         try {
-            tokenDB = new MongoConnexion().handyDB().findById(id,Token.class,"tokens");
+            String[] authInfos = new String(Base64.getDecoder().decode(authorization)).split(":");
+            Token tokenDB = new MongoConnexion().handyDB().findById(authInfos[0],Token.class,"tokens");
+            return tokenDB.getToken().equals(authInfos[1]);
         }catch (Exception  e){
             return false;
         }
-        return tokenDB.getToken().equals(token);
+    }
+
+    static boolean checkAuth(HttpServletRequest req){
+        return checkAuth(req.getHeader("Authorization"));
+    }
+
+    static void validAuth(HttpServletRequest req){
+        if(!checkAuth(req)) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Auth token aren't valid");
     }
 }
