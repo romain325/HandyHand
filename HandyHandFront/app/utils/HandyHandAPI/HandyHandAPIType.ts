@@ -4,10 +4,14 @@ export interface ScriptCard {
   id: string;
 }
 
-export interface NewScript {
+export interface NewScript {
   file: string;
   description: string;
   args: string[];
   execType: string;
 }
 
+export interface UserCreds {
+  mail: string;
+  password: string;
+}
