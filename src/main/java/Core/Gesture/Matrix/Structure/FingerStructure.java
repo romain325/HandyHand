@@ -34,6 +34,10 @@ public class FingerStructure implements Serializable {
      * The type the finger
      */
     private Finger.Type type;
+    /**
+     * The matrix normalizer of the hand of the finger
+     */
+    private SimpleMatrix normaliser;
 
     /**
      * A constructor of the class FingerStructure
@@ -204,5 +208,23 @@ public class FingerStructure implements Serializable {
         if(!this.getMetacarpals().compare(fingerStructure.getMetacarpals(), divergence)) return false;
 
         return true;
+    }
+
+    /**
+     * A method to get a FingerStructure with this one but normalized
+     * @param normalizer The matrix normalisation we want to apply on it
+     * @return The new FingerStructure normalized
+     * @throws BadAttributeValueExpException If matrix is null or of an other size than (4,4)
+     */
+    public FingerStructure getNormalizedFingerStructure(SimpleMatrix normalizer) throws BadAttributeValueExpException {
+        if(normalizer == null) throw new BadAttributeValueExpException("Normalization matrix has to be not null");
+        if(normalizer.numRows() != 4 || normalizer.numCols() !=4) throw new BadAttributeValueExpException("Normalization matrix has to be of size (4,4)");
+
+        BoneStructure distalNew = getDistal().getNormalizedBoneStructure(normalizer);
+        BoneStructure intermediateNew = getIntermediate().getNormalizedBoneStructure(normalizer);
+        BoneStructure proximalNew = getProximal().getNormalizedBoneStructure(normalizer);
+        BoneStructure metacarpalsNew = getMetacarpals().getNormalizedBoneStructure(normalizer);
+
+        return new FingerStructure(getType(), distalNew, intermediateNew, proximalNew, metacarpalsNew);
     }
 }

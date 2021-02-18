@@ -7,17 +7,23 @@ import Core.Gesture.Matrix.Structure.HandStructure;
 import Utils.CallBack.SketchCallback;
 import com.leapmotion.leap.*;
 import org.ejml.simple.SimpleMatrix;
-import processing.core.PApplet;
 
 import javax.management.BadAttributeValueExpException;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.LinkedList;
 
-public class SkeletonStructureView extends SketchCallback {
+public class SkeletonStructureView extends SketchCallback implements KeyListener {
     LinkedList<Vector> vectorList = new LinkedList<>();
     HandStructure handStruct;
 
     public SkeletonStructureView(HandStructure handStructure) {
         this.handStruct = handStructure;
+    }
+
+    public void setHandStruct(HandStructure handStructure) {
+        if(handStructure == null) return;
+        handStruct = handStructure;
     }
 
     @Override
@@ -30,14 +36,22 @@ public class SkeletonStructureView extends SketchCallback {
         Hand hand = frame.hands().get(0);
         if(hand == null || !hand.isValid()) return;
 
-        HandStructure handStructure = handStruct;
+        HandStructure handStructure = null;
         try {
             handStructure = new HandStructure(hand);
         } catch (BadAttributeValueExpException e) {
-            return;
+            e.printStackTrace();
         }
 
-        displayOnceHandStructure(handStructure, 200, 200);
+        if(handStruct == null) {
+            handStruct = handStructure;
+        }
+
+        if(handStructure != null) {
+            System.out.println(handStruct.compareWithNormalization(handStructure, 20));
+        }
+
+        displayOnceHandStructure(handStruct, 200, 200);
 
         displayFrameAtPosition(frame, 350, 350);
     }
@@ -54,7 +68,7 @@ public class SkeletonStructureView extends SketchCallback {
 
         if(handStructure == null) return;
 
-        SimpleMatrix normalizer = handStructure.getNormaliser();
+        SimpleMatrix normalizer = handStructure.getNormalizer();
 
         // Palm
         SimpleMatrix palm = handStructure.getPalmNormal();
@@ -113,7 +127,7 @@ public class SkeletonStructureView extends SketchCallback {
         for (Hand hand: frame.hands()) {
             if (!hand.isValid()) continue;
             try {
-                matrixNormalizer = new MatrixNormalizer(hand, 60);
+                matrixNormalizer = new MatrixNormalizer(hand);
             } catch (BadAttributeValueExpException e) {
                 continue;
             }
@@ -187,5 +201,21 @@ public class SkeletonStructureView extends SketchCallback {
                 }
             }
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        System.out.println("olalala");
+        handStruct = null;
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }

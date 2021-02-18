@@ -157,4 +157,20 @@ public class BoneStructure implements Serializable {
 
         return true;
     }
+
+    /**
+     * A method to get a BoneStructure with this one but normalized
+     * @param normalizer The matrix normalisation we want to apply on it
+     * @return The new BoneStructure normalized
+     * @throws BadAttributeValueExpException If matrix is null or of an other size than (4,4)
+     */
+    public BoneStructure getNormalizedBoneStructure(SimpleMatrix normalizer) throws BadAttributeValueExpException {
+        if(normalizer == null) throw new BadAttributeValueExpException("Normalization matrix has to be not null");
+        if(normalizer.numRows() != 4 || normalizer.numCols() !=4) throw new BadAttributeValueExpException("Normalization matrix has to be of size (4,4)");
+
+        SimpleMatrix nextNew = normalizer.mult(getNextJoint());
+        SimpleMatrix prevNex = normalizer.mult(getPrevJoint());
+
+        return new BoneStructure(getType(), nextNew, prevNex);
+    }
 }

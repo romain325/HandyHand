@@ -11,17 +11,23 @@ import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Hand;
 
 import javax.management.BadAttributeValueExpException;
+import java.awt.event.KeyEvent;
 
 public class StructureTest implements Tester {
+    private SkeletonStructureView skeletonStructureView;
+    private Controller contro;
+
     @Override
     public void start() {
         structureTest(new Controller());
     }
 
     private void structureTest(Controller controller){
+        contro = controller;
         Hand hand = null;
         Frame frame = null;
         String file = "testHandStructure";
+        int count = 0;
 
         while(hand == null || !hand.isValid()) {
             frame = controller.frame();
@@ -35,8 +41,6 @@ public class StructureTest implements Tester {
         }
 
         HandStructure handStructure = (HandStructure) new InPutStructure().ReadObjectInFile(file);
-
-//        new SkeletonStructureView().render(handStructure);
 
 //        HandStructure secondHandStructure;
 //        while(true) {
@@ -57,6 +61,8 @@ public class StructureTest implements Tester {
 //            System.out.println(comparison);
 //        }
 
-        new ProcessingRenderer(controller, new SkeletonStructureView((HandStructure) new InPutStructure().ReadObjectInFile(file))).show();
+        skeletonStructureView = new SkeletonStructureView((HandStructure) new InPutStructure().ReadObjectInFile(file));
+
+        new ProcessingRenderer(controller, skeletonStructureView).show();
     }
 }
