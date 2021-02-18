@@ -84,6 +84,17 @@ public class MatrixNormalizer {
     }
 
     /**
+     * A constructor of the class MatrixNormalizer for normalize vectors of a hand
+     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * @param hand The hand on which we want to normalizer based
+     * @param metacarpalMiddleFingerLength The length of the metacarpal bone which we want to have after scaling
+     * @throws BadAttributeValueExpException An exception is thrown if the hand is null or not valid
+     */
+    public MatrixNormalizer(Hand hand, float metacarpalMiddleFingerLength) throws BadAttributeValueExpException {
+        setNormalizer(getNoramlisationMatrixFromHand(hand, metacarpalMiddleFingerLength));
+    }
+
+    /**
      * A method to get a normalization matrix from a hand
      * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
      * @param hand The hand on which we want to normalizer based

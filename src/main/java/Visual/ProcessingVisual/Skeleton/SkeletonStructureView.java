@@ -1,5 +1,6 @@
 package Visual.ProcessingVisual.Skeleton;
 
+import Core.Gesture.Matrix.Normalization.MatrixNormalizer;
 import Core.Gesture.Matrix.Structure.BoneStructure;
 import Core.Gesture.Matrix.Structure.FingerStructure;
 import Core.Gesture.Matrix.Structure.HandStructure;
@@ -8,26 +9,45 @@ import com.leapmotion.leap.*;
 import org.ejml.simple.SimpleMatrix;
 import processing.core.PApplet;
 
+import javax.management.BadAttributeValueExpException;
 import java.util.LinkedList;
 
 public class SkeletonStructureView extends SketchCallback {
     LinkedList<Vector> vectorList = new LinkedList<>();
-    HandStructure handStructure;
+    HandStructure handStruct;
 
     public SkeletonStructureView(HandStructure handStructure) {
-        this.handStructure = handStructure;
+        this.handStruct = handStructure;
     }
 
     @Override
     public void render(Frame frame) {
-        float palmX, palmY, palmZ;
-
         getSketch().size(500,500);
         getSketch().background(55);
 
+        if(frame == null) return;
+
+        Hand hand = frame.hands().get(0);
+        if(hand == null || !hand.isValid()) return;
+
+        HandStructure handStructure = handStruct;
+        try {
+            handStructure = new HandStructure(hand);
+        } catch (BadAttributeValueExpException e) {
+            return;
+        }
+
+        displayOnceHandStructure(handStructure, 200, 200);
+
+        displayFrameAtPosition(frame, 350, 350);
+    }
+
+    public void displayOnceHandStructure(HandStructure handStructure, int posiX, int posiZ) {
+        float palmX, palmY, palmZ;
+
         for (Vector v: vectorList) {
             getSketch().fill(148,0,211);
-            getSketch().ellipse(v.getX() +250,v.getZ()+250,5,5);
+            getSketch().ellipse(v.getX() +posiX,v.getZ()+250,5,5);
         }
 
         getSketch().fill(255,255,255);
@@ -39,15 +59,13 @@ public class SkeletonStructureView extends SketchCallback {
         // Palm
         SimpleMatrix palm = handStructure.getPalmNormal();
 
-        palm = normalizer.mult(palm);
-
         palmX = (float) palm.get(0,0);
         palmY = (float) palm.get(1,0);
         palmZ = (float) palm.get(2,0);
 
-        palmX += 250;
+        palmX += posiX;
         palmY += 250;
-        palmZ += 250;
+        palmZ += posiZ;
 
         getSketch().ellipse( palmX,palmZ,30,30);
 
@@ -71,11 +89,102 @@ public class SkeletonStructureView extends SketchCallback {
                 bonePrevY = (float) bonePrev.get(1,0);
                 bonePrevZ = (float) bonePrev.get(2,0);
 
-                boneNextX += 250; boneNextY += 250; boneNextZ += 250;
-                bonePrevX += 250; bonePrevY += 250; bonePrevZ += 250;
+                boneNextX += posiX; boneNextY += 250; boneNextZ += posiZ;
+                bonePrevX += posiX; bonePrevY += 250; bonePrevZ += posiZ;
 
                 getSketch().ellipse(boneNextX,boneNextZ, 10,10);
                 getSketch().line(boneNextX,boneNextZ, bonePrevX, bonePrevZ);
+            }
+        }
+    }
+
+    public void displayFrameAtPosition(Frame frame, int posiX, int posiZ) {
+        float palmX, palmY, palmZ,boneX,boneY,boneZ,bone2X,bone2Y,bone2Z,toolX,toolY,toolZ;
+
+        var g = getSketch();
+
+        for (Vector v: vectorList) {
+            g.fill(148,0,211);
+            g.ellipse(v.getX() +posiX,v.getZ()+posiZ,5,5);
+        }
+
+        MatrixNormalizer matrixNormalizer;
+        g.fill(255,255,255);
+        for (Hand hand: frame.hands()) {
+            if (!hand.isValid()) continue;
+            try {
+                matrixNormalizer = new MatrixNormalizer(hand, 60);
+            } catch (BadAttributeValueExpException e) {
+                continue;
+            }
+            SimpleMatrix normalizer = matrixNormalizer.getNormalizer();
+
+            // Palm
+            palmX = hand.palmPosition().getX();
+            palmY = hand.palmPosition().getY();
+            palmZ = hand.palmPosition().getZ();
+
+            SimpleMatrix palm = new SimpleMatrix(4, 1);
+            palm.set(0, 0, palmX);
+            palm.set(1, 0, palmY);
+            palm.set(2, 0, palmZ);
+            palm.set(3, 0, 1);
+
+            palm = normalizer.mult(palm);
+
+            palmX = (float) palm.get(0, 0);
+            palmY = (float) palm.get(1, 0);
+            palmZ = (float) palm.get(2, 0);
+
+            palmX += posiX;
+            palmZ += posiZ;
+
+            g.ellipse(palmX, palmZ, 30, 30);
+
+            // Finger
+            SimpleMatrix bone = new SimpleMatrix(4, 1);
+            SimpleMatrix bone2 = new SimpleMatrix(4, 1);
+            for (Finger finger : hand.fingers()) {
+                for (Bone.Type type : Bone.Type.values()) {
+                    boneX = finger.bone(type).nextJoint().getX();
+                    boneY = finger.bone(type).nextJoint().getY();
+                    boneZ = finger.bone(type).nextJoint().getZ();
+
+                    bone.set(0, 0, boneX);
+                    bone.set(1, 0, boneY);
+                    bone.set(2, 0, boneZ);
+                    bone.set(3, 0, 1);
+
+                    bone = normalizer.mult(bone);
+
+                    boneX = (float) bone.get(0, 0);
+                    boneY = (float) bone.get(1, 0);
+                    boneZ = (float) bone.get(2, 0);
+
+                    bone2X = finger.bone(type).prevJoint().getX();
+                    bone2Y = finger.bone(type).prevJoint().getY();
+                    bone2Z = finger.bone(type).prevJoint().getZ();
+
+                    bone2.set(0, 0, bone2X);
+                    bone2.set(1, 0, bone2Y);
+                    bone2.set(2, 0, bone2Z);
+                    bone2.set(3, 0, 1);
+
+                    bone2 = normalizer.mult(bone2);
+
+                    bone2X = (float) bone2.get(0, 0);
+                    bone2Y = (float) bone2.get(1, 0);
+                    bone2Z = (float) bone2.get(2, 0);
+
+                    boneX += posiX;
+                    boneZ += posiZ;
+
+                    bone2X += posiX;
+                    bone2Z += posiZ;
+
+                    g.ellipse(boneX, boneZ, 10, 10);
+                    g.line(boneX, boneZ, bone2X, bone2Z);
+                }
             }
         }
     }

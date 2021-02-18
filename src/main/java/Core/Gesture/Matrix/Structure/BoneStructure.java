@@ -40,12 +40,12 @@ public class BoneStructure implements Serializable {
         next.set(2,0, nextJoint.getZ());
         next.set(3,0, 1);
 
-        Vector prevJoint = bone.nextJoint();
+        Vector prevJoint = bone.prevJoint();
         SimpleMatrix prev = new SimpleMatrix(4, 1);
-        next.set(0,0, prevJoint.getX());
-        next.set(1,0, prevJoint.getY());
-        next.set(2,0, prevJoint.getZ());
-        next.set(3,0, 1);
+        prev.set(0,0, prevJoint.getX());
+        prev.set(1,0, prevJoint.getY());
+        prev.set(2,0, prevJoint.getZ());
+        prev.set(3,0, 1);
 
         setType(bone.type());
         setNextJoint(next);

@@ -136,7 +136,7 @@ public class FingerStructure implements Serializable {
      * @throws BadAttributeValueExpException If the BoneStructure is null or not of the good type
      */
     private void setDistal(BoneStructure distal) throws BadAttributeValueExpException {
-        if(distal.getType() == null) throw new BadAttributeValueExpException("The bone as to be not null");
+        if(distal == null) throw new BadAttributeValueExpException("The bone as to be not null");
         if(distal.getType() != Bone.Type.TYPE_DISTAL) throw new BadAttributeValueExpException("The bone as to be of type distal");
         this.distal = distal;
     }
@@ -147,7 +147,7 @@ public class FingerStructure implements Serializable {
      * @throws BadAttributeValueExpException If the BoneStructure is null or not of the good type
      */
     private void setIntermediate(BoneStructure intermediate) throws BadAttributeValueExpException {
-        if(intermediate.getType() == null) throw new BadAttributeValueExpException("The bone as to be not null");
+        if(intermediate == null) throw new BadAttributeValueExpException("The bone as to be not null");
         if(intermediate.getType() != Bone.Type.TYPE_INTERMEDIATE) throw new BadAttributeValueExpException("The bone as to be of type intermediate");
         this.intermediate = intermediate;
     }
@@ -158,7 +158,7 @@ public class FingerStructure implements Serializable {
      * @throws BadAttributeValueExpException If the BoneStructure is null or not of the good type
      */
     private void setProximal(BoneStructure proximal) throws BadAttributeValueExpException {
-        if(proximal.getType() == null) throw new BadAttributeValueExpException("The bone as to be not null");
+        if(proximal == null) throw new BadAttributeValueExpException("The bone as to be not null");
         if(proximal.getType() != Bone.Type.TYPE_PROXIMAL) throw new BadAttributeValueExpException("The bone as to be of type proximal");
         this.proximal = proximal;
     }
@@ -169,7 +169,7 @@ public class FingerStructure implements Serializable {
      * @throws BadAttributeValueExpException If the BoneStructure is null or not of the good type
      */
     private void setMetacarpals(BoneStructure metacarpals) throws BadAttributeValueExpException {
-        if(metacarpals.getType() == null) throw new BadAttributeValueExpException("The bone as to be not null");
+        if(metacarpals == null) throw new BadAttributeValueExpException("The bone as to be not null");
         if(metacarpals.getType() != Bone.Type.TYPE_METACARPAL) throw new BadAttributeValueExpException("The bone as to be of type metacarpals");
         this.metacarpals = metacarpals;
     }

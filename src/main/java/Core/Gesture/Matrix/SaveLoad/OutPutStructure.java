@@ -12,7 +12,7 @@ public class OutPutStructure {
             ObjectOutputStream objectOut = new ObjectOutputStream(new FileOutputStream(filePath + File.separator + file));
             objectOut.writeObject(serObject);
             objectOut.close();
-            System.out.println("The Object  was succesfully written to the file : " + filePath);
+            System.out.println("The Object  was successfully written to the file : " + filePath);
         } catch (Exception e) {
             e.printStackTrace();
         }
