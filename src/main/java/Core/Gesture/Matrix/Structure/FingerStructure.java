@@ -34,10 +34,6 @@ public class FingerStructure implements Serializable {
      * The type the finger
      */
     private Finger.Type type;
-    /**
-     * The matrix normalizer of the hand of the finger
-     */
-    private SimpleMatrix normaliser;
 
     /**
      * A constructor of the class FingerStructure

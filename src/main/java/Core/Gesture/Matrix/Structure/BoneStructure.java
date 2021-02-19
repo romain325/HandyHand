@@ -26,7 +26,7 @@ public class BoneStructure implements Serializable {
     private Bone.Type type;
 
     /**
-     *
+     * A constructor of the class BoneStructure
      * @param bone The bone that we want to save informations
      * @throws BadAttributeValueExpException If the bone is null or not valid
      */

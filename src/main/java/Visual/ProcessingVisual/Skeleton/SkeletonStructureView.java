@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.LinkedList;
 
-public class SkeletonStructureView extends SketchCallback implements KeyListener {
+public class SkeletonStructureView extends SketchCallback {
     LinkedList<Vector> vectorList = new LinkedList<>();
     HandStructure handStruct;
 
@@ -203,19 +203,7 @@ public class SkeletonStructureView extends SketchCallback implements KeyListener
         }
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        System.out.println("olalala");
+    public void resetHandStructure() {
         handStruct = null;
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
     }
 }

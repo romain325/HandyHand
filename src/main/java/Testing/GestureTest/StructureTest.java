@@ -6,12 +6,12 @@ import Core.Gesture.Matrix.Structure.HandStructure;
 import Testing.Tester;
 import Visual.ProcessingVisual.Skeleton.SkeletonStructureView;
 import Visual.Renderer.ProcessingRenderer;
+import Visual.Renderer.ProcessingRendererSkeletonStructureView;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Hand;
 
 import javax.management.BadAttributeValueExpException;
-import java.awt.event.KeyEvent;
 
 public class StructureTest implements Tester {
     private SkeletonStructureView skeletonStructureView;
@@ -27,7 +27,6 @@ public class StructureTest implements Tester {
         Hand hand = null;
         Frame frame = null;
         String file = "testHandStructure";
-        int count = 0;
 
         while(hand == null || !hand.isValid()) {
             frame = controller.frame();
@@ -42,27 +41,12 @@ public class StructureTest implements Tester {
 
         HandStructure handStructure = (HandStructure) new InPutStructure().ReadObjectInFile(file);
 
-//        HandStructure secondHandStructure;
-//        while(true) {
-//            frame = controller.frame();
-//            hand = frame.hands().get(0);
-//            if(hand == null || !hand.isValid()) continue;
-//
-//            try {
-//                secondHandStructure = new HandStructure(hand);
-//            } catch (BadAttributeValueExpException e) {
-//                continue;
-//            }
-//
-//            float divergence = 80;
-//
-//            boolean comparison = handStructure.compare(secondHandStructure, divergence);
-//
-//            System.out.println(comparison);
-//        }
-
         skeletonStructureView = new SkeletonStructureView((HandStructure) new InPutStructure().ReadObjectInFile(file));
 
-        new ProcessingRenderer(controller, skeletonStructureView).show();
+        try {
+            new ProcessingRendererSkeletonStructureView(controller, skeletonStructureView).show();
+        } catch (BadAttributeValueExpException e) {
+            e.printStackTrace();
+        }
     }
 }

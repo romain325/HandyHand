@@ -7,7 +7,7 @@ import javax.management.BadAttributeValueExpException;
 /**
  * The class of the structure of a couple of Hands, to save both positions and the normalizer matrix of those, and the distance between them
  */
-public class DoubleHandStructure {
+public class DoubleHandStructure implements IDefineStructure {
     /**
      * The structure of the left hand
      */
