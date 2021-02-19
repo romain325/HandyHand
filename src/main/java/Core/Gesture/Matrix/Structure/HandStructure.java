@@ -15,7 +15,6 @@ import java.util.Objects;
 
 /**
  * The class of the structure of a Hand, to save positions and the normalizer matrix of this one
- * All matrix are homogeneous
  */
 public class HandStructure implements Serializable {
     /**

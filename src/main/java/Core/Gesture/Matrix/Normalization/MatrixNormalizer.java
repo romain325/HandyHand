@@ -9,18 +9,18 @@ import org.ejml.simple.SimpleMatrix;
 import javax.management.BadAttributeValueExpException;
 
 /**
- * A class to get a normalizer matrix. All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+ * A class to get a normalizer matrix. All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
  */
 public class MatrixNormalizer {
     /**
      * The matrix normalizer
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      */
     private SimpleMatrix normalizer;
 
     /**
      * A method to get the matrix normalizer
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @return The matrix normalizer that is contained in the class
      */
     public SimpleMatrix getNormalizer() {
@@ -30,7 +30,7 @@ public class MatrixNormalizer {
     /**
      * A method to set the matrix normalizer in the class.
      * The new matrix have to be of the same size of the old one.
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param normalizer The new matrix normalizer
      * @throws BadAttributeValueExpException An exception is thrown if the normalizer is null, or not of the same size of the oldest
      */
@@ -53,7 +53,7 @@ public class MatrixNormalizer {
 
     /**
      * A constructor of the class MatrixNormalizer
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param normalizer The matrix normalizer that we want in
      * @throws BadAttributeValueExpException An exception is thrown if the normalizer is null
      */
@@ -63,7 +63,7 @@ public class MatrixNormalizer {
 
     /**
      * A constructor of the class MatrixNormalizer
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param translation The matrix translation that well be in the matrix normalizer
      * @param rotations Some matrix translations that well be in the matrix normalizer
      * @throws BadAttributeValueExpException An exception is thrown if the normalizer couldn't be initialized
@@ -75,7 +75,7 @@ public class MatrixNormalizer {
 
     /**
      * A constructor of the class MatrixNormalizer for normalize vectors of a hand
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param hand The hand on which we want to normalizer based
      * @throws BadAttributeValueExpException An exception is thrown if the hand is null or not valid
      */
@@ -85,7 +85,7 @@ public class MatrixNormalizer {
 
     /**
      * A constructor of the class MatrixNormalizer for normalize vectors of a hand
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param hand The hand on which we want to normalizer based
      * @param metacarpalMiddleFingerLength The length of the metacarpal bone which we want to have after scaling
      * @throws BadAttributeValueExpException An exception is thrown if the hand is null or not valid
@@ -96,7 +96,7 @@ public class MatrixNormalizer {
 
     /**
      * A method to get a normalization matrix from a hand
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param hand The hand on which we want to normalizer based
      * @return The new matrix normalizer
      * @throws BadAttributeValueExpException An exception is thrown if the hand is null or not valid
@@ -113,7 +113,7 @@ public class MatrixNormalizer {
 
     /**
      * A method to get a normalization matrix from a hand
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param hand The hand on which we want to normalizer based
      * @param metacarpalMiddleFingerLength The length of the metacarpal bone which we want to have after scaling
      * @return The new matrix normalizer
@@ -190,7 +190,7 @@ public class MatrixNormalizer {
 
     /**
      * A method to get a normalisation matrix from a translation and some rotations matrix
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param translation The translation we want in the normalisation
      * @param rotations Some rotations we want in the normalisation
      * @return The matrix normalizer produce
@@ -220,7 +220,7 @@ public class MatrixNormalizer {
 
     /**
      * A method to get a translation matrix
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param translations Some float in the translations
      * @return The new matrix translations
      */
@@ -236,7 +236,7 @@ public class MatrixNormalizer {
 
     /**
      * A method to get the translation matrix for vectors of the hand
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param hand The hand that we want the matric from
      * @return The translation matrix for vectors of the hand
      * @throws BadAttributeValueExpException If thand is null or not valid
@@ -262,7 +262,7 @@ public class MatrixNormalizer {
 //     */
     /**
      * Rotation matrix with teta angle and form any axis passing by the origin.
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * The vector have to be normalized by standard 0 in a direct orthonormal coordinate system
      * @param teta The angle in radian that we want to rotate
      * @param axe The vector normalized by which we want to rotate
@@ -285,7 +285,7 @@ public class MatrixNormalizer {
 
     /**
      * A method to get a rotation around the x axis, for 3d
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param v The angle in radian that we want to rotate
      * @return The new rotation matrix
      */
@@ -302,7 +302,7 @@ public class MatrixNormalizer {
 
     /**
      * A method to get a rotation around the y axis, for 3d
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param v The angle in radian that we want to rotate
      * @return The new rotation matrix
      */
@@ -319,7 +319,7 @@ public class MatrixNormalizer {
 
     /**
      * A method to get a rotation around the z axis, for 3d
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param v The angle in radian that we want to rotate
      * @return The new rotation matrix
      */
@@ -336,7 +336,7 @@ public class MatrixNormalizer {
 
     /**
      * A method to get a scaling matrix
-     * All coordinates are homogeneous, so each matrix have a row and column add, and vectors have a row had
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param scales The scales that we want in the matrix
      * @return The new matrix scaling
      */
