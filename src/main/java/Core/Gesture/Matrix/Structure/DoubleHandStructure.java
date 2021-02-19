@@ -1,5 +1,6 @@
 package Core.Gesture.Matrix.Structure;
 
+import com.leapmotion.leap.Hand;
 import org.ejml.simple.SimpleMatrix;
 
 import javax.management.BadAttributeValueExpException;
@@ -41,7 +42,8 @@ public class DoubleHandStructure implements IDefineStructure {
      */
     public DoubleHandStructure(HandStructure leftHand, HandStructure rightHand) throws BadAttributeValueExpException {
         if(leftHand == null || rightHand == null) throw new BadAttributeValueExpException("Both HandStructure have to be not null");
-        if(leftHand.getHandType() != HandType.LEFT || rightHand.getHandType() != HandType.RIGHT) throw new BadAttributeValueExpException("Both HandStructure have to be of the correct HandType");
+        if(leftHand.getHandType() != HandType.LEFT || rightHand.getHandType() != HandType.RIGHT)
+            throw new BadAttributeValueExpException("Both HandStructure have to be of the correct HandType : Left for the first, right for the second");
 
         setLeftHand(leftHand);
         setRightHand(rightHand);
@@ -51,6 +53,37 @@ public class DoubleHandStructure implements IDefineStructure {
 
         BoneStructure metaIndexRightHand = rightHand.getIndex().getMetacarpals();
         BoneStructure metaPinkyRightHand = rightHand.getPinky().getMetacarpals();
+
+        setDistanceNextMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getNextJoint(), metaIndexRightHand.getNextJoint()));
+        setDistancePrevMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getPrevJoint(), metaIndexRightHand.getPrevJoint()));
+
+        setDistanceNextMetaPinky(distanceBetween2Vectors(metaPinkyLeftHand.getNextJoint(), metaPinkyRightHand.getNextJoint()));
+        setDistancePrevMetaPinky(distanceBetween2Vectors(metaPinkyLeftHand.getPrevJoint(), metaPinkyRightHand.getPrevJoint()));
+    }
+
+    /**
+     * A constructor of the DoubleHandStructure
+     * @param leftHand The left hand
+     * @param rightHand The right hand
+     * @throws BadAttributeValueExpException If hands are null, or not of the good type
+     */
+    public DoubleHandStructure(Hand leftHand, Hand rightHand) throws BadAttributeValueExpException {
+        if(leftHand == null || rightHand == null || !leftHand.isValid() || !rightHand.isValid())
+            throw new BadAttributeValueExpException("Both Hand have to be not null and valid");
+        if(!leftHand.isLeft() || !rightHand.isRight())
+            throw new BadAttributeValueExpException("Both Hand have to be of the correct type : Left for the first, right for the second");
+
+        HandStructure leftHandStructure = new HandStructure(leftHand);
+        HandStructure rightHandStructure = new HandStructure(rightHand);
+
+        setLeftHand(leftHandStructure);
+        setRightHand(rightHandStructure);
+
+        BoneStructure metaIndexLeftHand = leftHandStructure.getIndex().getMetacarpals();
+        BoneStructure metaPinkyLeftHand = leftHandStructure.getPinky().getMetacarpals();
+
+        BoneStructure metaIndexRightHand = rightHandStructure.getIndex().getMetacarpals();
+        BoneStructure metaPinkyRightHand = rightHandStructure.getPinky().getMetacarpals();
 
         setDistanceNextMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getNextJoint(), metaIndexRightHand.getNextJoint()));
         setDistancePrevMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getPrevJoint(), metaIndexRightHand.getPrevJoint()));
@@ -181,10 +214,9 @@ public class DoubleHandStructure implements IDefineStructure {
      * @param doubleHandStructure The DoubleHandStructure that we want to compare with
      * @param divergence The divergence that we accept between both DoubleHandStructures
      * @return Return true if they are similar, false otherwise
-     * @throws BadAttributeValueExpException If the DoubleHandStructure are null
      */
     public boolean compareWithoutDistance(DoubleHandStructure doubleHandStructure, float divergence) throws BadAttributeValueExpException {
-        if(doubleHandStructure == null) throw new BadAttributeValueExpException("The DoubleHandStructure has to be not null");
+        if(doubleHandStructure == null) return false;
 
         if(! doubleHandStructure.getLeftHand().compare(this.getLeftHand(), divergence)) return false;
         if(! doubleHandStructure.getRightHand().compare(this.getRightHand(), divergence)) return false;
@@ -197,10 +229,9 @@ public class DoubleHandStructure implements IDefineStructure {
      * @param doubleHandStructure The DoubleHandStructure that we want to compare with
      * @param divergence The divergence that we accept between both DoubleHandStructures
      * @return Return true if they are similar, false otherwise
-     * @throws BadAttributeValueExpException If the DoubleHandStructure are null
      */
     public boolean compare(DoubleHandStructure doubleHandStructure, float divergence) throws BadAttributeValueExpException {
-        if(doubleHandStructure == null) throw new BadAttributeValueExpException("The DoubleHandStructure has to be not null");
+        if(doubleHandStructure == null) return false;
 
         if(! this.compareWithoutDistance(doubleHandStructure, divergence)) return false;
 
@@ -217,10 +248,9 @@ public class DoubleHandStructure implements IDefineStructure {
      * @param doubleHandStructure The DoubleHandStructure that we want to compare with
      * @param divergence The divergence that we accept between both DoubleHandStructures
      * @return Return true if they are similar, false otherwise
-     * @throws BadAttributeValueExpException If the DoubleHandStructure are null
      */
     public boolean compareWithNormalizationWithoutDistance(DoubleHandStructure doubleHandStructure, float divergence) throws BadAttributeValueExpException {
-        if(doubleHandStructure == null) throw new BadAttributeValueExpException("The DoubleHandStructure has to be not null");
+        if(doubleHandStructure == null) return false;
 
         if(! doubleHandStructure.getLeftHand().compareWithNormalization(this.getLeftHand(), divergence)) return false;
         if(! doubleHandStructure.getRightHand().compareWithNormalization(this.getRightHand(), divergence)) return false;
@@ -233,10 +263,9 @@ public class DoubleHandStructure implements IDefineStructure {
      * @param doubleHandStructure The DoubleHandStructure that we want to compare with
      * @param divergence The divergence that we accept between both DoubleHandStructures
      * @return Return true if they are similar, false otherwise
-     * @throws BadAttributeValueExpException If the DoubleHandStructure are null
      */
     public boolean compareWithNormalization(DoubleHandStructure doubleHandStructure, float divergence) throws BadAttributeValueExpException {
-        if(doubleHandStructure == null) throw new BadAttributeValueExpException("The DoubleHandStructure has to be not null");
+        if(doubleHandStructure == null) return false;
 
         if(! this.compareWithNormalizationWithoutDistance(doubleHandStructure, divergence)) return false;
 

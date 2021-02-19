@@ -1,29 +1,28 @@
 package Visual.ProcessingVisual.Skeleton;
 
 import Core.Gesture.Matrix.Normalization.MatrixNormalizer;
-import Core.Gesture.Matrix.Structure.BoneStructure;
-import Core.Gesture.Matrix.Structure.FingerStructure;
-import Core.Gesture.Matrix.Structure.HandStructure;
+import Core.Gesture.Matrix.Structure.*;
 import Utils.CallBack.SketchCallback;
 import com.leapmotion.leap.*;
 import org.ejml.simple.SimpleMatrix;
 
 import javax.management.BadAttributeValueExpException;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.LinkedList;
 
 public class SkeletonStructureView extends SketchCallback {
     LinkedList<Vector> vectorList = new LinkedList<>();
-    HandStructure handStruct;
+    IDefineStructure defineStructure;
 
-    public SkeletonStructureView(HandStructure handStructure) {
-        this.handStruct = handStructure;
+    public SkeletonStructureView() {
+        setDefineStruct(null);
     }
 
-    public void setHandStruct(HandStructure handStructure) {
-        if(handStructure == null) return;
-        handStruct = handStructure;
+    public SkeletonStructureView(HandStructure handStructure) {
+        setDefineStruct(handStructure);
+    }
+
+    public void setDefineStruct(IDefineStructure defineStruct) {
+        defineStructure = defineStruct;
     }
 
     @Override
@@ -33,30 +32,42 @@ public class SkeletonStructureView extends SketchCallback {
 
         if(frame == null) return;
 
-        Hand hand = frame.hands().get(0);
-        if(hand == null || !hand.isValid()) return;
+        IDefineStructure iDefineStructure = new StructureManager().getStructureFromFrame(frame);
 
-        HandStructure handStructure = null;
-        try {
-            handStructure = new HandStructure(hand);
-        } catch (BadAttributeValueExpException e) {
-            e.printStackTrace();
-        }
+        if(iDefineStructure == null) return;
 
-        if(handStruct == null) {
-            handStruct = handStructure;
-        }
+        displayDefineStructureAtPosition(iDefineStructure, 250, 400);
 
-        if(handStructure != null) {
-            System.out.println(handStruct.compareWithNormalization(handStructure, 20));
-        }
+        if(defineStructure == null) setDefineStruct(iDefineStructure);
 
-        displayOnceHandStructure(handStruct, 200, 200);
+        displayDefineStructureAtPosition(defineStructure, 250, 150);
 
-        displayFrameAtPosition(frame, 350, 350);
+        System.out.println(new StructureManager().compareWithNormalization(iDefineStructure, defineStructure, 20));
+
+//        Hand hand = frame.hands().get(0);
+//        if(hand == null || !hand.isValid()) return;
+//
+//        HandStructure handStructure = null;
+//        try {
+//            handStructure = new HandStructure(hand);
+//        } catch (BadAttributeValueExpException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if(handStruct == null) {
+//            setDefineStruct(handStructure);
+//        }
+//
+//        if(handStructure != null) {
+//            System.out.println(handStruct.compareWithNormalization(handStructure, 20));
+//        }
+//
+//        displayHandStructure(handStruct, 200, 200);
+//
+//        displayFrameAtPosition(frame, 350, 350);
     }
 
-    public void displayOnceHandStructure(HandStructure handStructure, int posiX, int posiZ) {
+    public void displayHandStructure(HandStructure handStructure, int posiX, int posiZ) {
         float palmX, palmY, palmZ;
 
         for (Vector v: vectorList) {
@@ -112,7 +123,30 @@ public class SkeletonStructureView extends SketchCallback {
         }
     }
 
-    public void displayFrameAtPosition(Frame frame, int posiX, int posiZ) {
+    public void displayDoubleHandStructure(DoubleHandStructure doubleHandStructure, int centerX, int centerZ) {
+        if(doubleHandStructure == null) return;
+
+        int posiRight = (int) (doubleHandStructure.getDistanceNextMetaIndex() / 2);
+        int posiLeft = posiRight * -1;
+
+        posiRight += centerX;
+        posiLeft += centerX;
+
+        displayHandStructure(doubleHandStructure.getRightHand(), posiRight, centerZ);
+        displayHandStructure(doubleHandStructure.getLeftHand(), posiLeft, centerZ);
+    }
+
+    public void displayDefineStructureAtPosition(IDefineStructure iDefineStructure, int centerX, int centerZ) {
+        if(iDefineStructure == null) return;
+
+        if(iDefineStructure instanceof HandStructure) {
+            displayHandStructure((HandStructure)iDefineStructure, centerX, centerZ);
+        } else if (iDefineStructure instanceof DoubleHandStructure) {
+            displayDoubleHandStructure((DoubleHandStructure) iDefineStructure, centerX, centerZ);
+        }
+    }
+
+    public void displayFrameAtPositionFixe(Frame frame, int posiX, int posiZ) {
         float palmX, palmY, palmZ,boneX,boneY,boneZ,bone2X,bone2Y,bone2Z,toolX,toolY,toolZ;
 
         var g = getSketch();
@@ -203,7 +237,7 @@ public class SkeletonStructureView extends SketchCallback {
         }
     }
 
-    public void resetHandStructure() {
-        handStruct = null;
+    public void resetDefineStructure() {
+        setDefineStruct(null);
     }
 }

@@ -15,7 +15,6 @@ import javax.management.BadAttributeValueExpException;
 
 public class StructureTest implements Tester {
     private SkeletonStructureView skeletonStructureView;
-    private Controller contro;
 
     @Override
     public void start() {
@@ -23,7 +22,6 @@ public class StructureTest implements Tester {
     }
 
     private void structureTest(Controller controller){
-        contro = controller;
         Hand hand = null;
         Frame frame = null;
         String file = "testHandStructure";

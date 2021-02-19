@@ -26,6 +26,6 @@ public class ProcessingRendererSkeletonStructureView extends ProcessingRenderer 
     @Override
     public void keyPressed() {
         super.keyPressed();
-        skeletonStructureView.resetHandStructure();
+        skeletonStructureView.resetDefineStructure();
     }
 }
