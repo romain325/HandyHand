@@ -22,6 +22,7 @@ export function allCards(items: ScriptCard[]): JSX.Element {
           <CardScript
             title={items[(i - items.length) * -1 + j].file}
             description={items[(i - items.length) * -1 + j].description}
+            id={items[(i - items.length) * -1 + j].id}
           />
         </Col>
       );
@@ -43,7 +44,7 @@ export function allList(items: ScriptCard[]): JSX.Element {
     elements.push(
       <Row>
         <Col>
-          <LineScript title={propsNameToDisplayName(items[i].file)} description={items[i].description} />
+          <LineScript title={propsNameToDisplayName(items[i].file)} description={items[i].description} id={items[i].id} />
         </Col>
       </Row>
     );

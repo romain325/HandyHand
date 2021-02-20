@@ -46,7 +46,7 @@ export default function Counter() {
           ) : (
             items.map((item) => (
               <Col>
-                <CardScript title={item.file} description={item.description} />
+                <CardScript title={item.file} description={item.description} id={item.id} />
               </Col>
             ))
           )}

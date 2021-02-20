@@ -1,6 +1,6 @@
 package Core.Script;
 
-import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -8,7 +8,8 @@ import java.io.InputStreamReader;
 import java.util.Base64;
 
 public class Script implements Runnable {
-    private String id = getId();
+    @Id
+    private String id;
     private static final int EXEC_TIME_COOLDOWN = 3000;
     private static String userOS = System.getProperty("os.name");
     private  String execType;
@@ -49,6 +50,7 @@ public class Script implements Runnable {
         this.args = args;
         this.file = file;
         this.description = description;
+        id = getId();
     }
     public Script(){}
 
