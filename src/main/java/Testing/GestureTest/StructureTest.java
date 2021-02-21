@@ -5,7 +5,6 @@ import Core.Gesture.Matrix.SaveLoad.OutPutStructure;
 import Core.Gesture.Matrix.Structure.HandStructure;
 import Testing.Tester;
 import Visual.ProcessingVisual.Skeleton.SkeletonStructureView;
-import Visual.Renderer.ProcessingRenderer;
 import Visual.Renderer.ProcessingRendererSkeletonStructureView;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
@@ -13,17 +12,25 @@ import com.leapmotion.leap.Hand;
 
 import javax.management.BadAttributeValueExpException;
 
+/**
+ * The class to test all the structure
+ */
 public class StructureTest implements Tester {
-    private SkeletonStructureView skeletonStructureView;
-
+    /**
+     * The method to start the test
+     */
     @Override
     public void start() {
         structureTest(new Controller());
     }
 
+    /**
+     * The method containing the tests
+     * @param controller The controller to collect information return by the LeapMotion
+     */
     private void structureTest(Controller controller){
         Hand hand = null;
-        Frame frame = null;
+        Frame frame;
         String file = "testHandStructure";
 
         while(hand == null || !hand.isValid()) {
@@ -37,9 +44,7 @@ public class StructureTest implements Tester {
             e.printStackTrace();
         }
 
-        HandStructure handStructure = (HandStructure) new InPutStructure().ReadObjectInFile(file);
-
-        skeletonStructureView = new SkeletonStructureView((HandStructure) new InPutStructure().ReadObjectInFile(file));
+        SkeletonStructureView skeletonStructureView = new SkeletonStructureView((HandStructure) new InPutStructure().ReadObjectInFile(file));
 
         try {
             new ProcessingRendererSkeletonStructureView(controller, skeletonStructureView).show();
