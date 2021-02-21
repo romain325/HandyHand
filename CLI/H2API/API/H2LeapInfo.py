@@ -1,10 +1,9 @@
 import getopt
 
 import requests
-from rich.table import Table
 
-from ..Utils.APIUtils import APIUtils
 from .ApiEndpoint import ApiEndpoint
+from ..Utils.APIUtils import APIUtils
 
 
 class H2LeapInfo(ApiEndpoint):
@@ -13,11 +12,10 @@ class H2LeapInfo(ApiEndpoint):
         super().__init__(utils)
         self.endpoint += "/leap"
 
-        self.switcher = {
-            "state": self.getLeapState,
-            "view": self.getLeapView,
-            "help": self.getStateHelp
-        }
+        self.switcher["state"] = self.getLeapState
+        self.switcher["view"] = self.getLeapView
+
+        self.options["view"] = "-o [green]<outputFileName>[/green]: Select outputFilename\n-h : Possible options"
 
         self.execAdaptedFunction(args[1:])
 
@@ -37,7 +35,7 @@ class H2LeapInfo(ApiEndpoint):
         try:
             opts, _ = getopt.getopt(args[1:], "ho:")
             if dict(opts).get("-h") is not None:
-                self.utils.console.print("[i green]HandyHand leap view[/i green] option's: -o <outputFileName>")
+                self.printFunctionOptions("view")
                 return
 
             output = dict(opts).get("-o", "../LeapOutput") + ".png"
@@ -52,14 +50,14 @@ class H2LeapInfo(ApiEndpoint):
             print(err)
             self.utils.console.print("An error occurred while saving the file", style="red")
 
-    def getStateHelp(self, args):
+    def getPreciseHelp(self, args):
+        super().getPreciseHelp(args)
         helpTable = self.utils.getStandartHelpTable()
 
         helpTable.title = "Leap's Informations help"
-        helpTable.add_row("state", "Is a Leap motion currently connected", "None")
-        helpTable.add_row("view", "Save the current visual return of the Leap camera", "-o [green]<outputFileName>[/green]: Select outputFilename\n"
-                                                                                       "-h : Possible options")
-        helpTable.add_row("help", "display help", "None")
+        helpTable.add_row("state", "Is a Leap motion currently connected", self.getOption("state"))
+        helpTable.add_row("view", "Save the current visual return of the Leap camera", self.getOption("view"))
+        helpTable.add_row("help", "display help", self.getOption("help"))
 
         self.utils.console.print(helpTable)
         return

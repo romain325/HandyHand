@@ -1,5 +1,6 @@
 from typing import Dict
 
+from .API.H2LocalScript import H2LocalScript
 from .API.ApiEndpoint import ApiEndpoint
 from .API.CliHelp import CliHelp
 from .Utils.APIUtils import APIUtils
@@ -12,6 +13,7 @@ class H2API:
         self.args = args
         self.infos: Dict[str, ApiEndpoint] = {
             "leap": H2LeapInfo,
+            "local_script": H2LocalScript,
             "help": CliHelp
         }
 
