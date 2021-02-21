@@ -12,7 +12,7 @@ class APIUtils:
         self.console = rich.console.Console()
 
     def checkStatusCode(self, res: Response):
-        ErrorMessages(self.console).switcher.get(res.status_code)()
+        ErrorMessages(self.console).switcher.get(res.status_code)(res)
 
     def usageMessage(self):
         self.console.print("usage")

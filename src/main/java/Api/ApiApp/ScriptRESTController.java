@@ -100,13 +100,12 @@ public class ScriptRESTController {
                         HttpStatus.BAD_REQUEST, "Error while adding the script !", e1);
             }
         }
-        return "Error while adding scripts : Name already exist";
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error while adding scripts : Name already exist");
     }
+
 
     @PostMapping("/modify")
     public String modifyScript(HttpServletRequest req, @RequestBody String data) {
-        //TODO Verify Identity
-
         var objNew = new Gson().fromJson(data, JsonObject.class);
         Script oldScript;
         ScriptPersistance scriptPersistance = new ScriptPersistance();
@@ -151,9 +150,9 @@ public class ScriptRESTController {
                     return newScript.getId();
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Error while saving",e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Saving",e);
         }
-        return "Error during modifying !";
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error while modifying script");
     }
 
 
