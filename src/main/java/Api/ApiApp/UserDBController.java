@@ -92,7 +92,7 @@ public class UserDBController {
             scripts.add(scriptDBController.getById(req, s));
         }
         if (scripts.isEmpty()){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user doesnt have scripts yes !");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This user doesnt have scripts !");
         }
 
         return scripts;

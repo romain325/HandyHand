@@ -3,6 +3,7 @@ from typing import Dict
 from .API.H2LocalScript import H2LocalScript
 from .API.ApiEndpoint import ApiEndpoint
 from .API.CliHelp import CliHelp
+from .API.H2User import H2User
 from .Utils.APIUtils import APIUtils
 from .API.H2LeapInfo import H2LeapInfo
 
@@ -14,6 +15,7 @@ class H2API:
         self.infos: Dict[str, ApiEndpoint] = {
             "leap": H2LeapInfo,
             "local_script": H2LocalScript,
+            "user": H2User,
             "help": CliHelp
         }
 
