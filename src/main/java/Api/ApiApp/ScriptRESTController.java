@@ -120,7 +120,7 @@ public class ScriptRESTController {
 
         Map<String, String> elements = new HashMap<>(){{
             put("file",oldScript.getFile());
-            put("execPath",oldScript.getExecType());
+            put("execType",oldScript.getExecType());
             put("description", oldScript.getDescription());
         }};
 
@@ -139,7 +139,7 @@ public class ScriptRESTController {
 
         if(argsNew.isEmpty()) argsNew = Arrays.asList(oldScript.getArgs());
 
-        Script newScript = new Script(elements.get("execPath"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"));
+        Script newScript = new Script(elements.get("execType"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"));
 
         try{
             try {
