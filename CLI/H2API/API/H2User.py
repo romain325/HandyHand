@@ -91,7 +91,7 @@ class H2User(ApiEndpoint):
         try:
             opts, _ = getopt.getopt(args[1:], "hdm:t:o:")
             isDebug = dict(opts).get("-d") is not None
-            r = requests.get(self.endpoint + "/" + base64.b64encode(str(dict(opts).get("-m")).encode("ascii")).decode("ascii"), headers=self.getConnectionHeader(opts))
+            r = requests.get(self.endpoint + "/" + base64.b64encode(str(dict(opts).get("-m")).encode("ascii")).decode("ascii"), headers=self.utils.getConnectionHeader(opts))
 
             self.utils.checkStatusCode(r)
             self.utils.console.print(r.json() if isDebug else getScriptTable(r.json()))
@@ -106,15 +106,6 @@ class H2User(ApiEndpoint):
             print(err)
         except Exception as err:
             print(err)
-
-    def getConnectionHeader(self, args: List[tuple]):
-        filePath = dict(args).get("-t")
-        if filePath is None:
-            filePath = "../user.token"
-        headers = {}
-        with open(filePath, "r") as f:
-            headers["Authorization"] = f.read()
-        return headers
 
     def parseUserInfo(self, args: List[tuple]):
         userInfo = {}

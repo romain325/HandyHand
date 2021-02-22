@@ -11,6 +11,7 @@ class ErrorMessages:
         self.switcher = {
             200: self.__statusOK,
             400: self.__badRequest,
+            401: self.__unauthorized,
             404: self.__notFound,
             500: self.__internalServerError
         }
@@ -33,6 +34,13 @@ class ErrorMessages:
     def __badRequest(self, res: Response):
         self.console.print(
             f"[bold]400 Bad Request:[/bold] [i]oops![/i] The request has failed\n\t"
+            f"[i]{res.json()['message']}[/i]",
+            style="red")
+        sys.exit(2)
+
+    def __unauthorized(self, res: Response):
+        self.console.print(
+            f"[bold]401 Not Authorized:[/bold] [i]Wait![/i] What are you doing there ?\n\t"
             f"[i]{res.json()['message']}[/i]",
             style="red")
         sys.exit(2)
