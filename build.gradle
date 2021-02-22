@@ -21,6 +21,8 @@ dependencies {
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.18'
     implementation 'org.springframework.boot:spring-boot-starter-data-rest'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    compile group: 'org.ejml', name: 'ejml-all', version: '0.40'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }

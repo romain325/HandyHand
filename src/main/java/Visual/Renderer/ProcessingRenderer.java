@@ -50,8 +50,6 @@ public class ProcessingRenderer extends PApplet {
         }
     }
 
-
-
     @Override
     public void settings() {
         // Add P2D as renderer when using shaders BUT not working rn
