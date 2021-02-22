@@ -8,8 +8,20 @@ import org.ejml.simple.SimpleMatrix;
 import javax.management.BadAttributeValueExpException;
 import java.util.LinkedList;
 
+/**
+ * A class to display the skeleton of hands normalized
+ */
 public class SkeletonNormalizedView extends SketchCallback {
+    /**
+     * A list of vector to memorise latest positions of a tool
+     */
     LinkedList<Vector> vectorList = new LinkedList<>();
+
+    /**
+     * Use the getSketch function to render on the sketch
+     * The method to display each frame
+     * @param frame Current Frame
+     */
     @Override
     public void render(Frame frame) {
         float palmX, palmY, palmZ,boneX,boneY,boneZ,bone2X,bone2Y,bone2Z,toolX,toolY,toolZ;

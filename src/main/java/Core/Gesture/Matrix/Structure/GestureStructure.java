@@ -24,9 +24,13 @@ public class GestureStructure {
      * If the structure is a DoubleHandStructure or not
      */
     private boolean isDoubleHand;
+    /**
+     * If the distance between both hands are important, so the comparison will include it
+     */
+    private boolean isDistanceImportant = false;
 
     /**
-     * The constructor of the class GestureStructure
+     * A constructor of the class GestureStructure
      * @param id The id of the gesture
      * @param gesture The structure that contains the gesture
      * @param name The name of the gesture
@@ -38,6 +42,23 @@ public class GestureStructure {
         setName(name);
         setDescription(description);
         setIsDoubleHand(gesture instanceof DoubleHandStructure);
+    }
+
+    /**
+     * A constructor of the class GestureStructure
+     * @param id The id of the gesture
+     * @param gesture The structure that contains the gesture
+     * @param name The name of the gesture
+     * @param description The description of the gesture
+     * @param isDistanceImportant If the distance between both hands are important, so the comparison will include it
+     */
+    public GestureStructure(String id, IDefineStructure gesture, String name, String description, boolean isDistanceImportant) {
+        setId(id);
+        setGesture(gesture);
+        setName(name);
+        setDescription(description);
+        setIsDoubleHand(gesture instanceof DoubleHandStructure);
+        setDistanceImportant(isDistanceImportant);
     }
 
     /**
@@ -81,6 +102,14 @@ public class GestureStructure {
     }
 
     /**
+     * To know if the distance between both hands are important, so the comparison will include it
+     * @return True if the distance between both hands are important, false otherwise
+     */
+    public boolean isDistanceImportant() {
+        return isDistanceImportant;
+    }
+
+    /**
      * The setter of the id of the gesture
      * @param id The id of the gesture
      */
@@ -118,5 +147,33 @@ public class GestureStructure {
      */
     private void setIsDoubleHand(boolean doubleHand) {
         isDoubleHand = doubleHand;
+    }
+
+    /**
+     * To know if the distance between both hands are important, so the comparison will include it
+     * @param distanceImportant True if the distance between both hands are important, false otherwise
+     */
+    private void setDistanceImportant(boolean distanceImportant) {
+        isDistanceImportant = distanceImportant;
+    }
+
+    /**
+     * A method to compare gestures within two GestureStructure
+     * @param gestureStructure The GestureStructure we want to compare with the current one
+     * @param divergence The divergence that we accept between both IDefineStructure in both GestureStructure
+     * @return Return true if they are similar, false otherwise
+     */
+    public boolean compareGestures(GestureStructure gestureStructure, float divergence) {
+        if(!gestureStructure.isDoubleHand() && !this.isDoubleHand()) {
+            return new StructureManager().compareWithNormalization(gestureStructure.getGesture(), this.getGesture(), divergence);
+        }
+        else if(gestureStructure.isDoubleHand() && this.isDoubleHand()) {
+            if(isDistanceImportant) {
+                return new StructureManager().compareWithNormalization(gestureStructure.getGesture(), this.getGesture(), divergence);
+            } else {
+                return new StructureManager().compareWithNormalizationWithoutDistance(gestureStructure.getGesture(), this.getGesture(), divergence);
+            }
+        }
+        return false;
     }
 }

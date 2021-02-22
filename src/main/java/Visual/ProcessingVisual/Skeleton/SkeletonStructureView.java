@@ -7,24 +7,52 @@ import com.leapmotion.leap.*;
 import org.ejml.simple.SimpleMatrix;
 
 import javax.management.BadAttributeValueExpException;
-import java.util.LinkedList;
 
+/**
+ * A class to display the skeleton of hands stocked in structures
+ */
 public class SkeletonStructureView extends SketchCallback {
-    LinkedList<Vector> vectorList = new LinkedList<>();
+    /**
+     * The structure of hands that are constantly compared to the current one
+     */
     IDefineStructure defineStructure;
 
+    /**
+     * A constructor of the class SkeletonStructureView
+     */
     public SkeletonStructureView() {
         setDefineStruct(null);
     }
 
+    /**
+     * A constructor of the class SkeletonStructureView
+     * @param handStructure The HandStructure that will be constantly compared to the current one
+     */
     public SkeletonStructureView(HandStructure handStructure) {
         setDefineStruct(handStructure);
     }
 
-    public void setDefineStruct(IDefineStructure defineStruct) {
+    /**
+     * The getter of the structure of hands that are constantly compared to the current one
+     * @return The structure of hands that are constantly compared to the current one
+     */
+    public IDefineStructure getDefineStructure() {
+        return defineStructure;
+    }
+
+    /**
+     * The setter of the structure of hands that are constantly compared to the current one
+     * @param defineStruct The structure of hands that are constantly compared to the current one
+     */
+    private void setDefineStruct(IDefineStructure defineStruct) {
         defineStructure = defineStruct;
     }
 
+    /**
+     * Use the getSketch function to render on the sketch
+     * The method to display each frame
+     * @param frame Current Frame
+     */
     @Override
     public void render(Frame frame) {
         getSketch().size(500,500);
@@ -38,42 +66,21 @@ public class SkeletonStructureView extends SketchCallback {
 
         displayDefineStructureAtPosition(iDefineStructure, 250, 400);
 
-        if(defineStructure == null) setDefineStruct(iDefineStructure);
+        if(defineStructure == null) setDefineStruct(iDefineStructure); //To reset the structure compared
 
         displayDefineStructureAtPosition(defineStructure, 250, 150);
 
         System.out.println(new StructureManager().compareWithNormalization(iDefineStructure, defineStructure, 20));
-
-//        Hand hand = frame.hands().get(0);
-//        if(hand == null || !hand.isValid()) return;
-//
-//        HandStructure handStructure = null;
-//        try {
-//            handStructure = new HandStructure(hand);
-//        } catch (BadAttributeValueExpException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if(handStruct == null) {
-//            setDefineStruct(handStructure);
-//        }
-//
-//        if(handStructure != null) {
-//            System.out.println(handStruct.compareWithNormalization(handStructure, 20));
-//        }
-//
-//        displayHandStructure(handStruct, 200, 200);
-//
-//        displayFrameAtPosition(frame, 350, 350);
     }
 
+    /**
+     * A method to display a HandStructure at a known position
+     * @param handStructure The HandStructure that we want to display
+     * @param posiX The abscissa position
+     * @param posiZ The ordinate position
+     */
     public void displayHandStructure(HandStructure handStructure, int posiX, int posiZ) {
         float palmX, palmY, palmZ;
-
-        for (Vector v: vectorList) {
-            getSketch().fill(148,0,211);
-            getSketch().ellipse(v.getX() +posiX,v.getZ()+250,5,5);
-        }
 
         getSketch().fill(255,255,255);
 
@@ -123,6 +130,12 @@ public class SkeletonStructureView extends SketchCallback {
         }
     }
 
+    /**
+     * A method to display a DoubleHandStructure at a known position
+     * @param doubleHandStructure The DoubleHandStructure that we want to display
+     * @param centerX The abscissa position
+     * @param centerZ The ordinate position
+     */
     public void displayDoubleHandStructure(DoubleHandStructure doubleHandStructure, int centerX, int centerZ) {
         if(doubleHandStructure == null) return;
 
@@ -136,6 +149,12 @@ public class SkeletonStructureView extends SketchCallback {
         displayHandStructure(doubleHandStructure.getLeftHand(), posiLeft, centerZ);
     }
 
+    /**
+     * A method to display a IDefineStructure at a known position
+     * @param iDefineStructure The IDefineStructure that we want to display
+     * @param centerX The abscissa position
+     * @param centerZ The ordinate position
+     */
     public void displayDefineStructureAtPosition(IDefineStructure iDefineStructure, int centerX, int centerZ) {
         if(iDefineStructure == null) return;
 
@@ -146,15 +165,16 @@ public class SkeletonStructureView extends SketchCallback {
         }
     }
 
+    /**
+     * A method to display a Frame at a known position
+     * @param frame The Frame that we want to display
+     * @param posiX The abscissa position
+     * @param posiZ The ordinate position
+     */
     public void displayFrameAtPositionFixe(Frame frame, int posiX, int posiZ) {
         float palmX, palmY, palmZ,boneX,boneY,boneZ,bone2X,bone2Y,bone2Z,toolX,toolY,toolZ;
 
         var g = getSketch();
-
-        for (Vector v: vectorList) {
-            g.fill(148,0,211);
-            g.ellipse(v.getX() +posiX,v.getZ()+posiZ,5,5);
-        }
 
         MatrixNormalizer matrixNormalizer;
         g.fill(255,255,255);
@@ -237,6 +257,9 @@ public class SkeletonStructureView extends SketchCallback {
         }
     }
 
+    /**
+     * A method to reset the structure that are compared to the current one
+     */
     public void resetDefineStructure() {
         setDefineStruct(null);
     }

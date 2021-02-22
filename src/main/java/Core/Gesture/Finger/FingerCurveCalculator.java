@@ -9,11 +9,15 @@ import javax.swing.text.MutableAttributeSet;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A class to calculate some curve of fingers
+ */
 public class FingerCurveCalculator {
 
     /**
-     * @param hand A hand that we want the information of the fingers
-     * @return
+     * A method to get the curves of each fingers of a Hand
+     * @param hand The hand that we want the information of the fingers
+     * @return A Map with the curves of each fingers with there type
      */
     public Map<Finger.Type, Float> fingersCurve(Hand hand) {
         if (hand == null || !hand.isValid()) return null;
@@ -28,8 +32,9 @@ public class FingerCurveCalculator {
     }
 
     /**
+     * A method to get the curves of the beginning of each fingers of a Hand
      * @param hand A hand that we want the information of the fingers
-     * @return
+     * @return A Map with the curves of the beginning of each fingers with there type
      */
     public Map<Finger.Type, Float> fingersStart(Hand hand) {
         if (hand == null || !hand.isValid()) return null;
@@ -44,9 +49,9 @@ public class FingerCurveCalculator {
     }
 
     /**
-     * A function that calculates the percentage of the curve of each fingers of the hand
+     * A function that calculates the percentage of the curve of the end of each fingers of the hand
      * @param hand A hand that we want the information of the fingers
-     * @return
+     * @return A Map with the curves of the end of each fingers with there type
      */
     public Map<Finger.Type, Float> fingersTips(Hand hand) {
         if (hand == null || !hand.isValid()) return null;
@@ -63,7 +68,6 @@ public class FingerCurveCalculator {
 
     /**
      * A function that calculates the percentage of the curve of the finger
-     *
      * @param finger A finger that we want the information
      * @return The percentage of the curve of the finger
      */
@@ -76,7 +80,6 @@ public class FingerCurveCalculator {
 
     /**
      * A function that calculates the percentage of the curve of the beginning of the finger
-     *
      * @param finger A finger that we want the information
      * @return The percentage of the curve of the beginning of the finger.
      * The percentage for the thumb are restrict to 0%, 50% and 100% and may not be correct.
@@ -152,7 +155,6 @@ public class FingerCurveCalculator {
 
     /**
      * A function that calculates the percentage of the curve of the fingertip
-     *
      * @param finger The finger that we want the information
      * @return The percentage of the curve of the fingertip
      */
@@ -236,15 +238,25 @@ public class FingerCurveCalculator {
         return percentage;
     }
 
+    /**
+     * A method to calculate the angle between the proximal and metacarpal bone of a Finger
+     * @param finger The Finger from which we want to calculate
+     * @return The angle between the proximal and metacarpal bone of a Finger
+     */
     public float angleProximalMetacarpal(Finger finger) {
         if(finger == null || !finger.isValid() || !finger.isFinger()) return -1;
         if(finger.type() == Finger.Type.TYPE_THUMB) return -1;
 
-        float degresAngle = angle2Bones(finger.bone(Bone.Type.TYPE_INTERMEDIATE), finger.bone(Bone.Type.TYPE_PROXIMAL));
+        float degresAngle = angle2Bones(finger.bone(Bone.Type.TYPE_PROXIMAL), finger.bone(Bone.Type.TYPE_METACARPAL));
 
         return degresAngle;
     }
 
+    /**
+     * A method to calculate the angle between the intermediate and proximal bone of a Finger
+     * @param finger The Finger from which we want to calculate
+     * @return The angle between the proximal and metacarpal bone of a Finger
+     */
     public float angleIntermediateProximal(Finger finger) {
         if(finger == null || !finger.isValid() || !finger.isFinger()) return -1;
 
@@ -253,6 +265,11 @@ public class FingerCurveCalculator {
         return degresAngle;
     }
 
+    /**
+     * A method to calculate the angle between the distal and intermediate bone of a Finger
+     * @param finger The Finger from which we want to calculate
+     * @return The angle between the proximal and metacarpal bone of a Finger
+     */
     public float angleDistalIntermediate(Finger finger) {
         if(finger == null || !finger.isValid() || !finger.isFinger()) return -1;
 
@@ -262,49 +279,52 @@ public class FingerCurveCalculator {
     }
 
     /**
-     * Pour plus d'explications : https://openclassrooms.com/forum/sujet/mathsespace-3d-calculer-l-angle-entre-2-vecteurs-87922
-     * @param bone1
-     * @param bone2
-     * @return
+     * A method to calculate the angle between two bones
+     * For more details : https://openclassrooms.com/forum/sujet/mathsespace-3d-calculer-l-angle-entre-2-vecteurs-87922
+     * @param bone1 The first bone that we want to calculate
+     * @param bone2 The second bone that we want to calculate
+     * @return The angle between two bones
      */
     public float angle2Bones(Bone bone1, Bone bone2) {
         if(bone1 == null || !bone1.isValid() || bone2 == null || !bone2.isValid()) return -1;
         if(bone1.length() == 0 || bone2.length() == 0) return -1;
 
-        //TODO : Vérifier que les os soient collés et que le bone1 soit plus éloigné de la main que le bone2
-        //(Genre bone1 : Distal et bone2 : Intermediate, mais pas l'inverse)
-        //Ou mettre en privé pour que seul nous avec les trois méthodes au-dessus puisse y utiliser
+        //Verify if both bones are stick
+        if(bone1.type() == Bone.Type.TYPE_DISTAL && bone2.type() == Bone.Type.TYPE_INTERMEDIATE ||
+                bone1.type() == Bone.Type.TYPE_INTERMEDIATE && bone2.type() == Bone.Type.TYPE_PROXIMAL ||
+                bone1.type() == Bone.Type.TYPE_PROXIMAL && bone2.type() == Bone.Type.TYPE_METACARPAL)
+        {
+            Vector vB = bone1.nextJoint(); //B
+            Vector vA = bone1.prevJoint(); //A
+            Vector vC = bone2.prevJoint(); //C
 
-        Vector vB = bone1.nextJoint(); //B
-        Vector vA = bone1.prevJoint(); //A
-        Vector vC = bone2.prevJoint(); //C
+            Vector vAB = new Vector(vB.getX() - vA.getX(),
+                    vB.getY() - vA.getY(),
+                    vB.getZ() - vA.getZ()); //AB
 
-        Vector vAB = new Vector(vB.getX() - vA.getX(),
-                vB.getY() - vA.getY(),
-                vB.getZ() - vA.getZ()); //AB
+            Vector vAC = new Vector(vC.getX() - vA.getX(),
+                    vC.getY() - vA.getY(),
+                    vC.getZ() - vA.getZ()); //AC
 
-        Vector vAC = new Vector(vC.getX() - vA.getX(),
-                vC.getY() - vA.getY(),
-                vC.getZ() - vA.getZ()); //AC
+            float absAB = (float) Math.sqrt(
+                    Math.pow(vAB.getX(), 2) +
+                            Math.pow(vAB.getY(), 2) +
+                            Math.pow(vAB.getZ(), 2)); // ||AB||
 
-        float absAB = (float) Math.sqrt(
-                Math.pow(vAB.getX(), 2) +
-                        Math.pow(vAB.getY(), 2) +
-                        Math.pow(vAB.getZ(), 2)); // ||AB||
+            float absAC = (float) Math.sqrt(
+                    Math.pow(vAC.getX(), 2) +
+                            Math.pow(vAC.getY(), 2) +
+                            Math.pow(vAC.getZ(), 2)); // ||AC||
 
-        float absAC = (float) Math.sqrt(
-                Math.pow(vAC.getX(), 2) +
-                        Math.pow(vAC.getY(), 2) +
-                        Math.pow(vAC.getZ(), 2)); // ||AC||
+            float ABAC = vAB.getX() * vAC.getX() +
+                    vAB.getY() * vAC.getY() +
+                    vAB.getZ() * vAC.getZ(); //AB.AC
 
-        float ABAC = vAB.getX() * vAC.getX() +
-                vAB.getY() * vAC.getY() +
-                vAB.getZ() * vAC.getZ(); //AB.AC
+            float radianAngle = (float) Math.acos(ABAC / (absAB * absAC)); //Angle A
 
-        float radianAngle = (float) Math.acos(ABAC / (absAB * absAC)); //Angle A
+            float degresAngle = (float) (radianAngle * 57.2958); //1 radian = 57.2958 degrés
 
-        float degresAngle = (float) (radianAngle * 57.2958); //1 radian = 57.2958 degrés
-
-        return degresAngle;
+            return degresAngle;
+        } else return 0;
     }
 }
