@@ -21,17 +21,27 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Base64;
 
+/**
+ * General Info about the leapmotion
+ */
 @RestController
 @RequestMapping("/leap")
 public class LeapInfosRESTController {
 
+    /**
+     * Check if a LeapMotion is currently connected
+     * @return connection state
+     */
     @GetMapping("/state")
     public boolean getState(){
         return new Controller().isConnected();
     }
 
+    /**
+     * Return the camera view of the LeapMotion, Yoann's head if error
+     */
     @GetMapping(value="/view")
-    public void getLeapView(HttpServletResponse response) throws IOException, URISyntaxException {
+    public void getLeapView(HttpServletResponse response) throws IOException {
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
 
         byte[] img = new CameraImage().getByteArrayImage();
