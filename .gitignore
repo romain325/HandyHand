@@ -10,4 +10,4 @@ build/
 
 # python
 
-**/pycache/**
+!**/__pycache__/
