@@ -7,3 +7,6 @@ HandyHand.iml
 # Gradle
 .gradle/
 build/
+
+# python
+__pycache__/
