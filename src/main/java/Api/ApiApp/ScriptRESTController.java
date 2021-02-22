@@ -4,7 +4,6 @@ import Core.Script.Script;
 import Core.StubPersistence.ScriptPersistance;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;

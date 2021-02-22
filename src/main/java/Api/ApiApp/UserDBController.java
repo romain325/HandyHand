@@ -98,13 +98,6 @@ public class UserDBController {
         return scripts;
     }
 
-    /*
-    Faire ma requête vers api avec requête et mdp
-    Si ok on créer token pour utilisateur et on renvoie
-    On sauvegarde un hashmap avec association clé token value id utilisateur
-
-     */
-
     /**
      {
         "mail":"",
@@ -139,7 +132,7 @@ public class UserDBController {
                     return new ResponseEntity<>(Base64.getEncoder().encodeToString((token.getId() + ":" + token.getToken()).getBytes()), HttpStatus.OK);
                 }
             }catch (Exception e){
-                return new ResponseEntity<>("Error while trying to refine your token !", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>("Error while trying to redefine your token !", HttpStatus.INTERNAL_SERVER_ERROR);
             }
             new MongoConnexion().handyDB().insert(token,"tokens");
         }else{
