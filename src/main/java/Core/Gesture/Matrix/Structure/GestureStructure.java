@@ -3,10 +3,12 @@ package Core.Gesture.Matrix.Structure;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.io.Serializable;
+
 /**
  * A class that contain a structure representing a gesture, with some information
  */
-public class GestureStructure {
+public class GestureStructure implements Serializable {
     /**
      * The id of the gesture
      */
@@ -14,7 +16,6 @@ public class GestureStructure {
     /**
      * The structure that contains the gesture
      */
-    @JsonIgnore
     private IDefineStructure gesture;
     /**
      * The name of the gesture

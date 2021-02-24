@@ -2,6 +2,7 @@ package Api.ApiApp;
 import Api.ApiApp.Database.MongoConnexion;
 import Api.ApiApp.UserDBController;
 import Core.Gesture.Matrix.SaveLoad.InPutStructure;
+import Core.Gesture.Matrix.Structure.BoneStructure;
 import Core.Gesture.Matrix.Structure.GestureStructure;
 import Core.Gesture.Matrix.Structure.HandStructure;
 import Core.Script.Script;
@@ -10,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
+import com.leapmotion.leap.Hand;
 import org.ejml.simple.SimpleMatrix;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -39,12 +41,13 @@ public class GestureDBController {
     }
 
     @GetMapping("/all")
-    public SimpleMatrix all(HttpServletRequest req) {
+    public List<GestureStructure> all(HttpServletRequest req) {
         try{
             UserDBController.validAuth(req);
-            List<GestureStructure> elems = new ArrayList<>(new MongoConnexion().handyDB().findAll(GestureStructure.class,"gestureStructure"));
-            System.out.println(((HandStructure) elems.get(0).getGesture()).getDirection().toString());
-            return ((HandStructure) elems.get(0).getGesture()).getDirection();
+            //HandStructure gestureStructure =(HandStructure) new InPutStructure().readObjectInFile("testHandStructure");
+            //new MongoConnexion().handyDB().save(new GestureStructure("testId2",gestureStructure,"test","test"));
+
+            return new ArrayList<>(new MongoConnexion().handyDB().findAll(GestureStructure.class,"gestureStructure"));
         }catch (Exception e){
             e.printStackTrace();
         }

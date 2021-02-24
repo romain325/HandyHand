@@ -1,5 +1,6 @@
 package Core.Gesture.Matrix.Structure;
 
+import Core.Gesture.Matrix.MatrixUtils;
 import com.leapmotion.leap.Bone;
 import com.leapmotion.leap.Vector;
 import org.ejml.simple.SimpleMatrix;
@@ -15,11 +16,11 @@ public class BoneStructure implements Serializable {
     /**
      * The position of the end of the bone
      */
-    private SimpleMatrix nextJoint;
+    private double[] nextJoint = new double[4];
     /**
      * The position of the start of the bone
      */
-    private SimpleMatrix prevJoint;
+    private double[] prevJoint = new double[4];
     /**
      * The type of the bone
      */
@@ -39,13 +40,25 @@ public class BoneStructure implements Serializable {
         if(bone == null || !bone.isValid()) throw new BadAttributeValueExpException("Bone as to be not null and valid");
 
         Vector nextJoint = bone.nextJoint();
+        this.nextJoint[0] = nextJoint.getX();
+        this.nextJoint[1] = nextJoint.getY();
+        this.nextJoint[2] = nextJoint.getZ();
+        this.nextJoint[3] = 1;
+        /*
         SimpleMatrix next = new SimpleMatrix(4, 1);
         next.set(0,0, nextJoint.getX());
         next.set(1,0, nextJoint.getY());
         next.set(2,0, nextJoint.getZ());
         next.set(3,0, 1);
+         */
 
         Vector prevJoint = bone.prevJoint();
+        this.prevJoint[0] = prevJoint.getX();
+        this.prevJoint[1] = prevJoint.getY();
+        this.prevJoint[2] = prevJoint.getZ();
+        this.prevJoint[3] = 1;
+
+        /*
         SimpleMatrix prev = new SimpleMatrix(4, 1);
         prev.set(0,0, prevJoint.getX());
         prev.set(1,0, prevJoint.getY());
@@ -55,7 +68,11 @@ public class BoneStructure implements Serializable {
         setType(bone.type());
         setNextJoint(next);
         setPrevJoint(prev);
+         */
+        setType(bone.type());
     }
+
+
 
     /**
      * A constructor of the class BoneStructure
@@ -75,7 +92,7 @@ public class BoneStructure implements Serializable {
      * @return The position of the end of the bone
      */
     public SimpleMatrix getNextJoint() {
-        return nextJoint;
+        return MatrixUtils.toSimpleMatrix(this.nextJoint);
     }
 
     /**
@@ -83,7 +100,7 @@ public class BoneStructure implements Serializable {
      * @return The position of the start of the bone
      */
     public SimpleMatrix getPrevJoint() {
-        return prevJoint;
+        return MatrixUtils.toSimpleMatrix(this.prevJoint);
     }
 
     /**
@@ -102,7 +119,7 @@ public class BoneStructure implements Serializable {
     private void setNextJoint(SimpleMatrix nextJoint) throws BadAttributeValueExpException {
         if(nextJoint == null) throw new BadAttributeValueExpException("The vector as to be not null");
         if(nextJoint.numRows() != 4 || nextJoint.numCols() != 1) throw new BadAttributeValueExpException("The vector as to be of size (4,1)");
-        this.nextJoint = nextJoint;
+        this.nextJoint = MatrixUtils.fromSimpleMatrix(nextJoint);
     }
 
     /**
@@ -113,7 +130,7 @@ public class BoneStructure implements Serializable {
     private void setPrevJoint(SimpleMatrix prevJoint) throws BadAttributeValueExpException {
         if(prevJoint == null) throw new BadAttributeValueExpException("The vector as to be not null");
         if(prevJoint.numRows() != 4 || prevJoint.numCols() != 1) throw new BadAttributeValueExpException("The vector as to be of size (4,1)");
-        this.prevJoint = prevJoint;
+        this.prevJoint = MatrixUtils.fromSimpleMatrix(prevJoint);
     }
 
     /**
@@ -152,12 +169,12 @@ public class BoneStructure implements Serializable {
 
         SimpleMatrix prev = boneStructure.getPrevJoint();
         for(int i = 0; i < 3; i++) {
-            if(Math.abs(prev.get(i) - this.prevJoint.get(i)) > divergence ) return false;
+            if(Math.abs(prev.get(i) - getPrevJoint().get(i)) > divergence ) return false;
         }
 
         SimpleMatrix next = boneStructure.getNextJoint();
         for(int i = 0; i < 3; i++) {
-            if(Math.abs(next.get(i) - this.nextJoint.get(i)) > divergence ) return false;
+            if(Math.abs(next.get(i) - getNextJoint().get(i)) > divergence ) return false;
         }
 
         return true;

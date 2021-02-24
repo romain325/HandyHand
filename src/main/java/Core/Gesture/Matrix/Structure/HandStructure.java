@@ -1,5 +1,6 @@
 package Core.Gesture.Matrix.Structure;
 
+import Core.Gesture.Matrix.MatrixUtils;
 import Core.Gesture.Matrix.Normalization.MatrixNormalizer;
 import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Hand;
@@ -40,11 +41,11 @@ public class HandStructure implements Serializable, IDefineStructure {
     /**
      * The vector of the direction of the hand
      */
-    private SimpleMatrix direction;
+    private double[] direction = new double[4];
     /**
      * The vector of the palm normal of the hand
      */
-    private SimpleMatrix palmNormal;
+    private double[] palmNormal = new double[4];
     /**
      * The type of the hand. If it is a right or left hand
      */
@@ -52,7 +53,7 @@ public class HandStructure implements Serializable, IDefineStructure {
     /**
      * The matrix normalizer of the hand
      */
-    private SimpleMatrix normalizer;
+    private double[][] normalizer = new double[4][4];
 
 
     public HandStructure(){}
@@ -233,7 +234,7 @@ public class HandStructure implements Serializable, IDefineStructure {
      * @return The vector of the direction of the hand
      */
     public SimpleMatrix getDirection() {
-        return direction;
+        return MatrixUtils.toSimpleMatrix(this.direction);
     }
 
     /**
@@ -241,7 +242,7 @@ public class HandStructure implements Serializable, IDefineStructure {
      * @return The vector of the palm normal of hand
      */
     public SimpleMatrix getPalmNormal() {
-        return palmNormal;
+        return MatrixUtils.toSimpleMatrix(this.palmNormal);
     }
 
     /**
@@ -257,7 +258,7 @@ public class HandStructure implements Serializable, IDefineStructure {
      * @return The matrix normalizer of the hand
      */
     public SimpleMatrix getNormalizer() {
-        return normalizer;
+        return MatrixUtils.toSimpleMatrix(this.normalizer);
     }
 
     /**
@@ -305,7 +306,7 @@ public class HandStructure implements Serializable, IDefineStructure {
      * @param direction The vector of the direction of the hand
      */
     public void setDirection(SimpleMatrix direction) {
-        this.direction = direction;
+        this.direction = MatrixUtils.fromSimpleMatrix(direction);
     }
 
     /**
@@ -313,7 +314,7 @@ public class HandStructure implements Serializable, IDefineStructure {
      * @param palmNormal The vector of the palm normal of hand
      */
     public void setPalmNormal(SimpleMatrix palmNormal) {
-        this.palmNormal = palmNormal;
+        this.palmNormal =  MatrixUtils.fromSimpleMatrix(palmNormal);
     }
 
     /**
@@ -329,7 +330,7 @@ public class HandStructure implements Serializable, IDefineStructure {
      * @param normalizer The matrix normalizer of the hand
      */
     private void setNormalizer(SimpleMatrix normalizer) {
-        this.normalizer = normalizer;
+        this.normalizer = MatrixUtils.squareFromSimpleMatrix(normalizer);
     }
 
     /**
