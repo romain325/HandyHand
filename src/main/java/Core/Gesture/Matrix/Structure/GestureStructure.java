@@ -1,5 +1,8 @@
 package Core.Gesture.Matrix.Structure;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * A class that contain a structure representing a gesture, with some information
  */
@@ -11,6 +14,7 @@ public class GestureStructure {
     /**
      * The structure that contains the gesture
      */
+    @JsonIgnore
     private IDefineStructure gesture;
     /**
      * The name of the gesture
@@ -59,6 +63,10 @@ public class GestureStructure {
         setDescription(description);
         setIsDoubleHand(gesture instanceof DoubleHandStructure);
         setDistanceImportant(isDistanceImportant);
+    }
+
+    public GestureStructure(){
+
     }
 
     /**
@@ -175,5 +183,9 @@ public class GestureStructure {
             }
         }
         return false;
+    }
+
+    public void setDoubleHand(boolean doubleHand) {
+        isDoubleHand = doubleHand;
     }
 }

@@ -34,6 +34,9 @@ public class DoubleHandStructure implements IDefineStructure {
      */
     private float distancePrevMetaPinky;
 
+    public DoubleHandStructure(){
+    }
+
     /**
      * A constructor of the DoubleHandStructure
      * @param leftHand The structure of the left hand

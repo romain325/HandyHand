@@ -54,6 +54,9 @@ public class HandStructure implements Serializable, IDefineStructure {
      */
     private SimpleMatrix normalizer;
 
+
+    public HandStructure(){}
+
     /**
      * A constructor of the HandStructure
      * All matrix are homogeneous

@@ -25,6 +25,11 @@ public class BoneStructure implements Serializable {
      */
     private Bone.Type type;
 
+    public BoneStructure(){
+
+    }
+
+
     /**
      * A constructor of the class BoneStructure
      * @param bone The bone that we want to save informations

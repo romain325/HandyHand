@@ -5,8 +5,12 @@ import Core.Gesture.Matrix.SaveLoad.InPutStructure;
 import Core.Gesture.Matrix.Structure.GestureStructure;
 import Core.Gesture.Matrix.Structure.HandStructure;
 import Core.Script.Script;
+import Core.StubPersistence.ExecPersistance;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.leapmotion.leap.Controller;
+import com.leapmotion.leap.Frame;
+import org.ejml.simple.SimpleMatrix;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -28,17 +32,23 @@ public class GestureDBController {
                 ids.add(g.getId());
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting all scripts",e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting all gesture",e);
         }
         if(ids.isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No script");
         return ids;
     }
 
     @GetMapping("/all")
-    public List<GestureStructure> all(HttpServletRequest req) {
-        UserDBController.validAuth(req);
-        List<GestureStructure> elems = new ArrayList<>(new MongoConnexion().handyDB().findAll(GestureStructure.class));
-        return elems;
+    public SimpleMatrix all(HttpServletRequest req) {
+        try{
+            UserDBController.validAuth(req);
+            List<GestureStructure> elems = new ArrayList<>(new MongoConnexion().handyDB().findAll(GestureStructure.class,"gestureStructure"));
+            System.out.println(((HandStructure) elems.get(0).getGesture()).getDirection().toString());
+            return ((HandStructure) elems.get(0).getGesture()).getDirection();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @GetMapping("/{id}")
@@ -52,23 +62,34 @@ public class GestureDBController {
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteScript(HttpServletRequest req, @PathVariable String id){
+    public boolean deleteGesture(HttpServletRequest req, @PathVariable String id){
         UserDBController.validAuth(req);
         try{
             GestureStructure structure = new MongoConnexion().handyDB().findById(id,GestureStructure.class);
             new MongoConnexion().handyDB().remove(structure);
             return true;
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while deleting script",e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while deleting gesture",e);
         }
     }
 
 
     @PostMapping(value = "/add")
     public String add(HttpServletRequest req, @RequestBody String data){
-        HandStructure handStructure = (HandStructure) new InPutStructure().ReadObjectInFile("testHandStructure");
-        GestureStructure structure = new GestureStructure("TestID",handStructure,"test","Description du test");
-        new MongoConnexion().handyDB().insert(structure);
+        UserDBController.validAuth(req);
+
+        Frame frame;
+        Controller controller;
+        try {
+            controller= new Controller();
+            frame=controller.frame();
+            HandStructure structure = new HandStructure(frame.hands().get(0));
+        }catch (Exception e){
+            return "Error :" + e.getMessage();
+        }
+
+
+
         return "ça a marché";
     }
 
