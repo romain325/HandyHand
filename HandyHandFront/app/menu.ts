@@ -19,12 +19,7 @@ export default class MenuBuilder {
   }
 
   buildMenu(): Menu {
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.DEBUG_PROD === 'true'
-    ) {
-      this.setupDevelopmentEnvironment();
-    }
+    this.setupRightClick();
 
     const template =
       process.platform === 'darwin'
@@ -37,18 +32,27 @@ export default class MenuBuilder {
     return menu;
   }
 
-  setupDevelopmentEnvironment(): void {
+  setupRightClick(): void {
     this.mainWindow.webContents.on('context-menu', (_, props) => {
       const { x, y } = props;
 
-      Menu.buildFromTemplate([
-        {
-          label: 'Inspect element',
-          click: () => {
-            this.mainWindow.webContents.inspectElement(x, y);
-          },
+      const inspect: MenuItemConstructorOptions = {
+        label: 'Inspect Element',
+        click: () => {
+          this.mainWindow.webContents.inspectElement(x, y);
         },
-      ]).popup({ window: this.mainWindow });
+      };
+
+      const options: MenuItemConstructorOptions[] = [];
+
+      if (
+        process.env.NODE_ENV === 'development' ||
+        process.env.DEBUG_PROD === 'true'
+      ) {
+        options.push(inspect);
+      }
+
+      Menu.buildFromTemplate(options).popup({ window: this.mainWindow });
     });
   }
 

@@ -84,7 +84,7 @@ export default function MyScriptsFeature() {
           allCards(items)
         ) : (
           allList(items)
-        ) }
+        )}
       </Container>
     </ContentPage>
   );

@@ -73,6 +73,12 @@ public class ScriptDBController {
     }
 
 
+    /**
+     *
+     * @param req
+     * @param data {"args":  ["-h"], "file":  "john2reaper", "description":  "An Amazing script !!", "execType":  "test"}
+     * @return
+     */
     @PostMapping(value = "/add")
     public String add(HttpServletRequest req, @RequestBody String data){
         UserDBController.validAuth(req);
@@ -86,7 +92,7 @@ public class ScriptDBController {
         Script script;
 
         try{
-            script = new Script(obj.get("execPath").getAsString(), args.toArray(new String[0]), obj.get("file").getAsString(), (obj.get("description") == null ? "" : obj.get("description").getAsString()));
+            script = new Script(obj.get("execType").getAsString(), args.toArray(new String[0]), obj.get("file").getAsString(), (obj.get("description") == null ? "" : obj.get("description").getAsString()));
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error adding: Bad Arguments");
         }
@@ -94,7 +100,7 @@ public class ScriptDBController {
         try {
             new MongoConnexion().handyDB().insert(script);
         }catch (Exception e){
-            return "The script is already in our database and his ID is "+script.getId();
+            return "The script is already in our database and his ID is " + script.getId();
         }
 
 
