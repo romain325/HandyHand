@@ -1,35 +1,33 @@
 package Api.ApiApp;
+
 import Api.ApiApp.Database.MongoConnexion;
-import Api.ApiApp.UserDBController;
-import Core.Gesture.Matrix.SaveLoad.InPutStructure;
 import Core.Gesture.Matrix.Structure.GestureStructure;
 import Core.Gesture.Matrix.Structure.HandStructure;
 import Core.Script.Script;
-import Core.StubPersistence.ExecPersistance;
+import Core.StubPersistence.GesturePersistance;
+import Core.StubPersistence.ScriptPersistance;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
 import com.mongodb.DBObject;
-import org.ejml.simple.SimpleMatrix;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.naming.NameNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @RestController
-@RequestMapping("/gestureDB")
-public class GestureDBController {
+@RequestMapping("/gesture")
+public class GestureRESTController {
 
     @GetMapping("/allId")
-    public List<String> allId(HttpServletRequest req){
-        UserDBController.validAuth(req);
-
+    public List<String> allId(){
         List<String> ids = new LinkedList<>();
         try {
-            for (GestureStructure g: new MongoConnexion().handyDB().findAll(GestureStructure.class)) {
+            for (GestureStructure g: new GesturePersistance().getAll()) {
                 ids.add(g.getId());
             }
         } catch (Exception e) {
@@ -40,10 +38,9 @@ public class GestureDBController {
     }
 
     @GetMapping("/all")
-    public List<DBObject> all(HttpServletRequest req) {
+    public List<GestureStructure> all() throws Exception {
         try{
-            UserDBController.validAuth(req);
-            List<DBObject> val = new ArrayList<>(new MongoConnexion().handyDB().findAll(DBObject.class,"gestureStructure"));
+            List<GestureStructure> val = new ArrayList<GestureStructure>(new GesturePersistance().getAll());
             return val;
         }catch (Exception e){
             e.printStackTrace();
@@ -52,55 +49,65 @@ public class GestureDBController {
     }
 
     @GetMapping("/{id}")
-    public DBObject getById(HttpServletRequest req, @PathVariable String id){
-        UserDBController.validAuth(req);
+    public GestureStructure getById(@PathVariable String id){
         try {
-            return new MongoConnexion().handyDB().findById(id,DBObject.class,"gestureStructure");
+            return new GesturePersistance().getById(id);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting script by id",e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting gesture by id",e);
         }
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteGesture(HttpServletRequest req, @PathVariable String id){
-        UserDBController.validAuth(req);
+    public boolean deleteGesure(@PathVariable String id){
         try{
-            GestureStructure structure = new MongoConnexion().handyDB().findById(id,GestureStructure.class);
-            new MongoConnexion().handyDB().remove(structure);
+            GestureStructure structure = new GesturePersistance().getById(id);
+            new GesturePersistance().remove(structure);
             return true;
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while deleting gesture",e);
         }
     }
 
-
-    @PostMapping(value = "/add")
-    public String add(HttpServletRequest req, @RequestBody String data){
-        UserDBController.validAuth(req);
-
+    @PostMapping("/add")
+    public String add(HttpServletRequest req, @RequestBody String data) {
         var objNew = new Gson().fromJson(data, JsonObject.class);
 
+        GestureStructure structure;
         Frame frame;
         Controller controller;
-        try {
+        try{
             controller= new Controller();
             frame=controller.frame();
-            HandStructure structure = new HandStructure(frame.hands().get(0));
-            new MongoConnexion().handyDB().save(new GestureStructure(structure,objNew.get("name").getAsString(),objNew.get("description").getAsString()
-                    ,objNew.get("distance").getAsBoolean(),objNew.get("double").getAsBoolean()),"gestureStructure");
+            HandStructure hand = new HandStructure(frame.hands().get(0));
+            structure = new GestureStructure(hand,objNew.get("name").getAsString(),objNew.get("description").getAsString(),objNew.get("distance").getAsBoolean(),objNew.get("double").getAsBoolean());
         }catch (Exception e){
-            return "Error : " + e.getMessage();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while add gesture",e);
         }
-        return "The gesture have been added !";
+        try{
+            new GesturePersistance().getById(structure.getId());
+        }catch (Exception e){
+            try {
+                new GesturePersistance().save(structure);
+                return "The gesture have been added";
+            }catch (Exception e1){
+                return "Error : " + e1.getMessage();
+            }
+        }
+
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error while adding gesture : id already exist");
     }
+
 
     @PostMapping("/modify")
     public String modifyScript(HttpServletRequest req, @RequestBody String data) {
-        UserDBController.validAuth(req);
-
         var objNew = new Gson().fromJson(data, JsonObject.class);
 
-        GestureStructure oldGesture= new MongoConnexion().handyDB().findById(objNew.get("oldId").getAsString(),GestureStructure.class);
+        GestureStructure oldGesture=null;
+        try {
+            oldGesture = new GesturePersistance().getById(objNew.get("oldId").getAsString());
+        } catch (NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         Frame frame;
         Controller controller;
@@ -137,8 +144,8 @@ public class GestureDBController {
         GestureStructure newGesture= new GestureStructure(structure,(String) elements.get("name"),(String) elements.get("description"),(Boolean) elements.get("distance"),(Boolean) elements.get("double"));
 
         try {
-            new MongoConnexion().handyDB().remove(oldGesture);
-            new MongoConnexion().handyDB().save(newGesture);
+            new GesturePersistance().remove(oldGesture);
+            new GesturePersistance().save(newGesture);
         }catch (Exception e){
             return "Error during saving !";
         }
