@@ -5,6 +5,7 @@ import Core.Gesture.Matrix.Normalization.MatrixNormalizer;
 import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.Vector;
+import net.minidev.json.annotate.JsonIgnore;
 import org.ejml.simple.SimpleMatrix;
 import org.springframework.lang.Nullable;
 
@@ -305,6 +306,7 @@ public class HandStructure implements Serializable, IDefineStructure {
      * The setter of the vector of the direction of the hand
      * @param direction The vector of the direction of the hand
      */
+    @JsonIgnore
     public void setDirection(SimpleMatrix direction) {
         this.direction = MatrixUtils.fromSimpleMatrix(direction);
     }
@@ -313,6 +315,7 @@ public class HandStructure implements Serializable, IDefineStructure {
      * The setter of the vector of the palm normal of hand
      * @param palmNormal The vector of the palm normal of hand
      */
+    @JsonIgnore
     public void setPalmNormal(SimpleMatrix palmNormal) {
         this.palmNormal =  MatrixUtils.fromSimpleMatrix(palmNormal);
     }
@@ -329,6 +332,7 @@ public class HandStructure implements Serializable, IDefineStructure {
      * The setter of the matrix normalizer of the hand
      * @param normalizer The matrix normalizer of the hand
      */
+    @JsonIgnore
     private void setNormalizer(SimpleMatrix normalizer) {
         this.normalizer = MatrixUtils.squareFromSimpleMatrix(normalizer);
     }

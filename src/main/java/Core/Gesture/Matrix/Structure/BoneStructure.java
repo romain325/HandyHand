@@ -3,6 +3,7 @@ package Core.Gesture.Matrix.Structure;
 import Core.Gesture.Matrix.MatrixUtils;
 import com.leapmotion.leap.Bone;
 import com.leapmotion.leap.Vector;
+import net.minidev.json.annotate.JsonIgnore;
 import org.ejml.simple.SimpleMatrix;
 
 import javax.management.BadAttributeValueExpException;
@@ -116,6 +117,7 @@ public class BoneStructure implements Serializable {
      * @param nextJoint The position of the end of the bone
      * @throws BadAttributeValueExpException If the position is null or not of size (4,1)
      */
+    @JsonIgnore
     private void setNextJoint(SimpleMatrix nextJoint) throws BadAttributeValueExpException {
         if(nextJoint == null) throw new BadAttributeValueExpException("The vector as to be not null");
         if(nextJoint.numRows() != 4 || nextJoint.numCols() != 1) throw new BadAttributeValueExpException("The vector as to be of size (4,1)");
@@ -127,6 +129,7 @@ public class BoneStructure implements Serializable {
      * @param prevJoint The position of the start of the bone
      * @throws BadAttributeValueExpException If the position is null or not of size (4,1)
      */
+    @JsonIgnore
     private void setPrevJoint(SimpleMatrix prevJoint) throws BadAttributeValueExpException {
         if(prevJoint == null) throw new BadAttributeValueExpException("The vector as to be not null");
         if(prevJoint.numRows() != 4 || prevJoint.numCols() != 1) throw new BadAttributeValueExpException("The vector as to be of size (4,1)");

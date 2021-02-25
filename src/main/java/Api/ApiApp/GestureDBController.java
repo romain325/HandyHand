@@ -12,6 +12,7 @@ import com.google.gson.JsonObject;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Hand;
+import com.mongodb.DBObject;
 import org.ejml.simple.SimpleMatrix;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -41,13 +42,14 @@ public class GestureDBController {
     }
 
     @GetMapping("/all")
-    public List<GestureStructure> all(HttpServletRequest req) {
+    public List<DBObject> all(HttpServletRequest req) {
         try{
             UserDBController.validAuth(req);
             //HandStructure gestureStructure =(HandStructure) new InPutStructure().readObjectInFile("testHandStructure");
             //new MongoConnexion().handyDB().save(new GestureStructure("testId2",gestureStructure,"test","test"));
-
-            return new ArrayList<>(new MongoConnexion().handyDB().findAll(GestureStructure.class,"gestureStructure"));
+            List<DBObject> val = new ArrayList<>(new MongoConnexion().handyDB().findAll(DBObject.class,"gestureStructure"));
+            System.out.println(val.get(0));
+            return val;
         }catch (Exception e){
             e.printStackTrace();
         }
