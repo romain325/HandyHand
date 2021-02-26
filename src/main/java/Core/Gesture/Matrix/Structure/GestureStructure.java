@@ -1,8 +1,7 @@
 package Core.Gesture.Matrix.Structure;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mongodb.DBObject;
+import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.util.Base64;
@@ -14,6 +13,7 @@ public class GestureStructure implements Serializable {
     /**
      * The id of the gesture
      */
+    @Id
     private String id;
     /**
      * The structure that contains the gesture
