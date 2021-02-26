@@ -1,4 +1,4 @@
-import { NewScript, ScriptCard, UserCreds } from './HandyHandAPIType';
+import {ExecInfo, NewScript, ScriptCard, UserCreds} from './HandyHandAPIType';
 import { getAuthedHeader } from '../../features/connection/Connexion';
 
 export default class HandyHandAPI {
@@ -47,10 +47,18 @@ export default class HandyHandAPI {
     return (await this.postToAPI('/script/add', elem)).text();
   }
 
+  public async modifyExec(elem: ExecInfo): Promise<string> {
+    return (await this.postToAPI('/exec/modify', elem)).text();
+  }
+
   public async removeScript(id: string) {
     await this.actionToAPI(`/script/${id}`, 'DELETE').finally(async () => {
       await this.actionToAPI(`/scriptDB/${id}`, 'DELETE', true);
     });
+  }
+
+  public async removeGesture(id: string) {
+    await this.actionToAPI(`/gesture/${id}`, 'DELETE');
   }
 
   public async createNewUser(elem: UserCreds): Promise<string> {

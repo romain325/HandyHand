@@ -1,6 +1,8 @@
 package Api.ApiApp;
 
 import Core.StubPersistence.ExecPersistance;
+import Core.StubPersistence.ScriptPersistance;
+import Utils.Converter.ExecDTO;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mongodb.lang.Nullable;
@@ -24,6 +26,23 @@ public class ExecRESTController {
      * @return list of all execs ids
      */
     @GetMapping("/all")
+    public List<ExecDTO> getAll(){
+        List<ExecDTO> values = new LinkedList<>();
+        try {
+            for (var val: new ExecPersistance().getAll()) {
+                values.add(new ExecDTO(val));
+            }
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting all execs",e);
+        }
+        return values;
+    }
+
+    /**
+     * Get all executable id
+     * @return list of all execs ids
+     */
+    @GetMapping("/allId")
     public List<String> getAllId(){
         List<String> ids = new LinkedList<>();
         try {

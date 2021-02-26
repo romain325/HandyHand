@@ -15,3 +15,17 @@ export interface UserCreds {
   mail: string;
   password: string;
 }
+
+export interface GestureCard {
+  name: string;
+  description: string;
+  isDistanceImportant: boolean;
+  isDoubleHand: boolean;
+  _id: string;
+}
+
+export interface ExecInfo {
+  id: string;
+  name: string;
+  execPath: string;
+}

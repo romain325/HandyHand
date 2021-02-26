@@ -6,5 +6,7 @@
   "SCRIPTS": "/scripts",
   "ADD_SCRIPT": "/script/add",
   "MY_SCRIPT": "/myScripts",
+  "GESTURE": "/gesture",
+  "EXEC": "/execList",
   "SETTINGS": "/settings"
 }

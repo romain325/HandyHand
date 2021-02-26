@@ -58,7 +58,7 @@ class H2Exec(ApiEndpoint):
         self.utils.console.print(r.json() if debug else getExecPanel(r.json()))
 
     def printAll(self, debug: bool):
-        r = requests.get(self.endpoint + "/all")
+        r = requests.get(self.endpoint + "/allId")
         self.utils.checkStatusCode(r)
 
         data = {}
