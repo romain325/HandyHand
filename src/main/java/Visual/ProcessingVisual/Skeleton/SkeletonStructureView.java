@@ -70,7 +70,8 @@ public class SkeletonStructureView extends SketchCallback {
 
         displayDefineStructureAtPosition(defineStructure, 250, 150);
 
-        System.out.println(new StructureManager().compareWithNormalization(iDefineStructure, defineStructure, 20));
+//        System.out.println(new StructureManager().compareWithNormalization(iDefineStructure, defineStructure, 20));
+        System.out.println(new StructureManager().compareWithNormalizationWithoutDistance(iDefineStructure, defineStructure, 20));
     }
 
     /**
@@ -261,6 +262,12 @@ public class SkeletonStructureView extends SketchCallback {
      * A method to reset the structure that are compared to the current one
      */
     public void resetDefineStructure() {
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         setDefineStruct(null);
     }
 }
