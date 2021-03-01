@@ -77,6 +77,7 @@ public class GestureRESTController {
         Controller controller;
         try{
             controller= new Controller();
+            while (!(controller.frame().isValid()));
             frame=controller.frame();
             HandStructure hand = new HandStructure(frame.hands().get(0));
             structure = new GestureStructure(hand,objNew.get("name").getAsString(),objNew.get("description").getAsString(),objNew.get("distance").getAsBoolean(),objNew.get("double").getAsBoolean());
@@ -90,7 +91,7 @@ public class GestureRESTController {
                 new GesturePersistance().save(structure);
                 return "The gesture have been added";
             }catch (Exception e1){
-                return "Error : " + e1.getMessage();
+                e.printStackTrace();
             }
         }
 
@@ -111,13 +112,14 @@ public class GestureRESTController {
 
         Frame frame;
         Controller controller;
-        HandStructure structure;
+        HandStructure structure = null;
         try {
             controller= new Controller();
+            while (!(controller.frame().isValid()));
             frame=controller.frame();
             structure = new HandStructure(frame.hands().get(0));
         }catch (Exception e){
-            return "Error : " + e.getMessage();
+            e.printStackTrace();
         }
 
         Map<String, Object> elements = new HashMap<>();

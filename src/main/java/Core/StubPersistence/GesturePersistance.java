@@ -17,7 +17,7 @@ public class GesturePersistance implements IGestureDataManager{
     @Override
     public List<GestureStructure> getAll() throws Exception {
         try {
-            return new LinkedList<>(Arrays.asList(gestureManager.getAll()));
+            return new LinkedList<>(gestureManager.getAll());
         } catch (Exception e) {
             throw new Exception("Error getAll GesturePersistance");
         }
@@ -42,10 +42,10 @@ public class GesturePersistance implements IGestureDataManager{
 
     @Override
     public void save(GestureStructure object) throws Exception {
-        List<GestureStructure> list = new LinkedList<>(Arrays.asList(gestureManager.getAll()));
+        LinkedList<GestureStructure> list = new LinkedList<>(gestureManager.getAll());
         list.add(object);
         try{
-            gestureManager.save(new Gson().toJson(list, List.class));
+            gestureManager.save(list);
         }catch (Exception e){
             throw new Exception(object.getId());
         }
@@ -54,7 +54,7 @@ public class GesturePersistance implements IGestureDataManager{
     @Override
     public void saveAll(List<GestureStructure> listScripts) throws Exception {
         try{
-            gestureManager.save(new Gson().toJson(listScripts, List.class));
+            gestureManager.save(new LinkedList<>(listScripts));
         } catch (Exception e) {
             throw new Exception("Error saveAll GesturePersistance");
         }
@@ -62,10 +62,10 @@ public class GesturePersistance implements IGestureDataManager{
 
     public void remove(GestureStructure gestureStructure) throws Exception {
         try{
-            List<GestureStructure> list = new LinkedList<>(Arrays.asList(gestureManager.getAll()));
+            LinkedList<GestureStructure> list = new LinkedList<>(gestureManager.getAll());
             list.remove(gestureStructure);
             System.out.println(list.contains(gestureStructure));
-            gestureManager.save(new Gson().toJson(list,List.class));
+            gestureManager.save(list);
         } catch (Exception e) {
             throw new Exception("Error remove GesturePersistance");
         }

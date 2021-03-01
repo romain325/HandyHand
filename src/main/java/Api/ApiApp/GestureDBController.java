@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.management.BadAttributeValueExpException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -84,11 +85,14 @@ public class GestureDBController {
         Controller controller;
         try {
             controller= new Controller();
+            while(!(controller.frame().isValid())){}
             frame=controller.frame();
             HandStructure structure = new HandStructure(frame.hands().get(0));
-            new MongoConnexion().handyDB().save(new GestureStructure(structure,objNew.get("name").getAsString(),objNew.get("description").getAsString()
+            new MongoConnexion().handyDB().insert(new GestureStructure(structure,objNew.get("name").getAsString(),objNew.get("description").getAsString()
                     ,objNew.get("distance").getAsBoolean(),objNew.get("double").getAsBoolean()),"gestureStructure");
-        }catch (Exception e){
+        }catch (BadAttributeValueExpException e){
+            return "Your hand(s) isn't visible by the controller or the controller is disconnected !";
+        } catch (Exception e){
             return "Error : " + e.getMessage();
         }
         return "The gesture have been added !";
@@ -107,10 +111,13 @@ public class GestureDBController {
         HandStructure structure;
         try {
             controller= new Controller();
+            while(!(controller.frame().isValid())){}
             frame=controller.frame();
             structure = new HandStructure(frame.hands().get(0));
+        }catch (BadAttributeValueExpException e){
+            return "Your hand(s) isn't visible by the controller or the controller is disconnected !";
         }catch (Exception e){
-            return "Error : " + e.getMessage();
+            return "Error : " + e.getMessage() + e.getClass();
         }
 
         Map<String, Object> elements = new HashMap<>();
