@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
+import com.leapmotion.leap.Gesture;
 import com.mongodb.DBObject;
 import org.ejml.simple.SimpleMatrix;
 import org.springframework.http.HttpStatus;
@@ -41,10 +42,10 @@ public class GestureDBController {
     }
 
     @GetMapping("/all")
-    public List<DBObject> all(HttpServletRequest req) {
+    public List<GestureStructure> all(HttpServletRequest req) {
         try{
             UserDBController.validAuth(req);
-            List<DBObject> val = new ArrayList<>(new MongoConnexion().handyDB().findAll(DBObject.class,"gestureStructure"));
+            List<GestureStructure> val = new ArrayList<>(new MongoConnexion().handyDB().findAll(GestureStructure.class,"gestureStructure"));
             return val;
         }catch (Exception e){
             e.printStackTrace();
@@ -53,10 +54,10 @@ public class GestureDBController {
     }
 
     @GetMapping("/{id}")
-    public DBObject getById(HttpServletRequest req, @PathVariable String id){
+    public GestureStructure getById(HttpServletRequest req, @PathVariable String id){
         UserDBController.validAuth(req);
         try {
-            return new MongoConnexion().handyDB().findById(id,DBObject.class,"gestureStructure");
+            return new MongoConnexion().handyDB().findById(id,GestureStructure.class,"gestureStructure");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting script by id",e);
         }
