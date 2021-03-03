@@ -40,21 +40,28 @@ public class GestureRESTController {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting all gestures",e);
         }
-        if(ids.isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No script");
         return ids;
     }
 
+    /**
+     * Get all gestures
+     * @return detailed gesture list
+     */
     @GetMapping("/all")
     public List<GestureStructure> all() throws Exception {
         try{
-            List<GestureStructure> val = new ArrayList<GestureStructure>(new GesturePersistance().getAll());
-            return val;
+            return new ArrayList<>(new GesturePersistance().getAll());
         }catch (Exception e){
             e.printStackTrace();
         }
-        return null;
+        return new ArrayList<>();
     }
 
+    /**
+     * get a gesture by id
+     * @param id selected gesture's id
+     * @return selected gesture
+     */
     @GetMapping("/{id}")
     public GestureStructure getById(@PathVariable String id){
         try {
@@ -64,6 +71,11 @@ public class GestureRESTController {
         }
     }
 
+    /**
+     * Delete a gesture from his id
+     * @param id gesture id
+     * @return Boolean
+     */
     @DeleteMapping("/{id}")
     public boolean deleteGesure(@PathVariable String id){
         try{
@@ -75,9 +87,12 @@ public class GestureRESTController {
         }
     }
 
-    /*
-    * { "name":"", "description": "", "distance": bool, "double": bool  }
-    */
+    /**
+     * Add a new gesture
+     * @param req Httprequest
+     * @param data { "name":"", "description": "", "distance": bool, "double": bool  }
+     * @return id of the new gesture
+     */
     @PostMapping("/add")
     public String add(HttpServletRequest req, @RequestBody String data) {
         var objNew = new Gson().fromJson(data, JsonObject.class);
@@ -92,7 +107,7 @@ public class GestureRESTController {
             HandStructure hand = new HandStructure(frame.hands().get(0));
             structure = new GestureStructure(hand,objNew.get("name").getAsString(),objNew.get("description").getAsString(),objNew.get("distance").getAsBoolean(),objNew.get("double").getAsBoolean());
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while add gesture",e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while add gesture: " + e.getMessage() ,e);
         }
         try{
             new GesturePersistance().getById(structure.getId());
@@ -101,14 +116,19 @@ public class GestureRESTController {
                 new GesturePersistance().save(structure);
                 return structure.getId();
             }catch (Exception e1){
-                e.printStackTrace();
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"Error while adding gesture : " + e.getMessage());
             }
         }
 
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error while adding gesture : id already exist");
     }
 
-
+    /**
+     * Modify an existing gesture from his id
+     * @param req HttpRequest
+     * @param data { "name":"", "description": "", "distance": bool, "double": bool  }
+     * @return new gesture id
+     */
     @PostMapping("/modify")
     public String modifyScript(HttpServletRequest req, @RequestBody String data) {
         var objNew = new Gson().fromJson(data, JsonObject.class);
@@ -117,7 +137,7 @@ public class GestureRESTController {
         try {
             oldGesture = new GesturePersistance().getById(objNew.get("oldId").getAsString());
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error: Id not found");
         }
 
         Frame frame;
@@ -129,7 +149,7 @@ public class GestureRESTController {
             frame=controller.frame();
             structure = new HandStructure(frame.hands().get(0));
         }catch (Exception e){
-            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error: while fetching the hand movement");
         }
 
         Map<String, Object> elements = new HashMap<>();
@@ -140,7 +160,7 @@ public class GestureRESTController {
             elements.put("double", oldGesture.isDoubleHand());
             elements.put("distance", oldGesture.isDistanceImportant());
         }catch (Exception e){
-            return "The id of this script is not registered in our database !";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error: Id not in the database");
         }
 
         for(var elem : elements.keySet()){
@@ -159,10 +179,9 @@ public class GestureRESTController {
             new GesturePersistance().remove(oldGesture);
             new GesturePersistance().save(newGesture);
         }catch (Exception e){
-            return "Error during saving !";
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while saving");
         }
-
-        return "The gesture have been modified";
+        return newGesture.getId();
     }
 
 }

@@ -21,10 +21,18 @@ import javax.management.BadAttributeValueExpException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+/**
+ * online gesture rest controller
+ */
 @RestController
 @RequestMapping("/gestureDB")
 public class GestureDBController {
 
+    /**
+     * get all gestures id
+     * @param req HttpRequest auth
+     * @return all ids
+     */
     @GetMapping("/allId")
     public List<String> allId(HttpServletRequest req){
         UserDBController.validAuth(req);
@@ -37,32 +45,46 @@ public class GestureDBController {
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting all gestures",e);
         }
-        if(ids.isEmpty()) throw new ResponseStatusException(HttpStatus.NO_CONTENT, "No script");
         return ids;
     }
 
+    /**
+     * Get all detailled gestures
+     * @param req authed Httprequest
+     * @return all detailed gestures
+     */
     @GetMapping("/all")
     public List<GestureStructure> all(HttpServletRequest req) {
         try{
             UserDBController.validAuth(req);
-            List<GestureStructure> val = new ArrayList<>(new MongoConnexion().handyDB().findAll(GestureStructure.class,"gestureStructure"));
-            return val;
+            return new ArrayList<>(new MongoConnexion().handyDB().findAll(GestureStructure.class,"gestureStructure"));
         }catch (Exception e){
-            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
-        return null;
     }
 
+    /**
+     * Get a specific gesture from his id
+     * @param req authed http req
+     * @param id the Gesture id
+     * @return  detailed gestuire
+     */
     @GetMapping("/{id}")
     public GestureStructure getById(HttpServletRequest req, @PathVariable String id){
         UserDBController.validAuth(req);
         try {
             return new MongoConnexion().handyDB().findById(id,GestureStructure.class,"gestureStructure");
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting script by id",e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting script by id: " + e.getMessage(),e);
         }
     }
 
+    /**
+     * Delete a gesture from his di
+     * @param req authed http req
+     * @param id gesture id
+     * @return boole
+     */
     @DeleteMapping("/{id}")
     public boolean deleteGesture(HttpServletRequest req, @PathVariable String id){
         UserDBController.validAuth(req);
@@ -76,6 +98,12 @@ public class GestureDBController {
     }
 
 
+    /**
+     * Add a new gesture
+     * @param req authed http req
+     * @param data { "name":"", "description": "", "distance": bool, "double": bool  }
+     * @return new script id
+     */
     @PostMapping(value = "/add")
     public String add(HttpServletRequest req, @RequestBody String data){
         UserDBController.validAuth(req);
@@ -84,22 +112,29 @@ public class GestureDBController {
 
         Frame frame;
         Controller controller;
+        GestureStructure gestureStructure = null;
         try {
             controller= new Controller();
             while(!(controller.frame().isValid())){}
-            frame=controller.frame();
-            HandStructure structure = new HandStructure(frame.hands().get(0));
-            new MongoConnexion().handyDB().insert(new GestureStructure(structure,objNew.get("name").getAsString(),objNew.get("description").getAsString()
-                    ,objNew.get("distance").getAsBoolean(),objNew.get("double").getAsBoolean()),"gestureStructure");
+            gestureStructure = new GestureStructure(new HandStructure(controller.frame().hands().get(0)),objNew.get("name").getAsString(),objNew.get("description").getAsString()
+                    ,objNew.get("distance").getAsBoolean(),objNew.get("double").getAsBoolean());
+
+            new MongoConnexion().handyDB().insert(gestureStructure,"gestureStructure");
+
         }catch (BadAttributeValueExpException e){
-            return "Your hand(s) isn't visible by the controller or the controller is disconnected !";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Your hand(s) isn't visible by the controller or the controller is disconnected !");
         } catch (Exception e){
-            return "Error : " + e.getMessage();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Error: " + e.getMessage());
         }
-        // TODO RETURN REAL ERROR AND ID
-        return "The gesture have been added !";
+        return gestureStructure.getId();
     }
 
+    /**
+     * Modiify an existing gesture from his id
+     * @param req authed http req
+     * @param data { "name":"", "description": "", "distance": bool, "double": bool, "oldId": ""  }
+     * @return new id
+     */
     @PostMapping("/modify")
     public String modifyScript(HttpServletRequest req, @RequestBody String data) {
         UserDBController.validAuth(req);
@@ -117,9 +152,9 @@ public class GestureDBController {
             frame=controller.frame();
             structure = new HandStructure(frame.hands().get(0));
         }catch (BadAttributeValueExpException e){
-            return "Your hand(s) isn't visible by the controller or the controller is disconnected !";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Your hand(s) isn't visible by the controller or the controller is disconnected !");
         }catch (Exception e){
-            return "Error : " + e.getMessage() + e.getClass();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  "Error: " + e.getMessage());
         }
 
         Map<String, Object> elements = new HashMap<>();
@@ -130,7 +165,7 @@ public class GestureDBController {
             elements.put("double", oldGesture.isDoubleHand());
             elements.put("distance", oldGesture.isDistanceImportant());
         }catch (Exception e){
-            return "The id of this script is not registered in our database !";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The id of this script is not registered in our database !");
         }
 
         for(var elem : elements.keySet()){
@@ -149,11 +184,9 @@ public class GestureDBController {
             new MongoConnexion().handyDB().remove(oldGesture);
             new MongoConnexion().handyDB().save(newGesture);
         }catch (Exception e){
-            return "Error during saving !";
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,  "Error: " + e.getMessage());
         }
-        // TODO FUCKING ID AND REAL ERROR GODDAMNIT
-
-        return "The gesture have been modified";
+        return newGesture.getId();
     }
 
 }
