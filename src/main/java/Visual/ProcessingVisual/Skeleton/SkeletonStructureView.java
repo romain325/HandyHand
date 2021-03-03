@@ -86,10 +86,10 @@ public class SkeletonStructureView extends SketchCallback {
 
         if(handStructure == null) return;
 
-        SimpleMatrix normalizer = handStructure.getNormalizer();
+        SimpleMatrix normalizer = handStructure.getNormalizerMatrix();
 
         // Palm
-        SimpleMatrix palm = handStructure.getPalmNormal();
+        SimpleMatrix palm = handStructure.getPalmNormalMatrix();
 
         palmX = (float) palm.get(0,0);
         palmY = (float) palm.get(1,0);
@@ -107,14 +107,14 @@ public class SkeletonStructureView extends SketchCallback {
         SimpleMatrix bonePrev;
         for (FingerStructure fingerStructure : handStructure.getFingersStructure()){
             for(BoneStructure boneStructure : fingerStructure.getBonesStructure()) {
-                boneNext = boneStructure.getNextJoint();
+                boneNext = boneStructure.getNextJointMatrix();
                 boneNext = normalizer.mult(boneNext);
 
                 boneNextX = (float) boneNext.get(0,0);
                 boneNextY = (float) boneNext.get(1,0);
                 boneNextZ = (float) boneNext.get(2,0);
 
-                bonePrev = boneStructure.getPrevJoint();
+                bonePrev = boneStructure.getPrevJointMatrix();
                 bonePrev = normalizer.mult(bonePrev);
 
                 bonePrevX = (float) bonePrev.get(0,0);

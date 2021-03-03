@@ -10,12 +10,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
+import com.leapmotion.leap.Gesture;
 import com.mongodb.DBObject;
 import org.ejml.simple.SimpleMatrix;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.management.BadAttributeValueExpException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
@@ -40,10 +42,10 @@ public class GestureDBController {
     }
 
     @GetMapping("/all")
-    public List<DBObject> all(HttpServletRequest req) {
+    public List<GestureStructure> all(HttpServletRequest req) {
         try{
             UserDBController.validAuth(req);
-            List<DBObject> val = new ArrayList<>(new MongoConnexion().handyDB().findAll(DBObject.class,"gestureStructure"));
+            List<GestureStructure> val = new ArrayList<>(new MongoConnexion().handyDB().findAll(GestureStructure.class,"gestureStructure"));
             return val;
         }catch (Exception e){
             e.printStackTrace();
@@ -52,10 +54,10 @@ public class GestureDBController {
     }
 
     @GetMapping("/{id}")
-    public DBObject getById(HttpServletRequest req, @PathVariable String id){
+    public GestureStructure getById(HttpServletRequest req, @PathVariable String id){
         UserDBController.validAuth(req);
         try {
-            return new MongoConnexion().handyDB().findById(id,DBObject.class,"gestureStructure");
+            return new MongoConnexion().handyDB().findById(id,GestureStructure.class,"gestureStructure");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting script by id",e);
         }
@@ -84,11 +86,14 @@ public class GestureDBController {
         Controller controller;
         try {
             controller= new Controller();
+            while(!(controller.frame().isValid())){}
             frame=controller.frame();
             HandStructure structure = new HandStructure(frame.hands().get(0));
-            new MongoConnexion().handyDB().save(new GestureStructure(structure,objNew.get("name").getAsString(),objNew.get("description").getAsString()
+            new MongoConnexion().handyDB().insert(new GestureStructure(structure,objNew.get("name").getAsString(),objNew.get("description").getAsString()
                     ,objNew.get("distance").getAsBoolean(),objNew.get("double").getAsBoolean()),"gestureStructure");
-        }catch (Exception e){
+        }catch (BadAttributeValueExpException e){
+            return "Your hand(s) isn't visible by the controller or the controller is disconnected !";
+        } catch (Exception e){
             return "Error : " + e.getMessage();
         }
         return "The gesture have been added !";
@@ -107,10 +112,13 @@ public class GestureDBController {
         HandStructure structure;
         try {
             controller= new Controller();
+            while(!(controller.frame().isValid())){}
             frame=controller.frame();
             structure = new HandStructure(frame.hands().get(0));
+        }catch (BadAttributeValueExpException e){
+            return "Your hand(s) isn't visible by the controller or the controller is disconnected !";
         }catch (Exception e){
-            return "Error : " + e.getMessage();
+            return "Error : " + e.getMessage() + e.getClass();
         }
 
         Map<String, Object> elements = new HashMap<>();

@@ -2,7 +2,6 @@ package Testing.GestureTest;
 
 import Core.Gesture.Matrix.SaveLoad.InPutStructure;
 import Core.Gesture.Matrix.SaveLoad.OutPutStructure;
-import Core.Gesture.Matrix.Structure.GestureStructure;
 import Core.Gesture.Matrix.Structure.HandStructure;
 import Testing.Tester;
 import Visual.ProcessingVisual.Skeleton.SkeletonStructureView;
@@ -40,7 +39,7 @@ public class StructureTest implements Tester {
         }
 
         try {
-            new OutPutStructure().WriteObjectToFile(new HandStructure(hand), file);
+            new OutPutStructure().writeObjectToFile(new HandStructure(hand), file);
         } catch (BadAttributeValueExpException e) {
             e.printStackTrace();
         }
