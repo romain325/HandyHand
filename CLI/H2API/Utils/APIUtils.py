@@ -1,4 +1,6 @@
+import getopt
 import sys
+import time
 from typing import List
 
 from requests import Response
@@ -37,3 +39,40 @@ class APIUtils:
         helpTable.add_column("Options", style="cyan")
 
         return helpTable
+
+    def timerCLI(self):
+        for remaining in range(3, 0, -1):
+            sys.stdout.write("\r")
+            sys.stdout.write("Wait: {:2d}s".format(remaining))
+            sys.stdout.flush()
+            time.sleep(1)
+        sys.stdout.flush()
+        self.console.print(f"\nDon't Move !", style="cyan")
+        return
+
+    def createGestureFromArgs(self, args):
+        gesture = {
+            "oldId": "",
+            "name": "",
+            "description": "",
+            "distance": False,
+            "double": False
+        }
+
+        if len(args) <= 1:
+            gesture["name"] = input("Gesture name: ")
+            gesture["description"] = input("Description: ")
+            gesture["double"] = "y" in input("Is Double Handed(y/n): ")
+            gesture["distance"] = "y" in input("Does distance matter?(y/n): ")
+        else:
+            try:
+                opts, _ = getopt.getopt(args[1:], "", ["name=", "desc=", "double", "distance"])
+                gesture["name"] = dict(opts).get("--name")
+                gesture["description"] = dict(opts).get("--desc")
+                gesture["double"] = "--double" in dict(opts)
+                gesture["distance"] = "--distance" in dict(opts)
+            except getopt.GetoptError as err:
+                print(err)
+            except Exception as err:
+                print(err)
+        return gesture

@@ -1,7 +1,9 @@
 from typing import Dict
 
+from .API.H2DBGesture import H2DBGesture
 from .API.H2DBScript import H2DBScript
 from .API.H2Exec import H2Exec
+from .API.H2LocalGesture import H2LocalGesture
 from .API.H2LocalScript import H2LocalScript
 from .API.ApiEndpoint import ApiEndpoint
 from .API.CliHelp import CliHelp
@@ -19,6 +21,8 @@ class H2API:
             "local_script": H2LocalScript,
             "db_script": H2DBScript,
             "exec": H2Exec,
+            "local_gesture": H2LocalGesture,
+            "db_gesture": H2DBGesture,
             "user": H2User,
             "help": CliHelp
         }

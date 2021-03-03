@@ -18,6 +18,13 @@ def getExecTable(jsonData: Dict[str, dict]):
     return execTable
 
 
+def getExecPanel(jsonData: dict):
+    data = list(jsonData.items())[0]
+    return Panel(f"[bold cyan]Type: [/bold cyan] {data[0]}\n"
+                 f"[bold cyan]Path: [/bold cyan] {data[1]}",
+                 expand=False)
+
+
 def getScriptTable(jsonData: list):
     scriptTable = Table(title="Script table")
 
@@ -39,9 +46,30 @@ def getScriptPanel(jsonData):
                  f"[bold cyan]Id: [/bold cyan] {jsonData['id']}",
                  expand=False)
 
+def getGestureTable(jsonData: list):
+    scriptTable = Table(title="Gesture table")
 
-def getExecPanel(jsonData: dict):
-    data = list(jsonData.items())[0]
-    return Panel(f"[bold cyan]Type: [/bold cyan] {data[0]}\n"
-                 f"[bold cyan]Path: [/bold cyan] {data[1]}",
+    scriptTable.add_column("Name", style="bold magenta")
+    scriptTable.add_column("Description", style="cyan")
+    scriptTable.add_column("Is distance important?", style="cyan")
+    scriptTable.add_column("Is double handed?", style="cyan")
+    scriptTable.add_column("Id", style="italic grey3")
+
+    for elem in jsonData:
+        scriptTable.add_row(
+            elem["name"],
+            elem["description"],
+            str(elem["distanceImportant"]),
+            str(elem["doubleHand"]),
+            elem["id"])
+
+    return scriptTable
+
+
+def getGesturePanel(jsonData):
+    return Panel(f"[bold cyan]Name: [/bold cyan] {jsonData['name']}\n"
+                 f"[bold cyan]Description: [/bold cyan] {str(jsonData['description'])}\n"
+                 f"[bold cyan]Is distance important ?: [/bold cyan]{str(jsonData['distanceImportant'])}\n"
+                 f"[bold cyan]Is double handed?: [/bold cyan]{str(jsonData['doubleHand'])}\n"
+                 f"[bold cyan]Id: [/bold cyan] {jsonData['id']}",
                  expand=False)

@@ -7,9 +7,20 @@ import com.leapmotion.leap.Hand;
 
 import java.util.Map;
 
+/**
+ * A class to recognize some gesture of a Hand
+ */
 public class HandRecognizer {
+    /**
+     * The FingerCurveCalculator that we use in this class
+     */
     private FingerStateRecognizer fingerStateRecognizer = new FingerStateRecognizer();
 
+    /**
+     * A method to know if the Hand is close or not
+     * @param hand The Hand that we want the information of
+     * @return True if the Hand is close, false otherwise
+     */
     public boolean isHandClosed(Hand hand) {
         if(hand == null || !hand.isValid()) return false;
 
@@ -20,6 +31,11 @@ public class HandRecognizer {
         return true;
     }
 
+    /**
+     * A method to know if the Hand is open or not
+     * @param hand The Hand that we want the information of
+     * @return True if the Hand is open, false otherwise
+     */
     public boolean isHandOpen(Hand hand) {
         if(hand == null || !hand.isValid()) return false;
 
@@ -30,6 +46,11 @@ public class HandRecognizer {
         return true;
     }
 
+    /**
+     * A method to know if the Hand is doing scissors or not
+     * @param hand The Hand that we want the information of
+     * @return True if the Hand is doing scissors, false otherwise
+     */
     public boolean isHandScissors(Hand hand) {
         if(hand == null || !hand.isValid()) return false;
 
@@ -44,6 +65,11 @@ public class HandRecognizer {
         return true;
     }
 
+    /**
+     * A method to know if the Hand is doing a fuck or not
+     * @param hand The Hand that we want the information of
+     * @return True if the Hand is doing a fuck, false otherwise
+     */
     public boolean isHandFuck(Hand hand){
         if(hand == null || !hand.isValid()) return false;
 
@@ -57,7 +83,11 @@ public class HandRecognizer {
         return true;
     }
 
-    //Count the number showed by the hand (with the fingers)
+    /**
+     * A method to know the number of Finger that are out of the Hand
+     * @param hand The Hand that we want the information of
+     * @return The number of Finger that are out of the Hand
+     */
     public int countHandFingersOut(Hand hand) {
         if(hand == null || !hand.isValid()) return -1;
 
