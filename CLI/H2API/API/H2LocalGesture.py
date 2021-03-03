@@ -1,4 +1,6 @@
 import getopt
+import time
+
 import magic
 import requests
 import json
@@ -26,16 +28,17 @@ class H2LocalGesture(ApiEndpoint):
 
         self.switcher["add"] = self.addGesture
         self.options["add"] = f"No args: prompt info\n" \
-                              f"--fp <FilePath>: file path of the gesture\n" \
+                              f"--name <FilePath>: file path of the gesture\n" \
                               f"--desc <Description>: gesture description\n" \
-                              f"--args <ExecutableArguments>: arguments given at the exec (seperated by a comma: ',')"
+                              f"--double: is double handed\n" \
+                              f"--distance: does the distance between the hands matter"
 
         self.switcher["modify"] = self.modifyGesture
         self.options["modify"] = f"<gesture id>: Gesture ID you want to modify\n" \
-                                 f"No args: prompt info\n" \
-                                 f"--fp <FilePath>: file path of the gesture\n" \
+                                 f"--name <FilePath>: file path of the gesture\n" \
                                  f"--desc <Description>: gesture description\n" \
-                                 f"--args <ExecutableArguments>: arguments given at the exec (seperated by a comma: ',')"
+                                 f"--double: is double handed\n" \
+                                 f"--distance: does the distance between the hands matter"
 
         self.execAdaptedFunction(args[1:])
 
@@ -72,17 +75,17 @@ class H2LocalGesture(ApiEndpoint):
         self.utils.checkStatusCode(r)
         self.utils.console.print(f"The Script {args[1]} has been deleted with success")
 
-    # //TODO Real Implementation here
     def addGesture(self, args: list):
         if "-h" in args:
             self.printFunctionOptions("add")
             return
 
-        script = self.__createScriptFromArgs(args)
+        script = self.utils.createGestureFromArgs(args)
+
+        self.utils.timerCLI()
 
         r = requests.post(self.endpoint + "/add", data=json.dumps(script))
         self.utils.checkStatusCode(r)
-
         self.utils.console.print(f"Gesture successfully added with the id [bold green]{r.text}[/bold green]",
                                  style="cyan")
 
@@ -95,10 +98,12 @@ class H2LocalGesture(ApiEndpoint):
             self.utils.console.print(f"The id of the script which will be modified is needed", style="orange3")
             return
 
-        script = self.__createScriptFromArgs(args[1:])
-        script["oldId"] = args[1]
+        gesture = self.utils.createGestureFromArgs(args[1:])
+        gesture["oldId"] = args[1]
 
-        r = requests.post(self.endpoint + "/modify", data=json.dumps(script))
+        self.utils.timerCLI()
+
+        r = requests.post(self.endpoint + "/modify", data=json.dumps(gesture))
         self.utils.checkStatusCode(r)
 
         self.utils.console.print(f"Script successfully modified,his new id is [bold green]{r.text}[/bold green]",

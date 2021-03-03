@@ -96,6 +96,7 @@ public class GestureDBController {
         } catch (Exception e){
             return "Error : " + e.getMessage();
         }
+        // TODO RETURN REAL ERROR AND ID
         return "The gesture have been added !";
     }
 
@@ -150,6 +151,7 @@ public class GestureDBController {
         }catch (Exception e){
             return "Error during saving !";
         }
+        // TODO FUCKING ID AND REAL ERROR GODDAMNIT
 
         return "The gesture have been modified";
     }

@@ -19,7 +19,7 @@ public class GestureManager implements BinaryManager<GestureStructure> {
 
     @Override
     public Path getPath() {
-        return Paths.get(this.getParent().getPath() + File.separator + "gesture");
+        return Paths.get(this.getParent().getPath() + File.separator + "gesture.obj");
     }
 
     @Override

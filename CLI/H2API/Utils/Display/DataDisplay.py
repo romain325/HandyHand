@@ -59,9 +59,9 @@ def getGestureTable(jsonData: list):
         scriptTable.add_row(
             elem["name"],
             elem["description"],
-            str(elem["isDistanceImportant"]),
-            str(elem["isDoubleHand"]),
-            elem["_id"])
+            str(elem["distanceImportant"]),
+            str(elem["doubleHand"]),
+            elem["id"])
 
     return scriptTable
 
@@ -69,7 +69,7 @@ def getGestureTable(jsonData: list):
 def getGesturePanel(jsonData):
     return Panel(f"[bold cyan]Name: [/bold cyan] {jsonData['name']}\n"
                  f"[bold cyan]Description: [/bold cyan] {str(jsonData['description'])}\n"
-                 f"[bold cyan]Is distance important ?: [/bold cyan]{str(jsonData['isDistanceImportant'])}\n"
-                 f"[bold cyan]Is double handed?: [/bold cyan]{str(jsonData['isDoubleHand'])}\n"
-                 f"[bold cyan]Id: [/bold cyan] {jsonData['_id']}",
+                 f"[bold cyan]Is distance important ?: [/bold cyan]{str(jsonData['distanceImportant'])}\n"
+                 f"[bold cyan]Is double handed?: [/bold cyan]{str(jsonData['doubleHand'])}\n"
+                 f"[bold cyan]Id: [/bold cyan] {jsonData['id']}",
                  expand=False)

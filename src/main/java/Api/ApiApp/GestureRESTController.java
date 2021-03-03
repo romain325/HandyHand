@@ -19,10 +19,17 @@ import javax.naming.NameNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+/**
+ * Gesture REST Controller
+ */
 @RestController
 @RequestMapping("/gesture")
 public class GestureRESTController {
 
+    /**
+     * Get all gestures ids
+     * @return Get all gesture ids
+     */
     @GetMapping("/allId")
     public List<String> allId(){
         List<String> ids = new LinkedList<>();
@@ -68,6 +75,9 @@ public class GestureRESTController {
         }
     }
 
+    /*
+    * { "name":"", "description": "", "distance": bool, "double": bool  }
+    */
     @PostMapping("/add")
     public String add(HttpServletRequest req, @RequestBody String data) {
         var objNew = new Gson().fromJson(data, JsonObject.class);
@@ -89,7 +99,7 @@ public class GestureRESTController {
         }catch (Exception e){
             try {
                 new GesturePersistance().save(structure);
-                return "The gesture have been added";
+                return structure.getId();
             }catch (Exception e1){
                 e.printStackTrace();
             }

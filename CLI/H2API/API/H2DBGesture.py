@@ -30,17 +30,18 @@ class H2DBGesture(ApiEndpoint):
         self.switcher["add"] = self.addGesture
         self.options["add"] = f"No args: prompt info\n" \
                               f"-t <path to token>: Specify a particular connection token\n" \
-                              f"--fp <FilePath>: file path of the gesture\n" \
+                              f"--name <FilePath>: file path of the gesture\n" \
                               f"--desc <Description>: gesture description\n" \
-                              f"--args <ExecutableArguments>: arguments given at the exec (seperated by a comma: ',')"
+                              f"--double: is double handed\n" \
+                              f"--distance: does the distance between the hands matter"
 
         self.switcher["modify"] = self.modifyGesture
-        self.options["modify"] = f"<gesture id>: gesture ID you want to modify\n" \
-                                 f"No args: prompt info\n" \
+        self.options["modify"] = f"<gesture id>: Gesture ID you want to modify\n" \
                                  f"-t <path to token>: Specify a particular connection token\n" \
-                                 f"--fp <FilePath>: file path of the gesture\n" \
+                                 f"--name <FilePath>: file path of the gesture\n" \
                                  f"--desc <Description>: gesture description\n" \
-                                 f"--args <ExecutableArguments>: arguments given at the exec (seperated by a comma: ',')"
+                                 f"--double: is double handed\n" \
+                                 f"--distance: does the distance between the hands matter"
 
         self.execAdaptedFunction(args[1:])
 
@@ -95,16 +96,16 @@ class H2DBGesture(ApiEndpoint):
         self.utils.console.print(f"The Gesture {args[1]} has been deleted with success")
 
 
-    # //TODO Real Implementation here
     def addGesture(self, args: list):
         if "-h" in args:
             self.printFunctionOptions("add")
             return
 
-        opts, _ = getopt.getopt(args[1:], "ht:", ["fp=", "desc=", "args="])
-        script = self.__createScriptFromArgs(opts)
+        gesture = self.utils.createGestureFromArgs(args)
+        opts, _ = getopt.getopt(args[1:], "ht:")
+        self.utils.timerCLI()
 
-        r = requests.post(self.endpoint + "/add", data=json.dumps(script), headers=self.utils.getConnectionHeader(opts))
+        r = requests.post(self.endpoint + "/add", data=json.dumps(gesture), headers=self.utils.getConnectionHeader(opts))
         self.utils.checkStatusCode(r)
 
         self.utils.console.print(f"Gesture successfully added with the id [bold green]{r.text}[/bold green]",
@@ -119,44 +120,20 @@ class H2DBGesture(ApiEndpoint):
             self.utils.console.print(f"The id of the script which will be modified is needed", style="orange3")
             return
 
-        opts, _ = getopt.getopt(args[2:], "ht:", ["fp=", "desc=", "args="])
-        script = self.__createScriptFromArgs(opts)
-        script["oldId"] = args[1]
+        gesture = self.utils.createGestureFromArgs(args)
+        gesture["oldId"] = args[1]
 
-        r = requests.post(self.endpoint + "/modify", data=json.dumps(script),
+        opts, _ = getopt.getopt(args[2:], "ht:", ["name=", "desc=", "double", "distance"])
+
+        self.utils.timerCLI()
+
+        r = requests.post(self.endpoint + "/modify", data=json.dumps(gesture),
                           headers=self.utils.getConnectionHeader(opts))
         self.utils.checkStatusCode(r)
 
         self.utils.console.print(f"Script successfully modified,his new id is [bold green]{r.text}[/bold green]",
                                  style="cyan")
 
-    def __createScriptFromArgs(self, args):
-        script = {
-            "oldId": "",
-            "file": "",
-            "description": "",
-            "args": []
-        }
-
-        if len(args) <= 1:
-            script["file"] = input("FileName: ")
-            script["description"] = input("Description: ")
-            script["args"] = input("Args: (Separated by coma: ',') ").split(",")
-        else:
-            script["file"] = dict(args).get("--fp")
-            script["description"] = dict(args).get("--desc")
-            script["args"] = dict(args).get("--args", "").split(",")
-            if script["file"] == "" or script["description"] == "":
-                self.utils.console.print(f"Error: Not all mandatory informations as been provided", style="red")
-                sys.exit(2)
-
-        try:
-            script["execType"] = magic.Magic(mime=True).from_file(script["file"])
-        except Exception as err:
-            self.utils.console.print(f"Error: Script file not found", style="red")
-            sys.exit(2)
-
-        return script
 
     def getPreciseHelp(self, args):
         super().getPreciseHelp(args)
