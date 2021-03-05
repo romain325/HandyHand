@@ -65,6 +65,10 @@ export default class HandyHandAPI {
     await this.actionToAPI(`/gesture/${id}`, 'DELETE');
   }
 
+  public async removeGestureDb(id: string) {
+    return await this.actionToAPI(`/gestureDB/${id}`, 'DELETE');
+  }
+
   public async createNewUser(elem: UserCreds): Promise<string> {
     return (await this.postToAPI('/user/add', elem)).json();
   }

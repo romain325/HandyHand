@@ -5,14 +5,16 @@ import { GestureCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
 import { allGestureCards } from '../../utils/display/scriptDisplay';
 import {Link} from "react-router-dom";
 import routes from "../../constants/routes.json";
+import {getAuthedHeader} from "../connection/Connexion";
 
-export default function GestureFeatures() {
+export default function GestureDbFeatures() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState<GestureCard[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/gesture/all', {
+    fetch('http://localhost:8080/gestureDB/all', {
       method: 'GET',
+      headers: getAuthedHeader(),
     })
       .then((rep) => rep.json())
       .then((json) => {
@@ -57,7 +59,7 @@ export default function GestureFeatures() {
         {items.length == 0 ? (
           <Col>Nothing Found ...</Col>
         ) : (
-          allGestureCards(items, false)
+          allGestureCards(items, true)
         )}
       </Container>
     </ContentPage>

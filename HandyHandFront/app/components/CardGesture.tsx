@@ -10,6 +10,7 @@ interface Props {
   id: string;
   doubleHand: boolean;
   distanceImportance: boolean;
+  isOnline: boolean;
 }
 
 export default function CardGesture(props: Props): JSX.Element {
@@ -24,8 +25,15 @@ export default function CardGesture(props: Props): JSX.Element {
             <Button
               variant="danger"
               onClick={() => {
-                new HandyHandAPI().removeGesture(props.id);
-                window.location.reload(false);
+                if (props.isOnline) {
+                  new HandyHandAPI().removeGesture(props.id);
+                } else {
+                  new HandyHandAPI()
+                    .removeGestureDb(props.id)
+                    .then(async (r) => console.log(await r.json()))
+                    .catch((err) => console.log(err));
+                }
+                //window.location.reload(false);
               }}
             >
               <FaTrash />

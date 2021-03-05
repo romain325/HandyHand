@@ -49,6 +49,9 @@ const SideBar = ({ isOpen, toggleBar, isConnected }: Props) => {
             <Link to={routes.GESTURE}>Gestures</Link>
           </Nav.Link>
           <Nav.Link>
+            <Link to={routes.GESTURE_DB}>Online Gestures</Link>
+          </Nav.Link>
+          <Nav.Link>
             <Link to={routes.EXEC}>Executable</Link>
           </Nav.Link>
           <Nav.Link>
