@@ -11,6 +11,8 @@ import ScriptsFeatures from './features/scripts/ScriptsFeature';
 import SettingsFeature from './features/settings/SettingsFeature';
 import MyScriptsFeature from './features/myScripts/myScriptsFeature';
 import ExecFeature from './features/execList/execList';
+import GestureFeatures from './features/gestureList/gestureList';
+import AddGestureFeature from "./features/addGesture/AddGestureFeature";
 
 export default function Routes() {
   return (
@@ -22,6 +24,8 @@ export default function Routes() {
         <Route path={routes.SCRIPTS} component={ScriptsFeatures} />
         <Route path={routes.MY_SCRIPT} component={MyScriptsFeature} />
         <Route path={routes.ADD_SCRIPT} component={AddScriptFeature} />
+        <Route path={routes.ADD_GESTURE} component={AddGestureFeature} />
+        <Route path={routes.GESTURE} component={GestureFeatures} />
         <Route path={routes.EXEC} component={ExecFeature} />
         <Route path={routes.SETTINGS} component={SettingsFeature} />
       </Switch>

@@ -3,6 +3,8 @@ import { Col, Container, Row } from 'react-bootstrap';
 import ContentPage from '../../containers/ContentPage';
 import { GestureCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
 import { allGestureCards } from '../../utils/display/scriptDisplay';
+import {Link} from "react-router-dom";
+import routes from "../../constants/routes.json";
 
 export default function GestureFeatures() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -31,7 +33,19 @@ export default function GestureFeatures() {
   }
 
   return (
-    <ContentPage childrenName="Scripts">
+    <ContentPage childrenName="Gestures">
+      <Container fluid>
+        <Link to={routes.ADD_GESTURE}>
+          <img
+            src="../resources/img/ajouterIcon.png"
+            height="25px"
+            width="25px"
+            style={{ margin: '15px' }}
+            alt="Add"
+          />
+        </Link>
+      </Container>
+
       <Container
         fluid
         style={{

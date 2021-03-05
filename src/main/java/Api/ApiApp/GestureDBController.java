@@ -115,6 +115,9 @@ public class GestureDBController {
         GestureStructure gestureStructure = null;
         try {
             controller= new Controller();
+            if(!controller.isConnected()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No leap motion connected");
+            }
             while(!(controller.frame().isValid())){}
             gestureStructure = new GestureStructure(new HandStructure(controller.frame().hands().get(0)),objNew.get("name").getAsString(),objNew.get("description").getAsString()
                     ,objNew.get("distance").getAsBoolean(),objNew.get("double").getAsBoolean());
@@ -148,6 +151,9 @@ public class GestureDBController {
         HandStructure structure;
         try {
             controller= new Controller();
+            if(!controller.isConnected()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No leap motion connected");
+            }
             while(!(controller.frame().isValid())){}
             frame=controller.frame();
             structure = new HandStructure(frame.hands().get(0));

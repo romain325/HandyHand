@@ -69,7 +69,7 @@ export function allGestureCards(items: GestureCard[]): JSX.Element {
           <CardGesture
             title={current.name}
             description={current.description}
-            id={current._id}
+            id={current.id}
             distanceImportance={current.isDistanceImportant}
             doubleHand={current.isDoubleHand}
           />

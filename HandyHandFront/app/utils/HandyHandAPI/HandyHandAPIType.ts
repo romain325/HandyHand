@@ -21,7 +21,7 @@ export interface GestureCard {
   description: string;
   isDistanceImportant: boolean;
   isDoubleHand: boolean;
-  _id: string;
+  id: string;
 }
 
 export interface ExecInfo {

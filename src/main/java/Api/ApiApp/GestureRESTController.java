@@ -102,10 +102,12 @@ public class GestureRESTController {
         Controller controller;
         try{
             controller= new Controller();
+            if(!controller.isConnected()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No leap motion connected");
+            }
             while (!(controller.frame().isValid()));
-            frame=controller.frame();
-            HandStructure hand = new HandStructure(frame.hands().get(0));
-            structure = new GestureStructure(hand,objNew.get("name").getAsString(),objNew.get("description").getAsString(),objNew.get("distance").getAsBoolean(),objNew.get("double").getAsBoolean());
+            HandStructure hand = new HandStructure(controller.frame().hands().get(0));
+            structure = new GestureStructure(hand,objNew.get("name").getAsString(),objNew.get("description").getAsString(),objNew.get("isDistanceImportant").getAsBoolean(),objNew.get("isDoubleHand").getAsBoolean());
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while add gesture: " + e.getMessage() ,e);
         }
@@ -145,6 +147,9 @@ public class GestureRESTController {
         HandStructure structure = null;
         try {
             controller= new Controller();
+            if(!controller.isConnected()){
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No leap motion connected");
+            }
             while (!(controller.frame().isValid()));
             frame=controller.frame();
             structure = new HandStructure(frame.hands().get(0));

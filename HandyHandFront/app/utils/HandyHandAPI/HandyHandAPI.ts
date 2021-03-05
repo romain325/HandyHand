@@ -1,4 +1,4 @@
-import {ExecInfo, NewScript, ScriptCard, UserCreds} from './HandyHandAPIType';
+import {ExecInfo, GestureCard, NewScript, ScriptCard, UserCreds} from './HandyHandAPIType';
 import { getAuthedHeader } from '../../features/connection/Connexion';
 
 export default class HandyHandAPI {
@@ -45,6 +45,10 @@ export default class HandyHandAPI {
 
   public async addNewScript(elem: NewScript): Promise<string> {
     return (await this.postToAPI('/script/add', elem)).text();
+  }
+
+  public async addNewGesture(elem: GestureCard): Promise<Response> {
+    return (await this.postToAPI('/gesture/add', elem));
   }
 
   public async modifyExec(elem: ExecInfo): Promise<string> {
