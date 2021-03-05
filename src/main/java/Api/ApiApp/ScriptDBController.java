@@ -102,7 +102,7 @@ public class ScriptDBController {
     /**
      * Add a new script to DB
      * @param req HttpRequest
-     * @param data {"args":  ["-h"], "file":  "john2reaper", "description":  "An Amazing script !!", "execType":  "test"}
+     * @param data {"args":  ["-h"], "file":  "john2reaper", "description":  "An Amazing script !!", "execType":  "test","idGesture" : "}
      * @return script id
      */
     @PostMapping(value = "/add")
@@ -117,7 +117,7 @@ public class ScriptDBController {
             for (var elem : obj.getAsJsonArray("args")){
                 args.add(elem.getAsString());
             }
-            script = new Script(obj.get("execType").getAsString(), args.toArray(new String[0]), obj.get("file").getAsString(), (obj.get("description") == null ? "" : obj.get("description").getAsString()));
+            script = new Script(obj.get("execType").getAsString(), args.toArray(new String[0]), obj.get("file").getAsString(), (obj.get("description") == null ? "" : obj.get("description").getAsString()),(obj.get("idGesture") == null ? "" : obj.get("idGesture").getAsString()));
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error adding: Bad Arguments");
         }
@@ -169,7 +169,7 @@ public class ScriptDBController {
 
         if(argsNew.isEmpty()) argsNew = Arrays.asList(oldScript.getArgs());
 
-        Script newScript = new Script(elements.get("execPath"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"));
+        Script newScript = new Script(elements.get("execPath"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"),elements.get("idGesture"));
 
         try {
             new MongoConnexion().handyDB().remove(oldScript);

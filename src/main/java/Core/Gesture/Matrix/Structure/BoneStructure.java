@@ -18,17 +18,19 @@ public class BoneStructure implements Serializable {
     /**
      * The position of the end of the bone
      */
-    public double[] nextJoint = new double[4];
+    private double[] nextJoint = new double[4];
     /**
      * The position of the start of the bone
      */
-    public double[] prevJoint = new double[4];
+    private double[] prevJoint = new double[4];
     /**
      * The type of the bone
      */
     private Bone.Type type;
 
-    public BoneStructure(){}
+    public BoneStructure(){
+
+    }
 
 
     /**
@@ -44,6 +46,13 @@ public class BoneStructure implements Serializable {
         this.nextJoint[1] = nextJoint.getY();
         this.nextJoint[2] = nextJoint.getZ();
         this.nextJoint[3] = 1;
+        /*
+        SimpleMatrix next = new SimpleMatrix(4, 1);
+        next.set(0,0, nextJoint.getX());
+        next.set(1,0, nextJoint.getY());
+        next.set(2,0, nextJoint.getZ());
+        next.set(3,0, 1);
+         */
 
         Vector prevJoint = bone.prevJoint();
         this.prevJoint[0] = prevJoint.getX();
@@ -51,6 +60,17 @@ public class BoneStructure implements Serializable {
         this.prevJoint[2] = prevJoint.getZ();
         this.prevJoint[3] = 1;
 
+        /*
+        SimpleMatrix prev = new SimpleMatrix(4, 1);
+        prev.set(0,0, prevJoint.getX());
+        prev.set(1,0, prevJoint.getY());
+        prev.set(2,0, prevJoint.getZ());
+        prev.set(3,0, 1);
+
+        setType(bone.type());
+        setNextJoint(next);
+        setPrevJoint(prev);
+         */
         setType(bone.type());
     }
 
@@ -87,20 +107,22 @@ public class BoneStructure implements Serializable {
         return MatrixUtils.toSimpleMatrix(this.prevJoint);
     }
 
+
+
     /**
      * The getter of the position of the end of the bone
      * @return The position of the end of the bone
      */
-    public double[] getNextJoint() {
-        return this.nextJoint;
+    public SimpleMatrix getNextJoint() {
+        return MatrixUtils.toSimpleMatrix(this.nextJoint);
     }
 
     /**
      * The getter of the position of the start of the bone
      * @return The position of the start of the bone
      */
-    public double[] getPrevJoint() {
-        return this.prevJoint;
+    public SimpleMatrix getPrevJoint() {
+        return MatrixUtils.toSimpleMatrix(this.prevJoint);
     }
 
     /**
@@ -136,28 +158,6 @@ public class BoneStructure implements Serializable {
     }
 
     /**
-     * The setter of the position of the end of the bone
-     * @param nextJoint The position of the end of the bone
-     * @throws BadAttributeValueExpException If the position is null or not of size (4,1)
-     */
-    @JsonProperty
-    private void setNextJoint(double[] nextJoint) throws BadAttributeValueExpException {
-        if(nextJoint == null) throw new BadAttributeValueExpException("The vector as to be not null");
-        this.nextJoint = nextJoint;
-    }
-
-    /**
-     * The setter of the position of the start of the bone
-     * @param prevJoint The position of the start of the bone
-     * @throws BadAttributeValueExpException If the position is null or not of size (4,1)
-     */
-    @JsonProperty
-    private void setPrevJoint(double[] prevJoint) throws BadAttributeValueExpException {
-        if(prevJoint == null) throw new BadAttributeValueExpException("The vector as to be not null");
-        this.prevJoint = prevJoint;
-    }
-
-    /**
      * The setter of the type of the bone
      * @param type The type of the bone
      * @throws BadAttributeValueExpException If the type is null
@@ -173,7 +173,6 @@ public class BoneStructure implements Serializable {
      * @return Return true if they are equals, false otherwise
      */
     @Override
-    @JsonIgnore
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -187,20 +186,19 @@ public class BoneStructure implements Serializable {
      * @param divergence The divergence that we accept between both BoneStructure
      * @return Return true if they are similar, false otherwise
      */
-    @JsonIgnore
     public boolean compare(BoneStructure boneStructure, float divergence) {
         if (boneStructure == null || boneStructure.getType() != this.getType()) return false;
 
         divergence = Math.abs(divergence);
 
-        SimpleMatrix prev = boneStructure.getPrevJointMatrix();
+        SimpleMatrix prev = boneStructure.getPrevJoint();
         for(int i = 0; i < 3; i++) {
-            if(Math.abs(prev.get(i) - getPrevJointMatrix().get(i)) > divergence ) return false;
+            if(Math.abs(prev.get(i) - getPrevJoint().get(i)) > divergence ) return false;
         }
 
-        SimpleMatrix next = boneStructure.getNextJointMatrix();
+        SimpleMatrix next = boneStructure.getNextJoint();
         for(int i = 0; i < 3; i++) {
-            if(Math.abs(next.get(i) - getNextJointMatrix().get(i)) > divergence ) return false;
+            if(Math.abs(next.get(i) - getNextJoint().get(i)) > divergence ) return false;
         }
 
         return true;
@@ -212,13 +210,12 @@ public class BoneStructure implements Serializable {
      * @return The new BoneStructure normalized
      * @throws BadAttributeValueExpException If matrix is null or of an other size than (4,4)
      */
-    @JsonIgnore
     public BoneStructure getNormalizedBoneStructure(SimpleMatrix normalizer) throws BadAttributeValueExpException {
         if(normalizer == null) throw new BadAttributeValueExpException("Normalization matrix has to be not null");
         if(normalizer.numRows() != 4 || normalizer.numCols() !=4) throw new BadAttributeValueExpException("Normalization matrix has to be of size (4,4)");
 
-        SimpleMatrix nextNew = normalizer.mult(getNextJointMatrix());
-        SimpleMatrix prevNex = normalizer.mult(getPrevJointMatrix());
+        SimpleMatrix nextNew = normalizer.mult(getNextJoint());
+        SimpleMatrix prevNex = normalizer.mult(getPrevJoint());
 
         return new BoneStructure(getType(), nextNew, prevNex);
     }
