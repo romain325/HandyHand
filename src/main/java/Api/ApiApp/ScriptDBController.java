@@ -1,7 +1,15 @@
 package Api.ApiApp;
 
 import Api.ApiApp.Database.MongoConnexion;
+import Core.Daemon.CallLoop;
+import Core.Daemon.Daemon;
+import Core.Gesture.Matrix.Structure.GestureStructure;
+import Core.Gesture.Matrix.Structure.IDefineStructure;
+import Core.Interaction.Interaction;
+import Core.Listener.GestureListener;
+import Core.Listener.MainListener;
 import Core.Script.Script;
+import Core.StubPersistence.ExecPersistance;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -12,6 +20,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.NameNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -20,6 +34,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/scriptDB")
 public class ScriptDBController {
+    Set<Daemon> daemons = new TreeSet<>();
+    private final String filePath = System.getProperty("user.home") + File.separator + ".handyhand" + File.separator + "scripts";
 
     /**
      * Get all db Scripts' id
@@ -56,7 +72,7 @@ public class ScriptDBController {
             }
             return elems;
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while fetching scrtipts");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while fetching scripts");
         }
     }
 
@@ -179,5 +195,75 @@ public class ScriptDBController {
         }
 
         return newScript.getId();
+    }
+
+    @PostMapping("/launch")
+    public String launchScript(HttpServletRequest req, @RequestBody String data) {
+        UserDBController.validAuth(req);
+        var obj = new Gson().fromJson(data, JsonObject.class);
+
+        Script script;
+        try{
+            script = new MongoConnexion().handyDB().findById(obj.get("scriptId").getAsString(),Script.class);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The script with the following id has not been found");
+        }
+
+
+
+        GestureStructure gestureStructure;
+        try {
+            gestureStructure =  new MongoConnexion().handyDB().findById(script.getIdGesture(),GestureStructure.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The gesture associated with the gesture has not been found");
+        }
+
+        Map.Entry<String,String> exec;
+        try {
+            exec =new ExecPersistance().getByName(script.getExecType());
+        } catch (NameNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The interpreter is not defined yet or not exact");
+        }
+
+        Map<String,String> map = new HashMap<>();
+
+        map.put("Python",".py");
+        map.put("PHP",".php");
+        //TODO add all programming languages extensions
+
+        String extension = map.get(exec.getKey());
+
+        checkFile();
+
+        String fileP = filePath+"/"+script.getId()+extension;
+        File file = new File(fileP);
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(script.getFile());
+            writer.close();
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while transcribing on local files");
+        }
+
+
+
+        Interaction interaction = new Interaction();
+        MainListener listener = new GestureListener(gestureStructure.getGesture());
+        interaction.addListener(new MainListener[]{listener}, new Script(exec.getValue(), script.getArgs() ,fileP));
+        Daemon daemon = new Daemon(script.getFile(), new CallLoop(interaction));
+        daemons.add(daemon);
+        daemon.start();
+
+        return "The script have been successfully associated with the gesture and can now be launch by executing the gesture !";
+    }
+
+    private void checkFile() {
+        if(!Files.exists(Path.of(filePath))){
+           File dir =new File(filePath);
+           dir.mkdirs();
+        }
     }
 }
