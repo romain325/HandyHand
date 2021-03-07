@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import ContentPage from '../../containers/ContentPage';
 import { GestureCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
 import { allGestureCards } from '../../utils/display/scriptDisplay';
-import {Link} from "react-router-dom";
-import routes from "../../constants/routes.json";
+import routes from '../../constants/routes.json';
+import { getAddress } from '../../utils/HandyHandAPI/HandyHandConfig';
 
 export default function GestureFeatures() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState<GestureCard[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/gesture/all', {
+    fetch(`${getAddress()}/gesture/all`, {
       method: 'GET',
     })
       .then((rep) => rep.json())
       .then((json) => {
         setItems(json);
-        console.log(json);
         setIsLoaded(true);
       });
   }, []);

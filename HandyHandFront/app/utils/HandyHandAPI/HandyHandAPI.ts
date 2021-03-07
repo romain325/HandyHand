@@ -1,8 +1,9 @@
 import {ExecInfo, GestureCard, NewScript, ScriptCard, UserCreds} from './HandyHandAPIType';
 import { getAuthedHeader } from '../../features/connection/Connexion';
+import { getAddress } from './HandyHandConfig';
 
 export default class HandyHandAPI {
-  private link = 'http://localhost:8080';
+  private link = getAddress();
 
   private async getFromAPI<T>(urlArg: string): Promise<T> {
     const rep = await fetch(this.link + urlArg);

@@ -30,7 +30,6 @@ export default function ExecFeature() {
       .then((rep) => rep.json())
       .then((json) => {
         setItems(json);
-        console.log(json);
         setIsLoaded(true);
       });
   }, []);
@@ -38,18 +37,6 @@ export default function ExecFeature() {
   if (!isLoaded) {
     return (
       <ContentPage childrenName="Loading..">
-        <Row>
-          <Col>
-            <Link to={routes.ADD_SCRIPT}>
-              <img
-                src="../resources/img/ajouterIcon.png"
-                height="25px"
-                width="25px"
-                style={{ margin: '10px' }}
-              />
-            </Link>
-          </Col>
-        </Row>
         <Row>
           <Col xs="10">Loading...</Col>
         </Row>
@@ -59,18 +46,6 @@ export default function ExecFeature() {
 
   return (
     <ContentPage childrenName="Scripts">
-      <Container fluid>
-        <Link to={routes.ADD_SCRIPT}>
-          <img
-            src="../resources/img/ajouterIcon.png"
-            height="25px"
-            width="25px"
-            style={{ margin: '15px' }}
-            alt="Add"
-          />
-        </Link>
-      </Container>
-
       <Container
         fluid
         style={{
