@@ -68,7 +68,16 @@ public class ScriptDBController {
         try{
             List<Map<String,String>> elems = new ArrayList<>();
             for (var e : new MongoConnexion().handyDB().findAll(Script.class)){
-                elems.add(new HashMap<>(){{put("file", e.getFile()); put("description", e.getDescription()); put("id", e.getId());}});
+                JsonObject scriptId = new JsonObject();
+                scriptId.addProperty("scriptId", e.getId());
+
+                elems.add(new HashMap<>(){{
+                    put("file", e.getFile());
+                    put("description", e.getDescription());
+                    put("id", e.getId());
+                    put("idGesture", e.getIdGesture());
+                    put("status", String.valueOf(checkStatus(req, scriptId.toString())));
+                }});
             }
             return elems;
         }catch (Exception e){
@@ -165,6 +174,7 @@ public class ScriptDBController {
             oldScript = new MongoConnexion().handyDB().findById(objNew.get("oldId").getAsString(),Script.class);
             elements.put("file", oldScript.getFile());
             elements.put("execPath", oldScript.getExecType());
+            elements.put("idGesture", oldScript.getIdGesture());
             elements.put("description", oldScript.getDescription());
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The script with the following id has not been found");
@@ -185,7 +195,12 @@ public class ScriptDBController {
 
         if(argsNew.isEmpty()) argsNew = Arrays.asList(oldScript.getArgs());
 
-        Script newScript = new Script(elements.get("execPath"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"),elements.get("idGesture"));
+        Script newScript = new Script(
+                elements.get("execPath"),
+                argsNew.toArray(new String[0]),
+                elements.get("file"),
+                elements.get("description"),
+                elements.get("idGesture"));
 
         try {
             new MongoConnexion().handyDB().remove(oldScript);
@@ -226,11 +241,16 @@ public class ScriptDBController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The gesture associated with the gesture has not been found");
         }
 
-        Map.Entry<String,String> exec;
+        Map.Entry<String,String> exec = null;
         try {
-            exec =new ExecPersistance().getByName(script.getExecType());
+            System.out.println(script.getExecType());
+            System.out.println(new ExecPersistance().getAll());
+            exec = new ExecPersistance().getByName(script.getExecType());
         } catch (NameNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The interpreter is not defined yet or not exact");
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The interpreter is not defined yet or not exact");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         Map<String,String> map = new HashMap<>();
@@ -279,7 +299,7 @@ public class ScriptDBController {
      * Stop the recognition of the gesture to launch the script
      * @param req httpRequest
      * @param data { "scriptId" : ""}
-     * @return launch script
+     * @return stop script
      */
     @PostMapping("/stop")
     public String stopScript(HttpServletRequest req, @RequestBody String data) {
@@ -292,11 +312,16 @@ public class ScriptDBController {
         return "The script have been successfully dissociated !";
     }
 
+    /***
+     * Check the status of a script
+     * @param req httpRequest
+     * @param data { "scriptId" : ""}
+     * @return status of the script
+     */
     @PostMapping("/status")
     public boolean checkStatus(HttpServletRequest req, @RequestBody String data){
         UserDBController.validAuth(req);
 
-        UserDBController.validAuth(req);
         var obj = new Gson().fromJson(data, JsonObject.class);
 
         return daemons.containsKey(obj.get("scriptId").getAsString());

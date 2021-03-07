@@ -48,7 +48,13 @@ public class ScriptRESTController {
         try {
             List<Map<String,String>> elems = new ArrayList<>();
             for (var e : new ScriptPersistance().getAll()){
-                elems.add(new HashMap<>(){{put("file", e.getFile()); put("description", e.getDescription()); put("id", e.getId());}});
+                elems.add(new HashMap<>(){{
+                    put("file", e.getFile());
+                    put("description", e.getDescription());
+                    put("id", e.getId());
+                    put("idGesture", e.getIdGesture() == null ? "" : e.getIdGesture());
+                    put("status", String.valueOf(false)); // TODO CHANGE WHEN IMPLEMENTATION ALLOW TO
+                }});
             }
             return elems;
         } catch (Exception e) {
@@ -149,6 +155,7 @@ public class ScriptRESTController {
             put("file",oldScript.getFile());
             put("execType",oldScript.getExecType());
             put("description", oldScript.getDescription());
+            put("idGesture", oldScript.getIdGesture());
         }};
 
         for(var elem : elements.keySet()){
@@ -166,7 +173,12 @@ public class ScriptRESTController {
 
         if(argsNew.isEmpty()) argsNew = Arrays.asList(oldScript.getArgs());
 
-        Script newScript = new Script(elements.get("execType"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"), elements.get("idGesture"));
+        Script newScript = new Script(
+                elements.get("execType"),
+                argsNew.toArray(new String[0]),
+                elements.get("file"),
+                elements.get("description"),
+                elements.get("idGesture"));
 
         try{
             try {

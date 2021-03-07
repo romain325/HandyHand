@@ -3,20 +3,40 @@ import { Col, Row, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import routes from '../../constants/routes.json';
 import ContentPage from '../../containers/ContentPage';
-import { ScriptCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
+import {
+  GestureCard,
+  ScriptCard,
+} from '../../utils/HandyHandAPI/HandyHandAPIType';
 import { allCards, allList } from '../../utils/display/scriptDisplay';
+import { getAddress } from '../../utils/HandyHandAPI/HandyHandConfig';
 
 export default function MyScriptsFeature() {
   const [isGrid, setIsGrid] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState<ScriptCard[]>([]);
+  const [gesture, setGestures] = useState<Map<string, string>>(
+    new Map<string, string>()
+  );
 
   useEffect(() => {
-    fetch('http://localhost:8080/script/all')
+    fetch(`${getAddress()}/gesture/all`)
       .then((rep) => rep.json())
       .then((json) => {
-        setItems(json);
-        setIsLoaded(true);
+        const gest = new Map<string, string>();
+        for (const r of json as GestureCard[]) {
+          gest.set(r.id, r.name);
+        }
+        gest.set('', 'None');
+        console.log(gest);
+        setGestures(gest);
+
+        fetch(`${getAddress()}/script/all`)
+          .then((rep) => rep.json())
+          .then((json2) => {
+            console.log(json2);
+            setItems(json2);
+            setIsLoaded(true);
+          });
       });
   }, []);
 
@@ -77,10 +97,10 @@ export default function MyScriptsFeature() {
           height: '70vh',
         }}
       >
-        { items.length == 0 ? (
+        {items.length == 0 ? (
           <Col>Nothing Found ...</Col>
         ) : isGrid ? (
-          allCards(items)
+          allCards(items, gesture, false)
         ) : (
           allList(items)
         )}

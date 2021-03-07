@@ -3,25 +3,48 @@ import { Col, Container, Row } from 'react-bootstrap';
 
 import ContentPage from '../../containers/ContentPage';
 import { allCards, allList } from '../../utils/display/scriptDisplay';
-import { ScriptCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
+import {
+  GestureCard,
+  ScriptCard,
+} from '../../utils/HandyHandAPI/HandyHandAPIType';
 import { getAuthedHeader } from '../connection/Connexion';
 import { getAddress } from '../../utils/HandyHandAPI/HandyHandConfig';
 
 export default function ScriptsFeatures() {
   const [isGrid, setIsGrid] = useState(true);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [items, setItems] = useState<ScriptCard[]>([]);
+  const [gesture, setGestures] = useState<Map<string, string>>(
+    new Map<string, string>()
+  );
 
   useEffect(() => {
-    fetch( `${getAddress()}/scriptDB/all`, {
+    fetch(`${getAddress()}/gestureDB/all`, {
       method: 'GET',
       headers: getAuthedHeader(),
     })
       .then((rep) => rep.json())
       .then((json) => {
-        setItems(json);
         console.log(json);
-        setIsLoaded(true);
+        const gest = new Map<string, string>();
+        for (const r of json as GestureCard[]) {
+          gest.set(r.id, r.name);
+        }
+        gest.set('', 'None');
+        console.log(gest);
+        setGestures(gest);
+
+
+        fetch(`${getAddress()}/scriptDB/all`, {
+          method: 'GET',
+          headers: getAuthedHeader(),
+        })
+          .then((rep) => rep.json())
+          .then((json2) => {
+            setItems(json2);
+            console.log(json2);
+            setIsLoaded(true);
+          });
       });
   }, []);
 
@@ -64,10 +87,10 @@ export default function ScriptsFeatures() {
         { items.length == 0 ? (
           <Col>Nothing Found ...</Col>
         ) : isGrid ? (
-          allCards(items)
+          allCards(items, gesture, true)
         ) : (
           allList(items)
-        ) }
+        )}
       </Container>
     </ContentPage>
   );
