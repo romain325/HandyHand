@@ -1,8 +1,9 @@
-import {ExecInfo, NewScript, ScriptCard, UserCreds} from './HandyHandAPIType';
+import {ExecInfo, GestureCard, NewScript, ScriptCard, UserCreds} from './HandyHandAPIType';
 import { getAuthedHeader } from '../../features/connection/Connexion';
+import { getAddress } from './HandyHandConfig';
 
 export default class HandyHandAPI {
-  private link = 'http://localhost:8080';
+  private link = getAddress();
 
   private async getFromAPI<T>(urlArg: string): Promise<T> {
     const rep = await fetch(this.link + urlArg);
@@ -47,6 +48,10 @@ export default class HandyHandAPI {
     return (await this.postToAPI('/script/add', elem)).text();
   }
 
+  public async addNewGesture(elem: GestureCard): Promise<Response> {
+    return (await this.postToAPI('/gesture/add', elem));
+  }
+
   public async modifyExec(elem: ExecInfo): Promise<string> {
     return (await this.postToAPI('/exec/modify', elem)).text();
   }
@@ -59,6 +64,10 @@ export default class HandyHandAPI {
 
   public async removeGesture(id: string) {
     await this.actionToAPI(`/gesture/${id}`, 'DELETE');
+  }
+
+  public async removeGestureDb(id: string) {
+    return await this.actionToAPI(`/gestureDB/${id}`, 'DELETE');
   }
 
   public async createNewUser(elem: UserCreds): Promise<string> {

@@ -64,8 +64,6 @@ export default function AddScriptFeature() {
                 ref={register}
               />
             </Form.Group>
-
-
             <Button type="submit" variant="primary">SUBMIT</Button>
           </Form>
         </Row>

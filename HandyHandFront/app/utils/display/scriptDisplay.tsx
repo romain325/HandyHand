@@ -54,14 +54,14 @@ export function allList(items: ScriptCard[]): JSX.Element {
   return <div>{elements}</div>;
 }
 
-export function allGestureCards(items: GestureCard[]): JSX.Element {
+export function allGestureCards(items: GestureCard[], isOnline: boolean): JSX.Element {
   const elements: JSX.Element[] = [];
 
   let i: number = items.length;
   while (i > 0) {
     const subElements: JSX.Element[] = [];
     const iter: number = i < 3 ? i : 3;
-    let current : GestureCard;
+    let current: GestureCard;
     for (let j = 0; j < iter; j++) {
       current = items[(i - items.length) * -1 +j]
       subElements.push(
@@ -69,9 +69,10 @@ export function allGestureCards(items: GestureCard[]): JSX.Element {
           <CardGesture
             title={current.name}
             description={current.description}
-            id={current._id}
+            id={current.id}
             distanceImportance={current.isDistanceImportant}
             doubleHand={current.isDoubleHand}
+            isOnline={isOnline}
           />
         </Col>
       );

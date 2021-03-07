@@ -16,7 +16,6 @@ export default function MyScriptsFeature() {
       .then((rep) => rep.json())
       .then((json) => {
         setItems(json);
-        console.log(json);
         setIsLoaded(true);
       });
   }, []);
