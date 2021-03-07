@@ -261,6 +261,8 @@ public class ScriptDBController {
         interaction.addListener(new MainListener[]{listener}, new Script(exec.getValue(), script.getArgs() ,fileP));
         Daemon daemon = new Daemon(script.getId(), new CallLoop(interaction));
         daemons.put(daemon.getDaemonName(),daemon);
+
+        //TODO remplacer liste de démon par démon unique
         daemon.start();
 
         return "The script have been successfully associated with the gesture and can now be launch by executing the gesture !";
@@ -288,6 +290,16 @@ public class ScriptDBController {
         daemon.stop();
 
         return "The script have been successfully dissociated !";
+    }
+
+    @PostMapping("/status")
+    public boolean checkStatus(HttpServletRequest req, @RequestBody String data){
+        UserDBController.validAuth(req);
+
+        UserDBController.validAuth(req);
+        var obj = new Gson().fromJson(data, JsonObject.class);
+
+        return daemons.containsKey(obj.get("scriptId").getAsString());
     }
 
 }
