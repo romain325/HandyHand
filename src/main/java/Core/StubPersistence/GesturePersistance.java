@@ -64,7 +64,6 @@ public class GesturePersistance implements IGestureDataManager{
         try{
             LinkedList<GestureStructure> list = new LinkedList<>(gestureManager.getAll());
             list.remove(gestureStructure);
-            System.out.println(list.contains(gestureStructure));
             gestureManager.save(list);
         } catch (Exception e) {
             throw new Exception("Error remove GesturePersistance");

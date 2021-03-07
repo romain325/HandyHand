@@ -5,6 +5,7 @@ import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.util.Base64;
+import java.util.Objects;
 
 /**
  * A class that contain a structure representing a gesture, with some information
@@ -192,4 +193,17 @@ public class GestureStructure implements Serializable {
     }
 
     public void setId(String id) { this.id = id;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GestureStructure that = (GestureStructure) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

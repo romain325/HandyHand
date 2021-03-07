@@ -18,7 +18,7 @@ public class GestureTest implements Tester {
      */
     @Override
     public void start() {
-        GestureMatcher.init();
+       // GestureMatcher.init();
 
         gestureTesting();
         try {
@@ -33,10 +33,13 @@ public class GestureTest implements Tester {
      * The method containing the tests
      */
     public void gestureTesting(){
+        /*
         Interaction interaction = new Interaction();
         MainListener listener = GestureListener.GestureListenerFactory("rock");
         interaction.addListener(new MainListener[]{listener}, new Script("test.bat", new String[]{} ,""));
         Daemon daemon = new Daemon("GestureListener", new CallLoop(interaction));
         daemon.start();
+
+         */
     }
 }

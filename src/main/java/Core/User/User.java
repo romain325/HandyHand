@@ -52,6 +52,10 @@ public class User {
         return scriptsId;
     }
 
+    public void setScriptsId(List<String> scriptsId) {
+        this.scriptsId = scriptsId;
+    }
+
     public void addScript(String scriptId) {
         scriptsId.add(scriptId);
     }
