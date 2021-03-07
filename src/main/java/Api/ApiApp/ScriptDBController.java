@@ -1,7 +1,15 @@
 package Api.ApiApp;
 
 import Api.ApiApp.Database.MongoConnexion;
+import Core.Daemon.CallLoop;
+import Core.Daemon.Daemon;
+import Core.Gesture.Matrix.Structure.GestureStructure;
+import Core.Gesture.Matrix.Structure.IDefineStructure;
+import Core.Interaction.Interaction;
+import Core.Listener.GestureListener;
+import Core.Listener.MainListener;
 import Core.Script.Script;
+import Core.StubPersistence.ExecPersistance;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -12,6 +20,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.NameNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -20,6 +34,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/scriptDB")
 public class ScriptDBController {
+    Map<String,Daemon> daemons = new TreeMap<>();
+    private final String filePath = System.getProperty("user.home") + File.separator + ".handyhand" + File.separator + "scripts";
 
     /**
      * Get all db Scripts' id
@@ -56,7 +72,7 @@ public class ScriptDBController {
             }
             return elems;
         }catch (Exception e){
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while fetching scrtipts");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while fetching scripts");
         }
     }
 
@@ -102,7 +118,7 @@ public class ScriptDBController {
     /**
      * Add a new script to DB
      * @param req HttpRequest
-     * @param data {"args":  ["-h"], "file":  "john2reaper", "description":  "An Amazing script !!", "execType":  "test"}
+     * @param data {"args":  ["-h"], "file":  "john2reaper", "description":  "An Amazing script !!", "execType":  "test","idGesture" : "}
      * @return script id
      */
     @PostMapping(value = "/add")
@@ -117,7 +133,7 @@ public class ScriptDBController {
             for (var elem : obj.getAsJsonArray("args")){
                 args.add(elem.getAsString());
             }
-            script = new Script(obj.get("execType").getAsString(), args.toArray(new String[0]), obj.get("file").getAsString(), (obj.get("description") == null ? "" : obj.get("description").getAsString()));
+            script = new Script(obj.get("execType").getAsString(), args.toArray(new String[0]), obj.get("file").getAsString(), (obj.get("description") == null ? "" : obj.get("description").getAsString()),(obj.get("idGesture") == null ? "" : obj.get("idGesture").getAsString()));
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error adding: Bad Arguments");
         }
@@ -169,7 +185,7 @@ public class ScriptDBController {
 
         if(argsNew.isEmpty()) argsNew = Arrays.asList(oldScript.getArgs());
 
-        Script newScript = new Script(elements.get("execPath"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"));
+        Script newScript = new Script(elements.get("execPath"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"),elements.get("idGesture"));
 
         try {
             new MongoConnexion().handyDB().remove(oldScript);
@@ -180,4 +196,110 @@ public class ScriptDBController {
 
         return newScript.getId();
     }
+
+    /***
+     * Launch the recognition of the gesture to launch the script
+     * @param req httpRequest
+     * @param data { "scriptId" : ""}
+     * @return launch script
+     */
+    @PostMapping("/launch")
+    public String launchScript(HttpServletRequest req, @RequestBody String data) {
+        UserDBController.validAuth(req);
+        var obj = new Gson().fromJson(data, JsonObject.class);
+
+        Script script;
+        try{
+            script = new MongoConnexion().handyDB().findById(obj.get("scriptId").getAsString(),Script.class);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The script with the following id has not been found");
+        }
+
+
+
+        GestureStructure gestureStructure;
+        try {
+            gestureStructure =  new MongoConnexion().handyDB().findById(script.getIdGesture(),GestureStructure.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The gesture associated with the gesture has not been found");
+        }
+
+        Map.Entry<String,String> exec;
+        try {
+            exec =new ExecPersistance().getByName(script.getExecType());
+        } catch (NameNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The interpreter is not defined yet or not exact");
+        }
+
+        Map<String,String> map = new HashMap<>();
+
+        map.put("Python",".py");
+        map.put("PHP",".php");
+        //TODO add all programming languages extensions
+
+        String extension = map.get(exec.getKey());
+
+        checkFile();
+
+        String fileP = filePath+"/"+script.getId()+extension;
+        File file = new File(fileP);
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(script.getFile());
+            writer.close();
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while transcribing on local files");
+        }
+
+
+
+        Interaction interaction = new Interaction();
+        MainListener listener = new GestureListener(gestureStructure.getGesture());
+        interaction.addListener(new MainListener[]{listener}, new Script(exec.getValue(), script.getArgs() ,fileP));
+        Daemon daemon = new Daemon(script.getId(), new CallLoop(interaction));
+        daemons.put(daemon.getDaemonName(),daemon);
+
+        //TODO remplacer liste de démon par démon unique
+        daemon.start();
+
+        return "The script have been successfully associated with the gesture and can now be launch by executing the gesture !";
+    }
+
+    private void checkFile() {
+        if(!Files.exists(Path.of(filePath))){
+           File dir =new File(filePath);
+           dir.mkdirs();
+        }
+    }
+
+    /***
+     * Stop the recognition of the gesture to launch the script
+     * @param req httpRequest
+     * @param data { "scriptId" : ""}
+     * @return launch script
+     */
+    @PostMapping("/stop")
+    public String stopScript(HttpServletRequest req, @RequestBody String data) {
+        UserDBController.validAuth(req);
+        var obj = new Gson().fromJson(data, JsonObject.class);
+
+        Daemon daemon=daemons.remove(obj.get("scriptId").getAsString());
+        daemon.stop();
+
+        return "The script have been successfully dissociated !";
+    }
+
+    @PostMapping("/status")
+    public boolean checkStatus(HttpServletRequest req, @RequestBody String data){
+        UserDBController.validAuth(req);
+
+        UserDBController.validAuth(req);
+        var obj = new Gson().fromJson(data, JsonObject.class);
+
+        return daemons.containsKey(obj.get("scriptId").getAsString());
+    }
+
 }

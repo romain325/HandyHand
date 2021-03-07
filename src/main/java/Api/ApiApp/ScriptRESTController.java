@@ -94,7 +94,7 @@ public class ScriptRESTController {
     /**
      * Add a new script to local
      * @param req Request
-     * @param data { "file": "", "description": "" , "execType": "", "args": [] }
+     * @param data { "file": "", "description": "" , "execType": "", "args": [],"idGesture" : "" }
      * @return Snew script ID
      */
     @PostMapping("/add")
@@ -107,7 +107,7 @@ public class ScriptRESTController {
 
         Script script;
         try{
-            script = new Script(obj.get("execType").getAsString(), args.toArray(new String[0]), obj.get("file").getAsString(), (obj.get("description") == null ? "" : obj.get("description").getAsString()));
+            script = new Script(obj.get("execType").getAsString(), args.toArray(new String[0]), obj.get("file").getAsString(), (obj.get("description") == null ? "" : obj.get("description").getAsString()),(obj.get("idGesture") == null ? "" : obj.get("idGesture").getAsString()));
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error adding: Bad Arguments");
         }
@@ -128,7 +128,7 @@ public class ScriptRESTController {
     /**
      * Modify an existing script
      * @param req request
-     * @param data { "oldId": "", "file": "", "description": "" , "execType": "", "args": [] }
+     * @param data { "oldId": "", "file": "", "description": "" , "execType": "", "args": [],"idGesture" : "" }
      * @return modified script id
      */
     @PostMapping("/modify")
@@ -166,7 +166,7 @@ public class ScriptRESTController {
 
         if(argsNew.isEmpty()) argsNew = Arrays.asList(oldScript.getArgs());
 
-        Script newScript = new Script(elements.get("execType"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"));
+        Script newScript = new Script(elements.get("execType"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"), elements.get("idGesture"));
 
         try{
             try {
