@@ -31,9 +31,10 @@ def getScriptTable(jsonData: list):
     scriptTable.add_column("Name", style="bold magenta")
     scriptTable.add_column("Description", style="cyan")
     scriptTable.add_column("Id", style="italic grey3")
+    scriptTable.add_column("Active", style="italic grey3")
 
     for elem in jsonData:
-        scriptTable.add_row(str(elem["file"]).split("/")[-1], elem["description"], elem["id"])
+        scriptTable.add_row(str(elem["file"]).split("/")[-1], elem["description"], elem["id"], elem["status"])
 
     return scriptTable
 
@@ -43,6 +44,7 @@ def getScriptPanel(jsonData):
                  f"[bold cyan]Description: [/bold cyan] {str(jsonData['description'])}\n"
                  f"[bold cyan]Exec Type: [/bold cyan]{str(jsonData['execType'])}\n"
                  f"[bold cyan]Exec Args: [/bold cyan]{str(jsonData['args'])}\n"
+                 f"[bold cyan]Associated Gesture: [/bold cyan]{str(jsonData['idGesture'])}\n"
                  f"[bold cyan]Id: [/bold cyan] {jsonData['id']}",
                  expand=False)
 
@@ -51,8 +53,8 @@ def getGestureTable(jsonData: list):
 
     scriptTable.add_column("Name", style="bold magenta")
     scriptTable.add_column("Description", style="cyan")
-    scriptTable.add_column("Is distance important?", style="cyan")
-    scriptTable.add_column("Is double handed?", style="cyan")
+    scriptTable.add_column("Distance important?", style="cyan")
+    scriptTable.add_column("Double handed?", style="cyan")
     scriptTable.add_column("Id", style="italic grey3")
 
     for elem in jsonData:

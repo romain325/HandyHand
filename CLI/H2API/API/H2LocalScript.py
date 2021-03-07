@@ -28,6 +28,7 @@ class H2LocalScript(ApiEndpoint):
         self.options["add"] = f"No args: prompt info\n" \
                               f"--fp <FilePath>: file path of the script\n" \
                               f"--desc <Description>: script description\n" \
+                              f"--gest <Gesture id>: Gesture to link with\n" \
                               f"--args <ExecutableArguments>: arguments given at the exec (seperated by a comma: ',')"
 
         self.switcher["modify"] = self.modifyScript
@@ -35,6 +36,7 @@ class H2LocalScript(ApiEndpoint):
                                  f"No args: prompt info\n" \
                                  f"--fp <FilePath>: file path of the script\n" \
                                  f"--desc <Description>: script description\n" \
+                                 f"--gest <Gesture id>: Gesture to link with\n" \
                                  f"--args <ExecutableArguments>: arguments given at the exec (seperated by a comma: ',')"
 
         self.execAdaptedFunction(args[1:])
@@ -127,10 +129,12 @@ class H2LocalScript(ApiEndpoint):
             script["file"] = input("FileName: ")
             script["description"] = input("Description: ")
             script["args"] = input("Args: (Separated by coma: ',') ").split(",")
+            script["idGesture"] = input("Gesture id(optional): ")
         else:
-            opts, _ = getopt.getopt(args[1:], "", ["fp=", "desc=", "args="])
+            opts, _ = getopt.getopt(args[1:], "", ["fp=", "desc=", "args=", "gest="])
             script["file"] = dict(opts).get("--fp")
             script["description"] = dict(opts).get("--desc")
+            script["idGesture"] = dict(opts).get("--gest", "")
             script["args"] = dict(opts).get("--args", "").split(",")
 
         try:
