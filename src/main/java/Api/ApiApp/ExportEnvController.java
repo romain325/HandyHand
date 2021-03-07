@@ -27,9 +27,11 @@ import static Api.ApiApp.UserDBController.validAuth;
 public class ExportEnvController {
 
 
-    @GetMapping("/{id}")
-    public String SyncEnv(HttpServletRequest req, @PathVariable String id){
+    @GetMapping("/sync")
+    public String SyncEnv(HttpServletRequest req){
         validAuth(req);
+        
+        String id = UserDBController.getConnectedUserId(req);
         try {
             exportGestureLocal(req, id);
             exportGestureToDB(req, id);
