@@ -34,7 +34,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/scriptDB")
 public class ScriptDBController {
-    Set<Daemon> daemons = new TreeSet<>();
+    Map<String,Daemon> daemons = new TreeMap<>();
     private final String filePath = System.getProperty("user.home") + File.separator + ".handyhand" + File.separator + "scripts";
 
     /**
@@ -197,6 +197,12 @@ public class ScriptDBController {
         return newScript.getId();
     }
 
+    /***
+     * Launch the recognition of the gesture to launch the script
+     * @param req httpRequest
+     * @param data { "scriptId" : ""}
+     * @return launch script
+     */
     @PostMapping("/launch")
     public String launchScript(HttpServletRequest req, @RequestBody String data) {
         UserDBController.validAuth(req);
@@ -253,8 +259,8 @@ public class ScriptDBController {
         Interaction interaction = new Interaction();
         MainListener listener = new GestureListener(gestureStructure.getGesture());
         interaction.addListener(new MainListener[]{listener}, new Script(exec.getValue(), script.getArgs() ,fileP));
-        Daemon daemon = new Daemon(script.getFile(), new CallLoop(interaction));
-        daemons.add(daemon);
+        Daemon daemon = new Daemon(script.getId(), new CallLoop(interaction));
+        daemons.put(daemon.getDaemonName(),daemon);
         daemon.start();
 
         return "The script have been successfully associated with the gesture and can now be launch by executing the gesture !";
@@ -266,4 +272,22 @@ public class ScriptDBController {
            dir.mkdirs();
         }
     }
+
+    /***
+     * Stop the recognition of the gesture to launch the script
+     * @param req httpRequest
+     * @param data { "scriptId" : ""}
+     * @return launch script
+     */
+    @PostMapping("/stop")
+    public String stopScript(HttpServletRequest req, @RequestBody String data) {
+        UserDBController.validAuth(req);
+        var obj = new Gson().fromJson(data, JsonObject.class);
+
+        Daemon daemon=daemons.remove(obj.get("scriptId").getAsString());
+        daemon.stop();
+
+        return "The script have been successfully dissociated !";
+    }
+
 }
