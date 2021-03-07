@@ -20,10 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.NameNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -211,7 +208,6 @@ public class ScriptDBController {
         Script script;
         try{
             script = new MongoConnexion().handyDB().findById(obj.get("scriptId").getAsString(),Script.class);
-
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The script with the following id has not been found");
         }
@@ -246,11 +242,13 @@ public class ScriptDBController {
         String fileP = filePath+"/"+script.getId()+extension;
         File file = new File(fileP);
 
+        System.out.println(script.getFileDecoded());
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(script.getFile());
+            PrintWriter writer = new PrintWriter(new FileWriter(file));
+            writer.write(script.getFileDecoded());
             writer.close();
         } catch (IOException e) {
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while transcribing on local files");
         }
 
@@ -260,6 +258,7 @@ public class ScriptDBController {
         MainListener listener = new GestureListener(gestureStructure.getGesture());
         interaction.addListener(new MainListener[]{listener}, new Script(exec.getValue(), script.getArgs() ,fileP));
         Daemon daemon = new Daemon(script.getId(), new CallLoop(interaction));
+        System.out.println(daemon);
         daemons.put(daemon.getDaemonName(),daemon);
 
         //TODO remplacer liste de démon par démon unique

@@ -5,8 +5,11 @@ import org.springframework.data.annotation.Id;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Objects;
+import java.util.Random;
 
 public class Script implements Runnable {
     @Id
@@ -52,7 +55,7 @@ public class Script implements Runnable {
         this.args = args;
         this.file = file;
         this.description = description;
-        id = getId();
+        id = createId();
         this.idGesture= idGesture;
     }
     public Script(){}
@@ -77,9 +80,23 @@ public class Script implements Runnable {
         }
     }
 
-    public String getId() {
-        return new String(Base64.getEncoder().encode((execType + "_" + file).toLowerCase().getBytes()));
+    public String createId() {
+        int leftLimit = 97;
+        int rightLimit = 122;
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        return new String(Base64.getEncoder().encode((generatedString).toLowerCase().getBytes()));
     }
+
+    public String getId(){
+        return id;
+    }
+
 
     @Override
     public boolean equals(Object obj) {
@@ -91,19 +108,17 @@ public class Script implements Runnable {
         return Objects.hash(id);
     }
 
-    public static String getUserOS() {
-        return userOS;
-    }
-
-    public static void setUserOS(String userOS) {
-        Script.userOS = userOS;
-    }
 
     public String getIdGesture() {
         return idGesture;
     }
 
+
     public void setIdGesture(String idGesture) {
         this.idGesture = idGesture;
+    }
+
+    public String getFileDecoded() {
+        return new String(Base64.getDecoder().decode(file));
     }
 }
