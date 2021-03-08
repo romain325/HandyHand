@@ -1,0 +1,16 @@
+#!/usr/bin/python3.8
+
+import sys
+from H2API import H2API
+
+
+def main():
+    # If no arg provided, show help
+    if len(sys.argv) <= 1:
+        sys.argv.append("help")
+
+    H2API.H2API(sys.argv[1:])
+
+
+if __name__ == "__main__":
+    main()

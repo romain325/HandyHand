@@ -34,6 +34,9 @@ public class DoubleHandStructure implements IDefineStructure {
      */
     private float distancePrevMetaPinky;
 
+    public DoubleHandStructure(){
+    }
+
     /**
      * A constructor of the DoubleHandStructure
      * @param leftHand The structure of the left hand
@@ -54,11 +57,11 @@ public class DoubleHandStructure implements IDefineStructure {
         BoneStructure metaIndexRightHand = rightHand.getIndex().getMetacarpals();
         BoneStructure metaPinkyRightHand = rightHand.getPinky().getMetacarpals();
 
-        setDistanceNextMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getNextJoint(), metaIndexRightHand.getNextJoint()));
-        setDistancePrevMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getPrevJoint(), metaIndexRightHand.getPrevJoint()));
+        setDistanceNextMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getNextJointMatrix(), metaIndexRightHand.getNextJointMatrix()));
+        setDistancePrevMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getPrevJointMatrix(), metaIndexRightHand.getPrevJointMatrix()));
 
-        setDistanceNextMetaPinky(distanceBetween2Vectors(metaPinkyLeftHand.getNextJoint(), metaPinkyRightHand.getNextJoint()));
-        setDistancePrevMetaPinky(distanceBetween2Vectors(metaPinkyLeftHand.getPrevJoint(), metaPinkyRightHand.getPrevJoint()));
+        setDistanceNextMetaPinky(distanceBetween2Vectors(metaPinkyLeftHand.getNextJointMatrix(), metaPinkyRightHand.getNextJointMatrix()));
+        setDistancePrevMetaPinky(distanceBetween2Vectors(metaPinkyLeftHand.getPrevJointMatrix(), metaPinkyRightHand.getPrevJointMatrix()));
     }
 
     /**
@@ -85,11 +88,11 @@ public class DoubleHandStructure implements IDefineStructure {
         BoneStructure metaIndexRightHand = rightHandStructure.getIndex().getMetacarpals();
         BoneStructure metaPinkyRightHand = rightHandStructure.getPinky().getMetacarpals();
 
-        setDistanceNextMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getNextJoint(), metaIndexRightHand.getNextJoint()));
-        setDistancePrevMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getPrevJoint(), metaIndexRightHand.getPrevJoint()));
+        setDistanceNextMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getNextJointMatrix(), metaIndexRightHand.getNextJointMatrix()));
+        setDistancePrevMetaIndex(distanceBetween2Vectors(metaIndexLeftHand.getPrevJointMatrix(), metaIndexRightHand.getPrevJointMatrix()));
 
-        setDistanceNextMetaPinky(distanceBetween2Vectors(metaPinkyLeftHand.getNextJoint(), metaPinkyRightHand.getNextJoint()));
-        setDistancePrevMetaPinky(distanceBetween2Vectors(metaPinkyLeftHand.getPrevJoint(), metaPinkyRightHand.getPrevJoint()));
+        setDistanceNextMetaPinky(distanceBetween2Vectors(metaPinkyLeftHand.getNextJointMatrix(), metaPinkyRightHand.getNextJointMatrix()));
+        setDistancePrevMetaPinky(distanceBetween2Vectors(metaPinkyLeftHand.getPrevJointMatrix(), metaPinkyRightHand.getPrevJointMatrix()));
     }
 
     /**

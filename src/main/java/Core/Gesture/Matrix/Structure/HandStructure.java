@@ -1,6 +1,9 @@
 package Core.Gesture.Matrix.Structure;
 
+import Core.Gesture.Matrix.MatrixUtils;
 import Core.Gesture.Matrix.Normalization.MatrixNormalizer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.Vector;
@@ -40,11 +43,11 @@ public class HandStructure implements Serializable, IDefineStructure {
     /**
      * The vector of the direction of the hand
      */
-    private SimpleMatrix direction;
+    public double[] direction = new double[4];
     /**
      * The vector of the palm normal of the hand
      */
-    private SimpleMatrix palmNormal;
+    public double[] palmNormal = new double[4];
     /**
      * The type of the hand. If it is a right or left hand
      */
@@ -52,7 +55,10 @@ public class HandStructure implements Serializable, IDefineStructure {
     /**
      * The matrix normalizer of the hand
      */
-    private SimpleMatrix normalizer;
+    public double[][] normalizer = new double[4][4];
+
+
+    public HandStructure(){}
 
     /**
      * A constructor of the HandStructure
@@ -229,16 +235,34 @@ public class HandStructure implements Serializable, IDefineStructure {
      * The getter of the vector of the direction of the hand
      * @return The vector of the direction of the hand
      */
-    public SimpleMatrix getDirection() {
-        return direction;
+    @JsonIgnore
+    public SimpleMatrix getDirectionMatrix() {
+        return MatrixUtils.toSimpleMatrix(this.direction);
+    }
+
+    /**
+     * The getter of the vector of the direction of the hand
+     * @return The vector of the direction of the hand
+     */
+    public double[] getDirection() {
+        return this.direction;
     }
 
     /**
      * The getter of the vector of the palm normal of hand
      * @return The vector of the palm normal of hand
      */
-    public SimpleMatrix getPalmNormal() {
-        return palmNormal;
+    @JsonIgnore
+    public SimpleMatrix getPalmNormalMatrix() {
+        return MatrixUtils.toSimpleMatrix(this.palmNormal);
+    }
+
+    /**
+     * The getter of the vector of the palm normal of hand
+     * @return The vector of the palm normal of hand
+     */
+    public double[] getPalmNormal() {
+        return this.palmNormal;
     }
 
     /**
@@ -253,8 +277,17 @@ public class HandStructure implements Serializable, IDefineStructure {
      * The getter of the matrix normalizer of the hand
      * @return The matrix normalizer of the hand
      */
-    public SimpleMatrix getNormalizer() {
-        return normalizer;
+    @JsonIgnore
+    public SimpleMatrix getNormalizerMatrix() {
+        return MatrixUtils.toSimpleMatrix(this.normalizer);
+    }
+
+    /**
+     * The getter of the matrix normalizer of the hand
+     * @return The matrix normalizer of the hand
+     */
+    public double[][] getNormalizer() {
+        return this.normalizer;
     }
 
     /**
@@ -301,7 +334,27 @@ public class HandStructure implements Serializable, IDefineStructure {
      * The setter of the vector of the direction of the hand
      * @param direction The vector of the direction of the hand
      */
+    @JsonIgnore
     public void setDirection(SimpleMatrix direction) {
+        this.direction = MatrixUtils.fromSimpleMatrix(direction);
+    }
+
+    /**
+     * The setter of the vector of the palm normal of hand
+     * @param palmNormal The vector of the palm normal of hand
+     */
+    @JsonIgnore
+    public void setPalmNormal(SimpleMatrix palmNormal) {
+        this.palmNormal =  MatrixUtils.fromSimpleMatrix(palmNormal);
+    }
+
+
+    /**
+     * The setter of the vector of the direction of the hand
+     * @param direction The vector of the direction of the hand
+     */
+    @JsonProperty
+    public void setDirection(double[] direction) {
         this.direction = direction;
     }
 
@@ -309,9 +362,11 @@ public class HandStructure implements Serializable, IDefineStructure {
      * The setter of the vector of the palm normal of hand
      * @param palmNormal The vector of the palm normal of hand
      */
-    public void setPalmNormal(SimpleMatrix palmNormal) {
+    @JsonProperty
+    public void setPalmNormal(double[] palmNormal) {
         this.palmNormal = palmNormal;
     }
+
 
     /**
      * The setter of the type of the hand
@@ -325,7 +380,17 @@ public class HandStructure implements Serializable, IDefineStructure {
      * The setter of the matrix normalizer of the hand
      * @param normalizer The matrix normalizer of the hand
      */
+    @JsonIgnore
     private void setNormalizer(SimpleMatrix normalizer) {
+        this.normalizer = MatrixUtils.squareFromSimpleMatrix(normalizer);
+    }
+
+    /**
+     * The setter of the matrix normalizer of the hand
+     * @param normalizer The matrix normalizer of the hand
+     */
+    @JsonProperty
+    private void setNormalizer(double[][] normalizer) {
         this.normalizer = normalizer;
     }
 
@@ -359,14 +424,14 @@ public class HandStructure implements Serializable, IDefineStructure {
         if (!this.getRing().compare(handStructure.getRing(), divergence)) return false;
         if (!this.getPinky().compare(handStructure.getPinky(), divergence)) return false;
 
-        SimpleMatrix direct = handStructure.getDirection();
+        SimpleMatrix direct = handStructure.getDirectionMatrix();
         for (int i = 0; i < 3; i++) {
-            if (Math.abs(direct.get(i) - this.getDirection().get(i)) > divergence) return false;
+            if (Math.abs(direct.get(i) - this.getDirectionMatrix().get(i)) > divergence) return false;
         }
 
-        SimpleMatrix palm = handStructure.getPalmNormal();
+        SimpleMatrix palm = handStructure.getPalmNormalMatrix();
         for (int i = 0; i < 3; i++) {
-            if (Math.abs(palm.get(i) - this.getPalmNormal().get(i)) > divergence) return false;
+            if (Math.abs(palm.get(i) - this.getPalmNormalMatrix().get(i)) > divergence) return false;
         }
 
         return true;
@@ -377,15 +442,16 @@ public class HandStructure implements Serializable, IDefineStructure {
      * @return The new HandStructure normalized with is own matrix normalizer
      */
     @Nullable
+    @JsonIgnore
     public HandStructure getNormalizedHandStructure() {
         try {
-            FingerStructure thumbNew = getThumb().getNormalizedFingerStructure(getNormalizer());
-            FingerStructure indexNew = getIndex().getNormalizedFingerStructure(getNormalizer());
-            FingerStructure middleNew = getMiddle().getNormalizedFingerStructure(getNormalizer());
-            FingerStructure ringNew = getRing().getNormalizedFingerStructure(getNormalizer());
-            FingerStructure pinkyNew = getPinky().getNormalizedFingerStructure(getNormalizer());
+            FingerStructure thumbNew = getThumb().getNormalizedFingerStructure(getNormalizerMatrix());
+            FingerStructure indexNew = getIndex().getNormalizedFingerStructure(getNormalizerMatrix());
+            FingerStructure middleNew = getMiddle().getNormalizedFingerStructure(getNormalizerMatrix());
+            FingerStructure ringNew = getRing().getNormalizedFingerStructure(getNormalizerMatrix());
+            FingerStructure pinkyNew = getPinky().getNormalizedFingerStructure(getNormalizerMatrix());
 
-            return new HandStructure(thumbNew, indexNew, middleNew, ringNew, pinkyNew, getDirection(), getPalmNormal(), getHandType(), getNormalizer());
+            return new HandStructure(thumbNew, indexNew, middleNew, ringNew, pinkyNew, getDirectionMatrix(), getPalmNormalMatrix(), getHandType(), getNormalizerMatrix());
         } catch (BadAttributeValueExpException e) {
             e.printStackTrace();
             return null;

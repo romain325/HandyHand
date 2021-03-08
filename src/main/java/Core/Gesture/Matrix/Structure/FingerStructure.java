@@ -35,6 +35,8 @@ public class FingerStructure implements Serializable {
      */
     private Finger.Type type;
 
+    public FingerStructure(){}
+
     /**
      * A constructor of the class FingerStructure
      * @param finger The finger that we want save information of

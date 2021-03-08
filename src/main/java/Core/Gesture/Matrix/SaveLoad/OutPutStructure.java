@@ -18,7 +18,7 @@ public class OutPutStructure {
      * @param serObject The serializable object that we want to write
      * @param file The name of the file that we want for him
      */
-    public void WriteObjectToFile(Object serObject, String file) {
+    public void writeObjectToFile(Object serObject, String file) {
         try {
             ObjectOutputStream objectOut = new ObjectOutputStream(new FileOutputStream(filePath + File.separator + file));
             objectOut.writeObject(serObject);

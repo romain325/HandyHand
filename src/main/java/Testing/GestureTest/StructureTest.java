@@ -39,12 +39,12 @@ public class StructureTest implements Tester {
         }
 
         try {
-            new OutPutStructure().WriteObjectToFile(new HandStructure(hand), file);
+            new OutPutStructure().writeObjectToFile(new HandStructure(hand), file);
         } catch (BadAttributeValueExpException e) {
             e.printStackTrace();
         }
 
-        SkeletonStructureView skeletonStructureView = new SkeletonStructureView((HandStructure) new InPutStructure().ReadObjectInFile(file));
+        SkeletonStructureView skeletonStructureView = new SkeletonStructureView((HandStructure) new InPutStructure().readObjectInFile(file));
 
         try {
             new ProcessingRendererSkeletonStructureView(controller, skeletonStructureView).show();

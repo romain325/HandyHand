@@ -18,7 +18,7 @@ public class InPutStructure {
      * @param file The name of the file to read
      * @return The object read in the file, or null
      */
-    public Object ReadObjectInFile(String file) {
+    public Object readObjectInFile(String file) {
         try {
             ObjectInputStream objectIn = new ObjectInputStream(new FileInputStream(filePath + File.separator + file));
             Object obj = objectIn.readObject();

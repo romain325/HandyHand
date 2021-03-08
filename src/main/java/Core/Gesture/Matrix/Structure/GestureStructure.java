@@ -1,12 +1,19 @@
 package Core.Gesture.Matrix.Structure;
 
+
+import org.springframework.data.annotation.Id;
+
+import java.io.Serializable;
+import java.util.Base64;
+
 /**
  * A class that contain a structure representing a gesture, with some information
  */
-public class GestureStructure {
+public class GestureStructure implements Serializable {
     /**
      * The id of the gesture
      */
+    @Id
     private String id;
     /**
      * The structure that contains the gesture
@@ -29,36 +36,40 @@ public class GestureStructure {
      */
     private boolean isDistanceImportant = false;
 
+
     /**
      * A constructor of the class GestureStructure
-     * @param id The id of the gesture
      * @param gesture The structure that contains the gesture
      * @param name The name of the gesture
      * @param description The description of the gesture
      */
-    public GestureStructure(String id, IDefineStructure gesture, String name, String description) {
-        setId(id);
+    public GestureStructure(IDefineStructure gesture, String name, String description) {
         setGesture(gesture);
         setName(name);
         setDescription(description);
         setIsDoubleHand(gesture instanceof DoubleHandStructure);
+        setId();
     }
 
     /**
      * A constructor of the class GestureStructure
-     * @param id The id of the gesture
      * @param gesture The structure that contains the gesture
      * @param name The name of the gesture
      * @param description The description of the gesture
      * @param isDistanceImportant If the distance between both hands are important, so the comparison will include it
      */
-    public GestureStructure(String id, IDefineStructure gesture, String name, String description, boolean isDistanceImportant) {
-        setId(id);
+    public GestureStructure(IDefineStructure gesture, String name, String description, boolean isDistanceImportant , boolean isDoubleHand) {
         setGesture(gesture);
         setName(name);
         setDescription(description);
         setIsDoubleHand(gesture instanceof DoubleHandStructure);
         setDistanceImportant(isDistanceImportant);
+        setIsDoubleHand(isDoubleHand);
+        setId();
+    }
+
+    public GestureStructure(){
+
     }
 
     /**
@@ -111,10 +122,9 @@ public class GestureStructure {
 
     /**
      * The setter of the id of the gesture
-     * @param id The id of the gesture
      */
-    private void setId(String id) {
-        this.id = id;
+    private void setId(){
+        id = new String(Base64.getEncoder().encode((name+description).toLowerCase().getBytes()));
     }
 
     /**
@@ -176,4 +186,10 @@ public class GestureStructure {
         }
         return false;
     }
+
+    public void setDoubleHand(boolean doubleHand) {
+        isDoubleHand = doubleHand;
+    }
+
+    public void setId(String id) { this.id = id;}
 }

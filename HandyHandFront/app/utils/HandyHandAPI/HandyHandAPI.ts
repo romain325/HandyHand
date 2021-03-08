@@ -1,4 +1,5 @@
-import { ScriptCard, NewScript } from './HandyHandAPIType';
+import {ExecInfo, NewScript, ScriptCard, UserCreds} from './HandyHandAPIType';
+import { getAuthedHeader } from '../../features/connection/Connexion';
 
 export default class HandyHandAPI {
   private link = 'http://localhost:8080';
@@ -8,14 +9,34 @@ export default class HandyHandAPI {
     return await rep.json();
   }
 
-  private async postToAPI<T>(urlArg: string, data : T) : Promise<any> {
+  private async postToAPI<T>(urlArg: string, data: T): Promise<Response> {
     const options = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     };
-    const rep = await fetch(this.link + urlArg, options);
-    return await rep.json();
+    return await fetch(this.link + urlArg, options);
+  }
+
+  private async actionToAPI<T>(
+    urlArg: string,
+    method: string,
+    authed = false,
+    data: T = ''
+  ): Promise<Response> {
+    const options = {
+      method,
+      headers: {},
+      body: data.toString(),
+    };
+    if (data != '') {
+      options.body = JSON.stringify(data);
+    }
+    if (authed) {
+      options.headers = getAuthedHeader();
+    }
+
+    return await fetch(this.link + urlArg, options);
   }
 
   public async getScriptCards(): Promise<ScriptCard[]> {
@@ -23,6 +44,28 @@ export default class HandyHandAPI {
   }
 
   public async addNewScript(elem: NewScript): Promise<string> {
-    return await this.postToAPI('/script/add', elem);
+    return (await this.postToAPI('/script/add', elem)).text();
+  }
+
+  public async modifyExec(elem: ExecInfo): Promise<string> {
+    return (await this.postToAPI('/exec/modify', elem)).text();
+  }
+
+  public async removeScript(id: string) {
+    await this.actionToAPI(`/script/${id}`, 'DELETE').finally(async () => {
+      await this.actionToAPI(`/scriptDB/${id}`, 'DELETE', true);
+    });
+  }
+
+  public async removeGesture(id: string) {
+    await this.actionToAPI(`/gesture/${id}`, 'DELETE');
+  }
+
+  public async createNewUser(elem: UserCreds): Promise<string> {
+    return (await this.postToAPI('/user/add', elem)).json();
+  }
+
+  public async connectUser(elem: UserCreds): Promise<string> {
+    return (await this.postToAPI('/user/connect', elem)).text();
   }
 }

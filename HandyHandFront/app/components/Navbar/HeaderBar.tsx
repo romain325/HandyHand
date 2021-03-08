@@ -7,29 +7,39 @@ import styles from './HeaderBar.css';
 
 type Props = {
   toggleSidebar: Function;
+  disconnect: Function;
   childrenName?: string;
+  isConnected: boolean;
 };
 
-const HeaderBar = ({ toggleSidebar, childrenName }: Props) => {
-
+const HeaderBar = (props: Props) => {
   return (
     <Navbar className={styles.nav}>
       <Navbar.Brand>
-        <Button variant="secondary" onClick={() => toggleSidebar()}>
+        <Button variant="secondary" onClick={() => props.toggleSidebar()}>
           ☰ HandyHand
+          { props.childrenName == '' || props.childrenName == null ? '' : `/${props.childrenName}`}
         </Button>
       </Navbar.Brand>
-      <Nav className="mr-auto">
-        <p>{ (childrenName == "" || childrenName == null )? "" : `=> ${ childrenName}` } </p>
-      </Nav>
+      <Nav className="mr-auto" />
       <Nav>
-        <Link to={routes.CONNECTION}>
-          <Button variant="primary">Connexion</Button>
-        </Link>
-
-        <Link to={routes.REGISTER}>
-          <Button variant="secondary">Enregistrement</Button>
-        </Link>
+        { !props.isConnected ? (
+          <div>
+            <Link to={routes.CONNECTION} className="btn btn-primary">
+              Connexion
+            </Link>
+            <Link to={routes.REGISTER} className="btn btn-secondary">
+              Register
+            </Link>
+          </div>
+        ) : (
+          <Button
+            onClick={() => props.disconnect()}
+            className="btn btn-primary"
+          >
+            Disconnect
+          </Button>
+        )}
       </Nav>
     </Navbar>
   );

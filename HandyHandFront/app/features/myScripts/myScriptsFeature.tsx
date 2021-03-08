@@ -1,50 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Container, Button } from 'react-bootstrap';
+import { Col, Row, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { Item } from 'electron';
-import CardScript from '../../components/CardScript';
 import routes from '../../constants/routes.json';
 import ContentPage from '../../containers/ContentPage';
-import styles from './myScriptsFeature.css';
-
-interface ItemAPI {
-  description: string;
-  file: string;
-  id: string;
-}
-
-function allCards(items: ItemAPI[]): JSX.Element {
-  const elements: JSX.Element[] = [];
-
-  let i: number = items.length;
-  while (i > 0) {
-    const subElements: JSX.Element[] = [];
-    const iter: number = i < 3 ? i : 3;
-
-    for (let j = 0; j < iter; j++) {
-      subElements.push(
-        <Col>
-          <CardScript
-            title={items[(i - items.length) * -1 + j].file}
-            description={items[(i - items.length) * -1 + j].description}
-          />
-        </Col>
-      );
-    }
-    if (iter == 2) {
-      subElements.push(<Col />);
-    }
-
-    elements.push(<Row>{subElements}</Row>);
-    i -= 3;
-  }
-
-  return <div>{elements}</div>;
-}
+import { ScriptCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
+import { allCards, allList } from '../../utils/display/scriptDisplay';
 
 export default function MyScriptsFeature() {
+  const [isGrid, setIsGrid] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [items, setItems] = useState<ItemAPI[]>([]);
+  const [items, setItems] = useState<ScriptCard[]>([]);
 
   useEffect(() => {
     fetch('http://localhost:8080/script/all')
@@ -79,7 +44,32 @@ export default function MyScriptsFeature() {
   }
 
   return (
-    <ContentPage childrenName="My Scripts">
+    <ContentPage childrenName="Scripts">
+      <Container fluid>
+        <img
+          src={
+            isGrid ? '../resources/img/grid.png' : '../resources/img/list.png'
+          }
+          height="25px"
+          width="25px"
+          style={{
+            margin: '10px',
+          }}
+          onClick={(_e) => {
+            setIsGrid(!isGrid);
+          }}
+        />
+        <Link to={routes.ADD_SCRIPT}>
+          <img
+            src="../resources/img/ajouterIcon.png"
+            height="25px"
+            width="25px"
+            style={{ margin: '15px' }}
+            alt="Add"
+          />
+        </Link>
+      </Container>
+
       <Container
         fluid
         style={{
@@ -88,20 +78,13 @@ export default function MyScriptsFeature() {
           height: '70vh',
         }}
       >
-        <Row>
-          <Link to={routes.ADD_SCRIPT}>
-            <img
-              src="../resources/img/ajouterIcon.png"
-              height="25px"
-              width="25px"
-              style={{ margin: '15px' }}
-              alt="Add"
-            />
-          </Link>
-        </Row>
-        <Row>
-          {items.length == 0 ? <Col>Nothing Found ...</Col> : allCards(items)}
-        </Row>
+        { items.length == 0 ? (
+          <Col>Nothing Found ...</Col>
+        ) : isGrid ? (
+          allCards(items)
+        ) : (
+          allList(items)
+        )}
       </Container>
     </ContentPage>
   );
