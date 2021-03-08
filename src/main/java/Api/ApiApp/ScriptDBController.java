@@ -212,13 +212,10 @@ public class ScriptDBController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The script with the following id has not been found");
         }
 
-
-
         GestureStructure gestureStructure;
         try {
             gestureStructure =  new MongoConnexion().handyDB().findById(script.getIdGesture(),GestureStructure.class);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The gesture associated with the gesture has not been found");
         }
 
@@ -242,7 +239,6 @@ public class ScriptDBController {
         String fileP = filePath+"/"+script.getId()+extension;
         File file = new File(fileP);
 
-        System.out.println(script.getFileDecoded());
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(file));
             writer.write(script.getFileDecoded());
@@ -251,8 +247,6 @@ public class ScriptDBController {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while transcribing on local files");
         }
-
-
 
         Interaction interaction = new Interaction();
         MainListener listener = new GestureListener(gestureStructure.getGesture());
@@ -286,6 +280,9 @@ public class ScriptDBController {
         var obj = new Gson().fromJson(data, JsonObject.class);
 
         Daemon daemon=daemons.remove(obj.get("scriptId").getAsString());
+        if (daemon == null){
+            return "The script is not associated or not founded !";
+        }
         daemon.stop();
 
         return "The script have been successfully dissociated !";
