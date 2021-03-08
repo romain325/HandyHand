@@ -240,7 +240,13 @@ public class ScriptRESTController {
 
         checkFile();
 
-        String fileP = filePath+"/"+script.getId()+extension;
+        String fileP;
+        if ( extension != null ){
+            fileP = filePath+"/"+script.getId()+extension;
+        }else{
+            fileP = filePath+"/"+script.getId();
+        }
+
         File file = new File(fileP);
 
         try {
