@@ -58,20 +58,14 @@ export default class HandyHandAPI {
     return (await this.postToAPI('/exec/modify', elem, false)).text();
   }
 
-  public async removeScript(id: string) {
-    await this.actionToAPI(`/script/${id}`, 'DELETE');
+  public async removeScript(id: string, isOnline : boolean) : Promise{
+    const action = isOnline ? 'scriptDB' : 'script';
+    return await this.actionToAPI(`/${action}/${id}`, 'DELETE', false);
   }
 
-  public async removeScriptDB(id: string) {
-    await this.actionToAPI(`/scriptDB/${id}`, 'DELETE', true);
-  }
-
-  public async modifyScriptDB(script: any) {
-    await this.postToAPI(`/scriptDB/modify`, script, true);
-  }
-
-  public async modifyScript(script: any) {
-    await this.postToAPI(`/script/modify`, script, false);
+  public async modifyScript(script: any, isOnline: boolean) : Promise {
+    const action = isOnline ? 'scriptDB' : 'script';
+    return await this.postToAPI(`/${action}/modify`, script, isOnline);
   }
 
   public async removeGesture(id: string) {

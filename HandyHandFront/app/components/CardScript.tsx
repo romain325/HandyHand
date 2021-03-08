@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Card,
@@ -19,12 +19,14 @@ interface Props {
   gestureSet: Map<string, string>;
   onGestureSelect: (gestureId: string, scriptId: string) => void;
   onDeleteClic: (scriptId: string) => void;
-  onActiveClic: (scriptId : string, isActive: boolean | undefined) => void;
+  onActiveClic: (scriptId: string, isActive: boolean | undefined) => void;
   isActive?: boolean;
 }
 
 export default function CardScript(props: Props): JSX.Element {
-  const [isActive, setIsActive] = useState(props.isActive == null ? false : props.isActive);
+  const [isActive, setIsActive] = useState(
+    props.isActive == null ? false : props.isActive
+  );
 
   return (
     <Card text="dark" className="mb-2 scriptDisplay" id={props.id}>
@@ -34,17 +36,14 @@ export default function CardScript(props: Props): JSX.Element {
             <Card.Text>{propsNameToDisplayName(props.title)}</Card.Text>
           </Col>
           <Col sm={1}>
-            <Form.Check
-              custom
-              id={props.id}
-              type="switch"
-              >
+            <Form.Check custom id={props.id} type="switch">
               <Form.Check.Input checked={isActive} />
               <Form.Check.Label
                 onClick={() => {
                   props.onActiveClic(props.id, isActive);
                   setIsActive(!isActive);
-                }}>
+                }}
+              >
                 {isActive ? 'Listening' : 'Zzz'}
               </Form.Check.Label>
             </Form.Check>
@@ -54,7 +53,6 @@ export default function CardScript(props: Props): JSX.Element {
               variant="danger"
               onClick={() => {
                 props.onDeleteClic(props.id);
-                window.location.reload(false);
               }}
             >
               <FaTrash />

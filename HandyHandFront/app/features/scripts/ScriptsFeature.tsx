@@ -10,6 +10,18 @@ import {
 import { getAuthedHeader } from '../connection/Connexion';
 import { getAddress } from '../../utils/HandyHandAPI/HandyHandConfig';
 
+
+function refreshCards(onLoaded: (scripts: ScriptCard[]) => void) {
+  fetch(`${getAddress()}/scriptDB/all`, {
+    method: 'GET',
+    headers: getAuthedHeader(),
+  })
+    .then((rep) => rep.json())
+    .then((json2) => {
+      onLoaded(json2);
+    });
+}
+
 export default function ScriptsFeatures() {
   const [isGrid, setIsGrid] = useState(true);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -17,6 +29,13 @@ export default function ScriptsFeatures() {
   const [gesture, setGestures] = useState<Map<string, string>>(
     new Map<string, string>()
   );
+
+  const refresh = () => {
+    refreshCards((scripts) => {
+      setItems(scripts);
+      setIsLoaded(true);
+    });
+  };
 
   useEffect(() => {
     fetch(`${getAddress()}/gestureDB/all`, {
@@ -34,17 +53,7 @@ export default function ScriptsFeatures() {
         console.log(gest);
         setGestures(gest);
 
-
-        fetch(`${getAddress()}/scriptDB/all`, {
-          method: 'GET',
-          headers: getAuthedHeader(),
-        })
-          .then((rep) => rep.json())
-          .then((json2) => {
-            setItems(json2);
-            console.log(json2);
-            setIsLoaded(true);
-          });
+        refresh();
       });
   }, []);
 
@@ -87,9 +96,9 @@ export default function ScriptsFeatures() {
         { items.length == 0 ? (
           <Col>Nothing Found ...</Col>
         ) : isGrid ? (
-          allCards(items, gesture, true)
+          allCards(items, gesture, true, refresh)
         ) : (
-          allList(items)
+          allList(items, gesture, true, refresh)
         )}
       </Container>
     </ContentPage>

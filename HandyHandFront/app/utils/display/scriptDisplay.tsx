@@ -13,7 +13,8 @@ export function propsNameToDisplayName(name: string): string {
 export function allCards(
   items: ScriptCard[],
   gestures: Map<string, string>,
-  isOnline: boolean
+  isOnline: boolean,
+  refreshCards: () => void
 ): JSX.Element {
   const elements: JSX.Element[] = [];
 
@@ -28,34 +29,31 @@ export function allCards(
       subElements.push(
         <Col>
           <CardScript
+            key={currentObj.id}
             title={currentObj.file}
             description={currentObj.description}
             id={currentObj.id}
             gestureId={currentObj.idGesture}
             isActive={currentObj.status == 'true'}
             gestureSet={gestures}
-            onGestureSelect={
-              isOnline
-                ? (gestureId, scriptId) => {
-                    new HandyHandAPI().modifyScriptDB({
-                      oldId: scriptId,
-                      idGesture: gestureId,
-                    });
-                    window.location.reload();
-                  }
-                : (gestureId, scriptId) => {
-                    new HandyHandAPI().modifyScript({
-                      oldId: scriptId,
-                      idGesture: gestureId,
-                    });
-                    window.location.reload();
-                  }
-            }
-            onDeleteClic={
-              isOnline
-                ? (scriptId) => new HandyHandAPI().removeScriptDB(scriptId)
-                : (scriptId) => new HandyHandAPI().removeScript(scriptId)
-            }
+            onGestureSelect={(gestureId, scriptId) => {
+              new HandyHandAPI()
+                .modifyScript(
+                  {
+                    oldId: scriptId,
+                    idGesture: gestureId,
+                  },
+                  isOnline
+                )
+                .then(() => {
+                  refreshCards();
+                });
+            }}
+            onDeleteClic={(scriptId) => {
+              new HandyHandAPI()
+                .removeScript(scriptId, isOnline)
+                .then(() => refreshCards());
+            }}
             onActiveClic={(scriptId, isActive) =>
               new HandyHandAPI().switchScript(
                 scriptId,
@@ -78,16 +76,48 @@ export function allCards(
   return <div>{elements}</div>;
 }
 
-export function allList(items: ScriptCard[]): JSX.Element {
+export function allList(
+  items: ScriptCard[],
+  gestures: Map<string, string>,
+  isOnline: boolean,
+  refreshCards: () => void
+): JSX.Element {
   const elements: JSX.Element[] = [];
   for (let i = 0; i < items.length; i++) {
     elements.push(
       <Row>
         <Col>
           <LineScript
+            key={items[i].id}
             title={propsNameToDisplayName(items[i].file)}
             description={items[i].description}
             id={items[i].id}
+            gestureId={items[i].idGesture}
+            isActive={items[i].status == 'true'}
+            gestureSet={gestures}
+            onGestureSelect={(gestureId, scriptId) => {
+              new HandyHandAPI()
+                .modifyScript(
+                  {
+                    oldId: scriptId,
+                    idGesture: gestureId,
+                  },
+                  isOnline
+                )
+                .then(() => refreshCards());
+            }}
+            onDeleteClic={(scriptId) =>
+              new HandyHandAPI()
+                .removeScript(scriptId, isOnline)
+                .then(() => refreshCards())
+            }
+            onActiveClic={(scriptId, isActive) =>
+              new HandyHandAPI().switchScript(
+                scriptId,
+                isActive == null ? false : isActive,
+                isOnline
+              )
+            }
           />
         </Col>
       </Row>
@@ -113,6 +143,7 @@ export function allGestureCards(
       subElements.push(
         <Col>
           <CardGesture
+            key={current.id}
             title={current.name}
             description={current.description}
             id={current.id}

@@ -10,6 +10,14 @@ import {
 import { allCards, allList } from '../../utils/display/scriptDisplay';
 import { getAddress } from '../../utils/HandyHandAPI/HandyHandConfig';
 
+function refreshCards(onLoaded: (scripts: ScriptCard[]) => void) {
+  fetch(`${getAddress()}/script/all`)
+    .then((rep) => rep.json())
+    .then((json2) => {
+      onLoaded(json2);
+    });
+}
+
 export default function MyScriptsFeature() {
   const [isGrid, setIsGrid] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -17,6 +25,13 @@ export default function MyScriptsFeature() {
   const [gesture, setGestures] = useState<Map<string, string>>(
     new Map<string, string>()
   );
+
+  const refresh = () => {
+    refreshCards((scripts) => {
+      setItems(scripts);
+      setIsLoaded(true);
+    });
+  };
 
   useEffect(() => {
     fetch(`${getAddress()}/gesture/all`)
@@ -27,16 +42,9 @@ export default function MyScriptsFeature() {
           gest.set(r.id, r.name);
         }
         gest.set('', 'None');
-        console.log(gest);
         setGestures(gest);
 
-        fetch(`${getAddress()}/script/all`)
-          .then((rep) => rep.json())
-          .then((json2) => {
-            console.log(json2);
-            setItems(json2);
-            setIsLoaded(true);
-          });
+        refresh();
       });
   }, []);
 
@@ -100,9 +108,9 @@ export default function MyScriptsFeature() {
         {items.length == 0 ? (
           <Col>Nothing Found ...</Col>
         ) : isGrid ? (
-          allCards(items, gesture, false)
+          allCards(items, gesture, false, refresh)
         ) : (
-          allList(items)
+          allList(items, gesture, false, refresh)
         )}
       </Container>
     </ContentPage>
