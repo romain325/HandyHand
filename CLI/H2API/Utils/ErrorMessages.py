@@ -21,13 +21,13 @@ class ErrorMessages:
 
     def __notFound(self, res):
         self.console.print(
-            "[bold]404 Not Found:[/bold] [i]oops![/i] we're not able to find the information you wanted",
+            f"[bold]404 Not Found:[/bold] [i]oops![/i] we're not able to find the information you wanted\n#{res.json()['message']}",
             style="red")
         sys.exit(2)
 
     def __internalServerError(self, res):
         self.console.print(
-            "[bold]500 Internal Server Error:[/bold] [i]oops![/i] Outch what when wrong?",
+            f"[bold]500 Internal Server Error:[/bold] [i]oops![/i] Outch what when wrong?\n#{res.json()['message']}",
             style="red")
         sys.exit(2)
 

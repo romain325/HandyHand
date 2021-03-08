@@ -35,9 +35,9 @@ class H2DBScript(ApiEndpoint):
                               f"--gest <Gesture id>: Gesture to link with\n" \
                               f"--args <ExecutableArguments>: arguments given at the exec (seperated by a comma: ',')"
 
-        self.switcher["switch"] = self.switchScriptState
-        self.options["switch"] = f"<script id>: Id of the script you want to switch On/Off" \
-                                 f"-t <path to token>: Specify a particular connection token\n"
+        self.switcher["listen"] = self.switchScriptState
+        self.options["listen"] = f"<script id>: Id of the script you want to switch On/Off\n" \
+                                 f"-t <path to token>: Specify a particular connection token"
 
         self.switcher["modify"] = self.modifyScript
         self.options["modify"] = f"<script id>: Script ID you want to modify\n" \
@@ -192,7 +192,7 @@ class H2DBScript(ApiEndpoint):
         helpTable.add_row("delete", "Delete a script from a given id", self.getOption("delete"))
         helpTable.add_row("add", "Add a new script from given data", self.getOption("add"))
         helpTable.add_row("modify", "Modify a script given by his id", self.getOption("modify"))
-        helpTable.add_row("switch", "Switch a script on or off", self.getOption("switch"))
+        helpTable.add_row("listen", "Switch a script on or off", self.getOption("listen"))
 
         self.utils.console.print(helpTable)
         return
