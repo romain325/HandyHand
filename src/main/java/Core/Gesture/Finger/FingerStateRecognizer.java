@@ -2,7 +2,6 @@ package Core.Gesture.Finger;
 
 import com.leapmotion.leap.Finger;
 import com.leapmotion.leap.Hand;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +10,7 @@ import java.util.Map;
  */
 public class FingerStateRecognizer {
     /**
-     * The FingerCurveCalculator that we use in this class
+     * The instance to calculate the different curves of the fingers
      */
     private final FingerCurveCalculator fingerCurveCalculator = new FingerCurveCalculator();
 
@@ -66,15 +65,19 @@ public class FingerStateRecognizer {
      * @return The State of the Finger
      */
     private FingerState recognizeState(float f){
-        if(f < 0){
+        //If the curve is under 0, it's an error
+        if(f < 0 || f > 100){
             return FingerState.ERROR;
         }
+        //If the curve is between 0 and 15, the finger is out
         if(f < 15){
             return FingerState.OUT;
         }
+        //If the curve is between 75 and 100, the finger is bend
         if (f > 75) {
             return FingerState.BENDING;
         }
+        //Else, the finger is set to normal
         return FingerState.NORMAL;
     }
 
