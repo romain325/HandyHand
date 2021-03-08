@@ -20,10 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.NameNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -226,18 +223,14 @@ public class ScriptDBController {
         Script script;
         try{
             script = new MongoConnexion().handyDB().findById(obj.get("scriptId").getAsString(),Script.class);
-
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The script with the following id has not been found");
         }
-
-
 
         GestureStructure gestureStructure;
         try {
             gestureStructure =  new MongoConnexion().handyDB().findById(script.getIdGesture(),GestureStructure.class);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The gesture associated with the gesture has not been found");
         }
 
@@ -267,19 +260,19 @@ public class ScriptDBController {
         File file = new File(fileP);
 
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(script.getFile());
+            PrintWriter writer = new PrintWriter(new FileWriter(file));
+            writer.write(script.getFileDecoded());
             writer.close();
         } catch (IOException e) {
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while transcribing on local files");
         }
-
-
 
         Interaction interaction = new Interaction();
         MainListener listener = new GestureListener(gestureStructure.getGesture());
         interaction.addListener(new MainListener[]{listener}, new Script(exec.getValue(), script.getArgs() ,fileP));
         Daemon daemon = new Daemon(script.getId(), new CallLoop(interaction));
+        System.out.println(daemon);
         daemons.put(daemon.getDaemonName(),daemon);
 
         //TODO remplacer liste de démon par démon unique
@@ -307,6 +300,9 @@ public class ScriptDBController {
         var obj = new Gson().fromJson(data, JsonObject.class);
 
         Daemon daemon=daemons.remove(obj.get("scriptId").getAsString());
+        if (daemon == null){
+            return "The script is not associated or not founded !";
+        }
         daemon.stop();
 
         return "The script have been successfully dissociated !";
