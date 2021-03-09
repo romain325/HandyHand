@@ -7,3 +7,9 @@ HandyHand.iml
 # Gradle
 .gradle/
 build/
+
+# python
+__pycache__/
+
+#perso
+user.token

@@ -4,6 +4,7 @@ import Core.Script.Script;
 import Core.StubPersistence.ScriptPersistance;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.mongodb.lang.Nullable;
 import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,17 @@ import javax.naming.NameNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+/**
+ * Control local script
+ */
 @RestController
 @RequestMapping("/script")
 public class ScriptRESTController {
 
+    /**
+     * Get all scripts id's
+     * @return list of id
+     */
     @GetMapping("/allId")
     public List<String> allId(){
         List<String> ids = new LinkedList<>();
@@ -31,28 +39,45 @@ public class ScriptRESTController {
         return ids;
     }
 
+    /**
+     * Get all scripts
+     * @return scripts' list
+     */
     @GetMapping("/all")
-    public List<Map<String,String>> all() throws Exception {
-        List<Map<String,String>> elems = new ArrayList<>();
-        for (var e : new ScriptPersistance().getAll()){
-            elems.add(new HashMap<>(){{put("file", e.getFile()); put("description", e.getDescription()); put("id", e.getId());}});
+    public List<Map<String,String>> all() {
+        try {
+            List<Map<String,String>> elems = new ArrayList<>();
+            for (var e : new ScriptPersistance().getAll()){
+                elems.add(new HashMap<>(){{put("file", e.getFile()); put("description", e.getDescription()); put("id", e.getId());}});
+            }
+            return elems;
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while fetching scripts");
         }
-        return elems;
+
     }
 
+    /**
+     * Get one script informations
+     * @param id script id
+     * @return script jsonObject
+     */
     @GetMapping("/{id}")
     public Script getById(@PathVariable String id){
         try {
             return new ScriptPersistance().getById(id);
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Script with this ID found",e);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error occurred while getting script by id",e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred while getting script by id",e);
         }
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Script not found !");
     }
 
+    /**
+     * Delete a script from his id
+     * @param id script id
+     * @return True if action succeed
+     */
     @DeleteMapping("/{id}")
     public boolean deleteScript(@PathVariable String id){
         try{
@@ -60,19 +85,20 @@ public class ScriptRESTController {
             scriptPersistance.remove(scriptPersistance.getById(id));
             return true;
         } catch (NameNotFoundException e) {
-            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Script not found !");
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while deleting script",e);
         }
-        throw new ResponseStatusException(
-                HttpStatus.NOT_FOUND, "Script not found !");
     }
 
+    /**
+     * Add a new script to local
+     * @param req Request
+     * @param data { "file": "", "description": "" , "execType": "", "args": [],"idGesture" : "" }
+     * @return Snew script ID
+     */
     @PostMapping("/add")
-    public String addScript(HttpServletRequest req, @RequestBody String data) {
-        //TODO Verify Identity
-
-        //Methods in order to get args
+    public String addScript(@Nullable HttpServletRequest req, @RequestBody String data) {
         var obj = new Gson().fromJson(data, JsonObject.class);
         List<String> args = new ArrayList<>();
         for (var elem : obj.getAsJsonArray("args")){
@@ -80,13 +106,11 @@ public class ScriptRESTController {
         }
 
         Script script;
-
         try{
-            script = new Script(obj.get("execType").getAsString(), args.toArray(new String[0]), obj.get("file").getAsString(), (obj.get("description") == null ? "" : obj.get("description").getAsString()));
+            script = new Script(obj.get("execType").getAsString(), args.toArray(new String[0]), obj.get("file").getAsString(), (obj.get("description") == null ? "" : obj.get("description").getAsString()),(obj.get("idGesture") == null ? "" : obj.get("idGesture").getAsString()));
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error adding: Bad Arguments");
         }
-
 
         try {
             new ScriptPersistance().getById(script.getId());
@@ -95,18 +119,20 @@ public class ScriptRESTController {
                 new ScriptPersistance().save(script);
                 return script.getId();
             } catch (Exception e1) {
-                e.printStackTrace();
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, "Error while adding the script !", e1);
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while adding the script !", e1);
             }
         }
-        return "Error while adding scripts : Name already exist";
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Error while adding scripts : Name already exist");
     }
 
+    /**
+     * Modify an existing script
+     * @param req request
+     * @param data { "oldId": "", "file": "", "description": "" , "execType": "", "args": [],"idGesture" : "" }
+     * @return modified script id
+     */
     @PostMapping("/modify")
-    public String modifyScript(HttpServletRequest req, @RequestBody String data) {
-        //TODO Verify Identity
-
+    public String modifyScript(@Nullable HttpServletRequest req, @RequestBody String data) {
         var objNew = new Gson().fromJson(data, JsonObject.class);
         Script oldScript;
         ScriptPersistance scriptPersistance = new ScriptPersistance();
@@ -121,7 +147,7 @@ public class ScriptRESTController {
 
         Map<String, String> elements = new HashMap<>(){{
             put("file",oldScript.getFile());
-            put("execPath",oldScript.getExecType());
+            put("execType",oldScript.getExecType());
             put("description", oldScript.getDescription());
         }};
 
@@ -140,7 +166,7 @@ public class ScriptRESTController {
 
         if(argsNew.isEmpty()) argsNew = Arrays.asList(oldScript.getArgs());
 
-        Script newScript = new Script(elements.get("execPath"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"));
+        Script newScript = new Script(elements.get("execType"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"), elements.get("idGesture"));
 
         try{
             try {
@@ -151,9 +177,9 @@ public class ScriptRESTController {
                     return newScript.getId();
             }
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Error while saving",e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error while modifying script : Saving",e);
         }
-        return "Error during modifying !";
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error while modifying script");
     }
 
 

@@ -16,7 +16,6 @@ export default function MyScriptsFeature() {
       .then((rep) => rep.json())
       .then((json) => {
         setItems(json);
-        console.log(json);
         setIsLoaded(true);
       });
   }, []);
@@ -84,7 +83,7 @@ export default function MyScriptsFeature() {
           allCards(items)
         ) : (
           allList(items)
-        ) }
+        )}
       </Container>
     </ContentPage>
   );

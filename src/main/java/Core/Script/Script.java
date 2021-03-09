@@ -1,20 +1,23 @@
 package Core.Script;
 
-import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Base64;
+import java.util.Objects;
 
 public class Script implements Runnable {
-    private String id = getId();
+    @Id
+    private String id;
     private static final int EXEC_TIME_COOLDOWN = 3000;
     private static String userOS = System.getProperty("os.name");
-    private  String execType;
-    private  String[] args;
-    private  String file;
-    private  String description;
+    private String execType;
+    private String[] args;
+    private String file;
+    private String description;
+    private String idGesture;
 
     public String getDescription() { return description; }
 
@@ -41,14 +44,16 @@ public class Script implements Runnable {
     public void setId(String id) { this.id = id; }
 
     public Script(String execPath, String[] args, String file) {
-        this(execPath,args,file,"");
+        this(execPath,args,file,"","");
     }
 
-    public Script(String execPath, String[] args, String file, String description) {
+    public Script(String execPath, String[] args, String file, String description, String idGesture) {
         this.execType = execPath;
         this.args = args;
         this.file = file;
         this.description = description;
+        id = getId();
+        this.idGesture= idGesture;
     }
     public Script(){}
 
@@ -81,6 +86,24 @@ public class Script implements Runnable {
         return obj.getClass() == Script.class && ((Script) obj).getId().equals(this.getId());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 
+    public static String getUserOS() {
+        return userOS;
+    }
 
+    public static void setUserOS(String userOS) {
+        Script.userOS = userOS;
+    }
+
+    public String getIdGesture() {
+        return idGesture;
+    }
+
+    public void setIdGesture(String idGesture) {
+        this.idGesture = idGesture;
+    }
 }

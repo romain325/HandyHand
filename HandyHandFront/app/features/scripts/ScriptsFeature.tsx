@@ -5,6 +5,7 @@ import ContentPage from '../../containers/ContentPage';
 import { allCards, allList } from '../../utils/display/scriptDisplay';
 import { ScriptCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
 import { getAuthedHeader } from '../connection/Connexion';
+import { getAddress } from '../../utils/HandyHandAPI/HandyHandConfig';
 
 export default function ScriptsFeatures() {
   const [isGrid, setIsGrid] = useState(true);
@@ -12,8 +13,7 @@ export default function ScriptsFeatures() {
   const [items, setItems] = useState<ScriptCard[]>([]);
 
   useEffect(() => {
-
-    fetch('http://localhost:8080/scriptDB/all', {
+    fetch( `${getAddress()}/scriptDB/all`, {
       method: 'GET',
       headers: getAuthedHeader(),
     })

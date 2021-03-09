@@ -1,9 +1,11 @@
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
-import { Link } from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import { Button, Nav } from 'react-bootstrap';
 import routes from '../../constants/routes.json';
 import styles from './HeaderBar.css';
+import {getAuthedHeader} from "../../features/connection/Connexion";
+import {getAddress} from "../../utils/HandyHandAPI/HandyHandConfig";
 
 type Props = {
   toggleSidebar: Function;
@@ -13,6 +15,8 @@ type Props = {
 };
 
 const HeaderBar = (props: Props) => {
+  const history = useHistory();
+
   return (
     <Navbar className={styles.nav}>
       <Navbar.Brand>
@@ -23,7 +27,7 @@ const HeaderBar = (props: Props) => {
       </Navbar.Brand>
       <Nav className="mr-auto" />
       <Nav>
-        { !props.isConnected ? (
+        {!props.isConnected ? (
           <div>
             <Link to={routes.CONNECTION} className="btn btn-primary">
               Connexion
@@ -33,12 +37,25 @@ const HeaderBar = (props: Props) => {
             </Link>
           </div>
         ) : (
-          <Button
-            onClick={() => props.disconnect()}
-            className="btn btn-primary"
-          >
-            Disconnect
-          </Button>
+          <div>
+            <Button
+              onClick={() => {
+                fetch(`${getAddress()}/env/sync`, {
+                  method: 'GET',
+                  headers: getAuthedHeader(),
+                }).then(() => history.push(routes.MY_SCRIPT));
+              }}
+              className="btn btn-secondary"
+            >
+              Sync Env
+            </Button>
+            <Button
+              onClick={() => props.disconnect()}
+              className="btn btn-primary"
+            >
+              Disconnect
+            </Button>
+          </div>
         )}
       </Nav>
     </Navbar>

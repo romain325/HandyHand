@@ -1,44 +1,27 @@
 package Core.Gesture;
 
-import Core.Gesture.HandPoses.HandType;
-import Core.Gesture.HandPoses.IGesture;
-import Core.Gesture.HandPoses.Poses.Fuck;
-import Core.Gesture.HandPoses.Poses.Leaf;
-import Core.Gesture.HandPoses.Poses.Rock;
-import Core.Gesture.HandPoses.Poses.Scissors;
+import Core.Gesture.Matrix.Structure.IDefineStructure;
+import Core.Gesture.Matrix.Structure.StructureManager;
 import com.leapmotion.leap.Frame;
 
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * A class to manage some match of gestures
+ */
 public class GestureMatcher {
-    private static final Map<String, IGesture> gestures = new HashMap<>();
+    /**
+     * All the gestures that exist
+     */
+    IDefineStructure gestureStructure;
 
-    public static boolean gestureExist(String key){
-        return gestures.containsKey(key);
-    }
-
-    public static void addGesture(String name, IGesture method) throws IllegalArgumentException {
-        // TODO verification
-        if(gestureExist(name)){
-            throw new IllegalArgumentException("This Gesture Already Exists");
-        }
-
-        gestures.put(name,method);
-    }
-
-    public static boolean getResult(String key, Frame frame, HandType hand) throws IllegalArgumentException {
-        if(!gestureExist(key)){
-            throw new IllegalArgumentException("This gesture is not in the registry");
-        }
-        return gestures.get(key).invoke(frame, hand);
+    public GestureMatcher(IDefineStructure gestureStructure) {
+        this.gestureStructure= gestureStructure;
     }
 
 
-    public static void init(){
-        addGesture("rock", new Rock());
-        addGesture("leaf", new Leaf());
-        addGesture("scissors", new Scissors());
-        addGesture("fuck", new Fuck());
+    public boolean getResult(Frame frame){
+        IDefineStructure iDefineStructure = new StructureManager().getStructureFromFrame(frame);
+        if(iDefineStructure == null) return false;
+        return new StructureManager().compareWithNormalization(iDefineStructure,gestureStructure, 20);
     }
+
 }
