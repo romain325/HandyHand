@@ -88,6 +88,10 @@ export default class HandyHandAPI {
     return await this.getFromAPI('/api/check');
   }
 
+  public async isConnected(): Promise<boolean> {
+    return await this.getFromAPI('/leap/state');
+  }
+
   public async switchScript(id: string, isActive: boolean, isOnline: boolean) {
     const place = isOnline ? 'scriptDB' : 'script';
     const action = isActive ? 'stop' : 'launch';

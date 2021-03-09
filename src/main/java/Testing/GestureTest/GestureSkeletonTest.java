@@ -18,7 +18,7 @@ public class GestureSkeletonTest implements Tester {
         Controller controller = new Controller();
         skeletonTest(controller);
 
-        GestureMatcher.init();
+        //GestureMatcher.init();
 
         gestureTesting();
         try {
@@ -30,10 +30,12 @@ public class GestureSkeletonTest implements Tester {
 
     public void gestureTesting(){
         Interaction interaction = new Interaction();
+        /*
         MainListener listener = GestureListener.GestureListenerFactory("rock");
         interaction.addListener(new MainListener[]{listener}, new Script("test.bat", new String[]{} ,""));
         Daemon daemon = new Daemon("GestureListener", new CallLoop(interaction));
         daemon.start();
+        */
     }
 
     private void skeletonTest(Controller controller){

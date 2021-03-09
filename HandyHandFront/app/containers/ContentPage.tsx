@@ -27,14 +27,14 @@ const ContentPage = (props: Props) => {
     <div className="fullHeight">
       <HeaderBar toggleSidebar={toggleNavBar} childrenName={childrenName} isConnected={isConnected} disconnect={disconnect} />
       <Row className="fullHeight">
-        <Col md={isOpen ? 4 : 0}
+        <Col md={isOpen ? 2 : 0}
           style={{
-            display:`${isOpen ? 'inherit' : 'none'}`
+            display: `${isOpen ? 'inherit' : 'none'}`,
           }}
         >
           <SideBar isOpen={isOpen} toggleBar={toggleNavBar} isConnected={isConnected} />
         </Col>
-        <Col md={isOpen ? 8 : 12}>
+        <Col md={isOpen ? 10 : 12}>
           {children}
         </Col>
       </Row>
