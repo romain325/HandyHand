@@ -69,6 +69,9 @@ public class GestureStructure implements Serializable {
         setId();
     }
 
+    /**
+     * A constructor of the class GestureStructure. This one do nothing
+     */
     public GestureStructure(){
 
     }
@@ -188,12 +191,25 @@ public class GestureStructure implements Serializable {
         return false;
     }
 
+    /**
+     * The setter of the the boolean DoubleHand to know if the Structure is a DoubleHandStructure
+     * @param doubleHand The boolean DoubleHand to know if the Structure is a DoubleHandStructure
+     */
     public void setDoubleHand(boolean doubleHand) {
         isDoubleHand = doubleHand;
     }
 
+    /**
+     * The setter of the id of the GestureStructure
+     * @param id The id of the GestureStructure
+     */
     public void setId(String id) { this.id = id;}
 
+    /**
+     * A method to know if two GestureStructure are the same
+     * @param o The Object that we want to compare with the current one
+     * @return True if both GestureStructure have the same id
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -202,6 +218,10 @@ public class GestureStructure implements Serializable {
         return id.equals(that.id);
     }
 
+    /**
+     * The method to get the hash code of the object
+     * @return The hash code of the object
+     */
     @Override
     public int hashCode() {
         return Objects.hash(id);

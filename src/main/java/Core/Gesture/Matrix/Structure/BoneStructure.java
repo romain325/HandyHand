@@ -32,7 +32,6 @@ public class BoneStructure implements Serializable {
 
     }
 
-
     /**
      * A constructor of the class BoneStructure
      * @param bone The bone that we want to save informations
