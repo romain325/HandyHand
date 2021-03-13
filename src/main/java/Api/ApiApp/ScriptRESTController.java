@@ -1,6 +1,15 @@
 package Api.ApiApp;
 
+import Api.ApiApp.Database.MongoConnexion;
+import Core.Daemon.CallLoop;
+import Core.Daemon.Daemon;
+import Core.Gesture.Matrix.Structure.GestureStructure;
+import Core.Interaction.Interaction;
+import Core.Listener.GestureListener;
+import Core.Listener.MainListener;
 import Core.Script.Script;
+import Core.StubPersistence.ExecPersistance;
+import Core.StubPersistence.GesturePersistance;
 import Core.StubPersistence.ScriptPersistance;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -12,6 +21,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.NameNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -20,6 +35,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/script")
 public class ScriptRESTController {
+    private final String filePath = System.getProperty("user.home") + File.separator + ".handyhand" + File.separator + "scripts";
+    Map<String,Daemon> daemons = new TreeMap<>();
 
     /**
      * Get all scripts id's
@@ -48,7 +65,13 @@ public class ScriptRESTController {
         try {
             List<Map<String,String>> elems = new ArrayList<>();
             for (var e : new ScriptPersistance().getAll()){
-                elems.add(new HashMap<>(){{put("file", e.getFile()); put("description", e.getDescription()); put("id", e.getId());}});
+                elems.add(new HashMap<>(){{
+                    put("file", e.getFile());
+                    put("description", e.getDescription());
+                    put("id", e.getId());
+                    put("idGesture", e.getIdGesture() == null ? "" : e.getIdGesture());
+                    put("status", String.valueOf(false)); // TODO CHANGE WHEN IMPLEMENTATION ALLOW TO
+                }});
             }
             return elems;
         } catch (Exception e) {
@@ -149,6 +172,7 @@ public class ScriptRESTController {
             put("file",oldScript.getFile());
             put("execType",oldScript.getExecType());
             put("description", oldScript.getDescription());
+            put("idGesture", oldScript.getIdGesture());
         }};
 
         for(var elem : elements.keySet()){
@@ -166,7 +190,12 @@ public class ScriptRESTController {
 
         if(argsNew.isEmpty()) argsNew = Arrays.asList(oldScript.getArgs());
 
-        Script newScript = new Script(elements.get("execType"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"), elements.get("idGesture"));
+        Script newScript = new Script(
+                elements.get("execType"),
+                argsNew.toArray(new String[0]),
+                elements.get("file"),
+                elements.get("description"),
+                elements.get("idGesture"));
 
         try{
             try {
@@ -182,5 +211,109 @@ public class ScriptRESTController {
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error while modifying script");
     }
 
+    /***
+     * Launch the recognition of the gesture to launch the script
+     * @param req httpRequest
+     * @param data { "scriptId" : ""}
+     * @return launch script
+     */
+    @PostMapping("/launch")
+    public String launchScript(HttpServletRequest req, @RequestBody String data) {
+        var obj = new Gson().fromJson(data, JsonObject.class);
 
+        Script script;
+        try{
+            script = new ScriptPersistance().getById(obj.get("scriptId").getAsString());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The script with the following id has not been found");
+        }
+
+        GestureStructure gestureStructure;
+        try {
+            gestureStructure =  new GesturePersistance().getById(script.getIdGesture());
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The gesture associated with the gesture has not been found");
+        }
+
+        Map.Entry<String,String> exec;
+        try {
+            exec =new ExecPersistance().getByName(script.getExecType());
+        } catch (NameNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The interpreter is not defined yet or not exact");
+        }
+
+        Map<String,String> map = new HashMap<>();
+
+        map.put("Python",".py");
+        map.put("PHP",".php");
+        //TODO add all programming languages extensions
+
+        String extension = map.get(exec.getKey());
+
+        checkFile();
+
+        String fileP;
+        if ( extension != null ){
+            fileP = filePath+"/"+script.getId()+extension;
+        }else{
+            fileP = filePath+"/"+script.getId();
+        }
+
+        File file = new File(fileP);
+
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter(file));
+            writer.write(script.getFileDecoded());
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while transcribing on local files");
+        }
+
+        Interaction interaction = new Interaction();
+        MainListener listener = new GestureListener(gestureStructure.getGesture());
+        interaction.addListener(new MainListener[]{listener}, new Script(exec.getValue(), script.getArgs() ,fileP));
+        Daemon daemon = new Daemon(script.getId(), new CallLoop(interaction));
+        System.out.println(daemon);
+        daemons.put(daemon.getDaemonName(),daemon);
+
+        //TODO remplacer liste de démon par démon unique
+        daemon.start();
+
+        return "The script have been successfully associated with the gesture and can now be launch by executing the gesture !";
+    }
+
+    private void checkFile() {
+        if(!Files.exists(Path.of(filePath))){
+            File dir =new File(filePath);
+            dir.mkdirs();
+        }
+    }
+
+    /***
+     * Stop the recognition of the gesture to launch the script
+     * @param req httpRequest
+     * @param data { "scriptId" : ""}
+     * @return launch script
+     */
+    @PostMapping("/stop")
+    public String stopScript(HttpServletRequest req, @RequestBody String data) {
+        var obj = new Gson().fromJson(data, JsonObject.class);
+
+        Daemon daemon = daemons.remove(obj.get("scriptId").getAsString());
+        if (daemon == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The script is not associated or not founded !");
+        }
+
+        daemon.interrupt();
+
+        return "The script have been successfully dissociated !";
+    }
+
+    @PostMapping("/status")
+    public boolean checkStatus(HttpServletRequest req, @RequestBody String data){
+        var obj = new Gson().fromJson(data, JsonObject.class);
+
+        return daemons.containsKey(obj.get("scriptId").getAsString());
+    }
 }

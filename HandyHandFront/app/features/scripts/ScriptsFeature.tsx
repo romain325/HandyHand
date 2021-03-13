@@ -3,25 +3,57 @@ import { Col, Container, Row } from 'react-bootstrap';
 
 import ContentPage from '../../containers/ContentPage';
 import { allCards, allList } from '../../utils/display/scriptDisplay';
-import { ScriptCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
+import {
+  GestureCard,
+  ScriptCard,
+} from '../../utils/HandyHandAPI/HandyHandAPIType';
 import { getAuthedHeader } from '../connection/Connexion';
 import { getAddress } from '../../utils/HandyHandAPI/HandyHandConfig';
 
+
+function refreshCards(onLoaded: (scripts: ScriptCard[]) => void) {
+  fetch(`${getAddress()}/scriptDB/all`, {
+    method: 'GET',
+    headers: getAuthedHeader(),
+  })
+    .then((rep) => rep.json())
+    .then((json2) => {
+      onLoaded(json2);
+    });
+}
+
 export default function ScriptsFeatures() {
   const [isGrid, setIsGrid] = useState(true);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [items, setItems] = useState<ScriptCard[]>([]);
+  const [gesture, setGestures] = useState<Map<string, string>>(
+    new Map<string, string>()
+  );
+
+  const refresh = () => {
+    refreshCards((scripts) => {
+      setItems(scripts);
+      setIsLoaded(true);
+    });
+  };
 
   useEffect(() => {
-    fetch( `${getAddress()}/scriptDB/all`, {
+    fetch(`${getAddress()}/gestureDB/all`, {
       method: 'GET',
       headers: getAuthedHeader(),
     })
       .then((rep) => rep.json())
       .then((json) => {
-        setItems(json);
         console.log(json);
-        setIsLoaded(true);
+        const gest = new Map<string, string>();
+        for (const r of json as GestureCard[]) {
+          gest.set(r.id, r.name);
+        }
+        gest.set('', 'None');
+        console.log(gest);
+        setGestures(gest);
+
+        refresh();
       });
   }, []);
 
@@ -64,10 +96,10 @@ export default function ScriptsFeatures() {
         { items.length == 0 ? (
           <Col>Nothing Found ...</Col>
         ) : isGrid ? (
-          allCards(items)
+          allCards(items, gesture, true, refresh)
         ) : (
-          allList(items)
-        ) }
+          allList(items, gesture, true, refresh)
+        )}
       </Container>
     </ContentPage>
   );

@@ -21,6 +21,9 @@ export default function ConnectionFeature() {
     new HandyHandAPI()
       .connectUser(data)
       .then((r) => {
+        if(r[0] == "{"){
+          throw JSON.parse(r);
+        }
         saveToken(r);
         history.push(routes.MY_SCRIPT);
       })

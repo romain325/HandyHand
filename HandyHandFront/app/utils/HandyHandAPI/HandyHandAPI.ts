@@ -10,10 +10,12 @@ export default class HandyHandAPI {
     return await rep.json();
   }
 
-  private async postToAPI<T>(urlArg: string, data: T): Promise<Response> {
+  private async postToAPI<T>(urlArg: string, data: T, isAuthed : boolean): Promise<Response> {
     const options = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: isAuthed
+        ? getAuthedHeader()
+        : { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     };
     return await fetch(this.link + urlArg, options);
@@ -45,21 +47,25 @@ export default class HandyHandAPI {
   }
 
   public async addNewScript(elem: NewScript): Promise<string> {
-    return (await this.postToAPI('/script/add', elem)).text();
+    return (await this.postToAPI('/script/add', elem, false)).text();
   }
 
   public async addNewGesture(elem: GestureCard): Promise<Response> {
-    return (await this.postToAPI('/gesture/add', elem));
+    return (await this.postToAPI('/gesture/add', elem, false));
   }
 
   public async modifyExec(elem: ExecInfo): Promise<string> {
-    return (await this.postToAPI('/exec/modify', elem)).text();
+    return (await this.postToAPI('/exec/modify', elem, false)).text();
   }
 
-  public async removeScript(id: string) {
-    await this.actionToAPI(`/script/${id}`, 'DELETE').finally(async () => {
-      await this.actionToAPI(`/scriptDB/${id}`, 'DELETE', true);
-    });
+  public async removeScript(id: string, isOnline : boolean) : Promise{
+    const action = isOnline ? 'scriptDB' : 'script';
+    return await this.actionToAPI(`/${action}/${id}`, 'DELETE', false);
+  }
+
+  public async modifyScript(script: any, isOnline: boolean) : Promise {
+    const action = isOnline ? 'scriptDB' : 'script';
+    return await this.postToAPI(`/${action}/modify`, script, isOnline);
   }
 
   public async removeGesture(id: string) {
@@ -71,10 +77,24 @@ export default class HandyHandAPI {
   }
 
   public async createNewUser(elem: UserCreds): Promise<string> {
-    return (await this.postToAPI('/user/add', elem)).json();
+    return (await this.postToAPI('/user/add', elem, false)).json();
   }
 
   public async connectUser(elem: UserCreds): Promise<string> {
-    return (await this.postToAPI('/user/connect', elem)).text();
+    return (await this.postToAPI('/user/connect', elem, false)).text();
+  }
+
+  public async isAlive(): Promise<boolean> {
+    return await this.getFromAPI('/api/check');
+  }
+
+  public async isConnected(): Promise<boolean> {
+    return await this.getFromAPI('/leap/state');
+  }
+
+  public async switchScript(id: string, isActive: boolean, isOnline: boolean) {
+    const place = isOnline ? 'scriptDB' : 'script';
+    const action = isActive ? 'stop' : 'launch';
+    await this.postToAPI(`/${place}/${action}`, { scriptId: id }, isOnline);
   }
 }

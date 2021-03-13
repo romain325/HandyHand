@@ -21,17 +21,19 @@ export default function AddScriptFeature() {
     if (file == null) {
       throw new Error('No file found');
     }
-    const returnData: NewScript = {
-      file: file.path,
-      description: data.description,
-      execType: file.type,
-      args: [],
-    };
 
-    new HandyHandAPI()
-      .addNewScript(returnData)
-      .then((r) => history.push(routes.MY_SCRIPT))
-      .catch((err) => console.log(err));
+    file.text().then((val) => {
+      const returnData: NewScript = {
+        file: btoa(val),
+        description: data.description,
+        execType: file.type,
+        args: [],
+      };
+      new HandyHandAPI()
+        .addNewScript(returnData)
+        .then((r) => history.push(routes.MY_SCRIPT))
+        .catch((err) => console.log(err));
+    });
   };
 
   return (
@@ -49,7 +51,7 @@ export default function AddScriptFeature() {
                 name="file"
                 ref={register({ required: true })}
               />
-              { errors.file && errors.file.type === "required" && (
+              {errors.file && errors.file.type === 'required' && (
                 <div className="error">The file is mandatory</div>
               )}
             </Form.Group>
@@ -64,7 +66,9 @@ export default function AddScriptFeature() {
                 ref={register}
               />
             </Form.Group>
-            <Button type="submit" variant="primary">SUBMIT</Button>
+            <Button type="submit" variant="primary">
+              SUBMIT
+            </Button>
           </Form>
         </Row>
       </Container>

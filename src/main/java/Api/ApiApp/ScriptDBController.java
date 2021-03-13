@@ -20,10 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.naming.NameNotFoundException;
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -68,7 +65,16 @@ public class ScriptDBController {
         try{
             List<Map<String,String>> elems = new ArrayList<>();
             for (var e : new MongoConnexion().handyDB().findAll(Script.class)){
-                elems.add(new HashMap<>(){{put("file", e.getFile()); put("description", e.getDescription()); put("id", e.getId());}});
+                JsonObject scriptId = new JsonObject();
+                scriptId.addProperty("scriptId", e.getId());
+
+                elems.add(new HashMap<>(){{
+                    put("file", e.getFile());
+                    put("description", e.getDescription());
+                    put("id", e.getId());
+                    put("idGesture", e.getIdGesture());
+                    put("status", String.valueOf(checkStatus(req, scriptId.toString())));
+                }});
             }
             return elems;
         }catch (Exception e){
@@ -165,6 +171,7 @@ public class ScriptDBController {
             oldScript = new MongoConnexion().handyDB().findById(objNew.get("oldId").getAsString(),Script.class);
             elements.put("file", oldScript.getFile());
             elements.put("execPath", oldScript.getExecType());
+            elements.put("idGesture", oldScript.getIdGesture());
             elements.put("description", oldScript.getDescription());
         }catch (Exception e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The script with the following id has not been found");
@@ -185,7 +192,12 @@ public class ScriptDBController {
 
         if(argsNew.isEmpty()) argsNew = Arrays.asList(oldScript.getArgs());
 
-        Script newScript = new Script(elements.get("execPath"), argsNew.toArray(new String[0]), elements.get("file"), elements.get("description"),elements.get("idGesture"));
+        Script newScript = new Script(
+                elements.get("execPath"),
+                argsNew.toArray(new String[0]),
+                elements.get("file"),
+                elements.get("description"),
+                elements.get("idGesture"));
 
         try {
             new MongoConnexion().handyDB().remove(oldScript);
@@ -211,26 +223,27 @@ public class ScriptDBController {
         Script script;
         try{
             script = new MongoConnexion().handyDB().findById(obj.get("scriptId").getAsString(),Script.class);
-
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The script with the following id has not been found");
         }
-
-
 
         GestureStructure gestureStructure;
         try {
             gestureStructure =  new MongoConnexion().handyDB().findById(script.getIdGesture(),GestureStructure.class);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The gesture associated with the gesture has not been found");
         }
 
-        Map.Entry<String,String> exec;
+        Map.Entry<String,String> exec = null;
         try {
-            exec =new ExecPersistance().getByName(script.getExecType());
+            System.out.println(script.getExecType());
+            System.out.println(new ExecPersistance().getAll());
+            exec = new ExecPersistance().getByName(script.getExecType());
         } catch (NameNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The interpreter is not defined yet or not exact");
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The interpreter is not defined yet or not exact");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         Map<String,String> map = new HashMap<>();
@@ -243,23 +256,29 @@ public class ScriptDBController {
 
         checkFile();
 
-        String fileP = filePath+"/"+script.getId()+extension;
+        String fileP;
+        if (extension !=null ){
+            fileP = filePath+"/"+script.getId()+extension;
+        }else{
+            fileP = filePath+"/"+script.getId();
+        }
+
         File file = new File(fileP);
 
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(script.getFile());
+            PrintWriter writer = new PrintWriter(new FileWriter(file));
+            writer.write(script.getFileDecoded());
             writer.close();
         } catch (IOException e) {
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while transcribing on local files");
         }
-
-
 
         Interaction interaction = new Interaction();
         MainListener listener = new GestureListener(gestureStructure.getGesture());
         interaction.addListener(new MainListener[]{listener}, new Script(exec.getValue(), script.getArgs() ,fileP));
         Daemon daemon = new Daemon(script.getId(), new CallLoop(interaction));
+        System.out.println(daemon);
         daemons.put(daemon.getDaemonName(),daemon);
 
         //TODO remplacer liste de démon par démon unique
@@ -279,7 +298,7 @@ public class ScriptDBController {
      * Stop the recognition of the gesture to launch the script
      * @param req httpRequest
      * @param data { "scriptId" : ""}
-     * @return launch script
+     * @return stop script
      */
     @PostMapping("/stop")
     public String stopScript(HttpServletRequest req, @RequestBody String data) {
@@ -287,16 +306,24 @@ public class ScriptDBController {
         var obj = new Gson().fromJson(data, JsonObject.class);
 
         Daemon daemon=daemons.remove(obj.get("scriptId").getAsString());
+        if (daemon == null){
+            return "The script is not associated or not founded !";
+        }
         daemon.stop();
 
         return "The script have been successfully dissociated !";
     }
 
+    /***
+     * Check the status of a script
+     * @param req httpRequest
+     * @param data { "scriptId" : ""}
+     * @return status of the script
+     */
     @PostMapping("/status")
     public boolean checkStatus(HttpServletRequest req, @RequestBody String data){
         UserDBController.validAuth(req);
 
-        UserDBController.validAuth(req);
         var obj = new Gson().fromJson(data, JsonObject.class);
 
         return daemons.containsKey(obj.get("scriptId").getAsString());

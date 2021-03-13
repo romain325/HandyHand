@@ -1,29 +1,66 @@
 import { Col, Row } from 'react-bootstrap';
 import React from 'react';
-import {GestureCard, ScriptCard} from '../HandyHandAPI/HandyHandAPIType';
+import { GestureCard, ScriptCard } from '../HandyHandAPI/HandyHandAPIType';
 import CardScript from '../../components/CardScript';
 import LineScript from '../../components/LineScript';
-import CardGesture from "../../components/CardGesture";
+import CardGesture from '../../components/CardGesture';
+import HandyHandAPI from '../HandyHandAPI/HandyHandAPI';
 
 export function propsNameToDisplayName(name: string): string {
   return name.split('/').reverse()[0].split('.')[0];
 }
 
-export function allCards(items: ScriptCard[]): JSX.Element {
+export function allCards(
+  items: ScriptCard[],
+  gestures: Map<string, string>,
+  isOnline: boolean,
+  refreshCards: () => void
+): JSX.Element {
   const elements: JSX.Element[] = [];
 
   let i: number = items.length;
   while (i > 0) {
     const subElements: JSX.Element[] = [];
     const iter: number = i < 3 ? i : 3;
+    let currentObj: ScriptCard;
 
     for (let j = 0; j < iter; j++) {
+      currentObj = items[(i - items.length) * -1 + j];
       subElements.push(
         <Col>
           <CardScript
-            title={items[(i - items.length) * -1 + j].file}
-            description={items[(i - items.length) * -1 + j].description}
-            id={items[(i - items.length) * -1 + j].id}
+            key={currentObj.id}
+            title={currentObj.file}
+            description={currentObj.description}
+            id={currentObj.id}
+            gestureId={currentObj.idGesture}
+            isActive={currentObj.status == 'true'}
+            gestureSet={gestures}
+            onGestureSelect={(gestureId, scriptId) => {
+              new HandyHandAPI()
+                .modifyScript(
+                  {
+                    oldId: scriptId,
+                    idGesture: gestureId,
+                  },
+                  isOnline
+                )
+                .then(() => {
+                  refreshCards();
+                });
+            }}
+            onDeleteClic={(scriptId) => {
+              new HandyHandAPI()
+                .removeScript(scriptId, isOnline)
+                .then(() => refreshCards());
+            }}
+            onActiveClic={(scriptId, isActive) =>
+              new HandyHandAPI().switchScript(
+                scriptId,
+                isActive == null ? false : isActive,
+                isOnline
+              )
+            }
           />
         </Col>
       );
@@ -39,13 +76,49 @@ export function allCards(items: ScriptCard[]): JSX.Element {
   return <div>{elements}</div>;
 }
 
-export function allList(items: ScriptCard[]): JSX.Element {
+export function allList(
+  items: ScriptCard[],
+  gestures: Map<string, string>,
+  isOnline: boolean,
+  refreshCards: () => void
+): JSX.Element {
   const elements: JSX.Element[] = [];
   for (let i = 0; i < items.length; i++) {
     elements.push(
       <Row>
         <Col>
-          <LineScript title={propsNameToDisplayName(items[i].file)} description={items[i].description} id={items[i].id} />
+          <LineScript
+            key={items[i].id}
+            title={propsNameToDisplayName(items[i].file)}
+            description={items[i].description}
+            id={items[i].id}
+            gestureId={items[i].idGesture}
+            isActive={items[i].status == 'true'}
+            gestureSet={gestures}
+            onGestureSelect={(gestureId, scriptId) => {
+              new HandyHandAPI()
+                .modifyScript(
+                  {
+                    oldId: scriptId,
+                    idGesture: gestureId,
+                  },
+                  isOnline
+                )
+                .then(() => refreshCards());
+            }}
+            onDeleteClic={(scriptId) =>
+              new HandyHandAPI()
+                .removeScript(scriptId, isOnline)
+                .then(() => refreshCards())
+            }
+            onActiveClic={(scriptId, isActive) =>
+              new HandyHandAPI().switchScript(
+                scriptId,
+                isActive == null ? false : isActive,
+                isOnline
+              )
+            }
+          />
         </Col>
       </Row>
     );
@@ -54,7 +127,10 @@ export function allList(items: ScriptCard[]): JSX.Element {
   return <div>{elements}</div>;
 }
 
-export function allGestureCards(items: GestureCard[], isOnline: boolean): JSX.Element {
+export function allGestureCards(
+  items: GestureCard[],
+  isOnline: boolean
+): JSX.Element {
   const elements: JSX.Element[] = [];
 
   let i: number = items.length;
@@ -63,10 +139,11 @@ export function allGestureCards(items: GestureCard[], isOnline: boolean): JSX.El
     const iter: number = i < 3 ? i : 3;
     let current: GestureCard;
     for (let j = 0; j < iter; j++) {
-      current = items[(i - items.length) * -1 +j]
+      current = items[(i - items.length) * -1 + j];
       subElements.push(
         <Col>
           <CardGesture
+            key={current.id}
             title={current.name}
             description={current.description}
             id={current.id}

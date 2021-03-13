@@ -3,20 +3,48 @@ import { Col, Row, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import routes from '../../constants/routes.json';
 import ContentPage from '../../containers/ContentPage';
-import { ScriptCard } from '../../utils/HandyHandAPI/HandyHandAPIType';
+import {
+  GestureCard,
+  ScriptCard,
+} from '../../utils/HandyHandAPI/HandyHandAPIType';
 import { allCards, allList } from '../../utils/display/scriptDisplay';
+import { getAddress } from '../../utils/HandyHandAPI/HandyHandConfig';
+
+function refreshCards(onLoaded: (scripts: ScriptCard[]) => void) {
+  fetch(`${getAddress()}/script/all`)
+    .then((rep) => rep.json())
+    .then((json2) => {
+      onLoaded(json2);
+    });
+}
 
 export default function MyScriptsFeature() {
   const [isGrid, setIsGrid] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
   const [items, setItems] = useState<ScriptCard[]>([]);
+  const [gesture, setGestures] = useState<Map<string, string>>(
+    new Map<string, string>()
+  );
+
+  const refresh = () => {
+    refreshCards((scripts) => {
+      setItems(scripts);
+      setIsLoaded(true);
+    });
+  };
 
   useEffect(() => {
-    fetch('http://localhost:8080/script/all')
+    fetch(`${getAddress()}/gesture/all`)
       .then((rep) => rep.json())
       .then((json) => {
-        setItems(json);
-        setIsLoaded(true);
+        const gest = new Map<string, string>();
+        for (const r of json as GestureCard[]) {
+          gest.set(r.id, r.name);
+        }
+        gest.set('', 'None');
+        setGestures(gest);
+
+        refresh();
       });
   }, []);
 
@@ -77,12 +105,12 @@ export default function MyScriptsFeature() {
           height: '70vh',
         }}
       >
-        { items.length == 0 ? (
+        {items.length == 0 ? (
           <Col>Nothing Found ...</Col>
         ) : isGrid ? (
-          allCards(items)
+          allCards(items, gesture, false, refresh)
         ) : (
-          allList(items)
+          allList(items, gesture, false, refresh)
         )}
       </Container>
     </ContentPage>

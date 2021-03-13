@@ -2,6 +2,8 @@ export interface ScriptCard {
   file: string;
   description: string;
   id: string;
+  idGesture: string;
+  status: string;
 }
 
 export interface NewScript {

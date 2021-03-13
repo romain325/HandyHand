@@ -1,3 +1,4 @@
+import base64
 import getopt
 import magic
 import requests
@@ -28,6 +29,7 @@ class H2LocalScript(ApiEndpoint):
         self.options["add"] = f"No args: prompt info\n" \
                               f"--fp <FilePath>: file path of the script\n" \
                               f"--desc <Description>: script description\n" \
+                              f"--gest <Gesture id>: Gesture to link with\n" \
                               f"--args <ExecutableArguments>: arguments given at the exec (seperated by a comma: ',')"
 
         self.switcher["modify"] = self.modifyScript
@@ -35,7 +37,11 @@ class H2LocalScript(ApiEndpoint):
                                  f"No args: prompt info\n" \
                                  f"--fp <FilePath>: file path of the script\n" \
                                  f"--desc <Description>: script description\n" \
+                                 f"--gest <Gesture id>: Gesture to link with\n" \
                                  f"--args <ExecutableArguments>: arguments given at the exec (seperated by a comma: ',')"
+
+        self.switcher["listen"] = self.switchScriptState
+        self.options["listen"] = f"<script id>: Id of the script you want to switch On/Off"
 
         self.execAdaptedFunction(args[1:])
 
@@ -103,6 +109,23 @@ class H2LocalScript(ApiEndpoint):
         self.utils.console.print(f"Script successfully modified,his new id is [bold green]{r.text}[/bold green]",
                                  style="cyan")
 
+
+    def switchScriptState(self, args):
+        if len(args) <= 1 or args[1] == "-h":
+            self.printFunctionOptions("listen")
+            return
+
+        script = {"scriptId": args[1]}
+        r = requests.post(self.endpoint + "/status", data=json.dumps(script))
+        self.utils.checkStatusCode(r)
+
+        action = "stop" if r.text == "true" else "launch"
+        message = f"Script {args[1]} stopped with success" if r.text == "true" else f"Script {args[1]} is listened for now"
+        r = requests.post(self.endpoint + "/" + action, data=json.dumps(script))
+        self.utils.checkStatusCode(r)
+        self.utils.console.print(message, style="bold green")
+
+
     def getAllScript(self, debug: bool):
         r = requests.get(self.endpoint + "/all")
         self.utils.checkStatusCode(r)
@@ -120,23 +143,31 @@ class H2LocalScript(ApiEndpoint):
             "oldId": "",
             "file": "",
             "description": "",
-            "args": []
+            "args": [],
+            "execType": ""
         }
 
         if len(args) <= 1:
             script["file"] = input("FileName: ")
             script["description"] = input("Description: ")
             script["args"] = input("Args: (Separated by coma: ',') ").split(",")
+            script["idGesture"] = input("Gesture id(optional): ")
         else:
-            opts, _ = getopt.getopt(args[1:], "", ["fp=", "desc=", "args="])
-            script["file"] = dict(opts).get("--fp")
-            script["description"] = dict(opts).get("--desc")
+            opts, _ = getopt.getopt(args[1:], "", ["fp=", "desc=", "args=", "gest="])
+            script["file"] = dict(opts).get("--fp", "")
+            script["description"] = dict(opts).get("--desc", "")
+            script["idGesture"] = dict(opts).get("--gest", "")
             script["args"] = dict(opts).get("--args", "").split(",")
 
         try:
-            script["execType"] = magic.Magic(mime=True).from_file(script["file"])
+            if script["execType"] != "":
+                script["execType"] = magic.Magic(mime=True).from_file(script["file"])
+            if script["file"] != "":
+                with open(script["file"], "r") as f:
+                    script["file"] = str(base64.b64encode(bytes(f.read(), encoding="utf8")))
         except Exception as err:
             self.utils.console.print(f"Error: Script file not found", style="red")
+            self.utils.console.print(f"Error: {err}", style="red")
             sys.exit(2)
 
         return script
@@ -150,6 +181,7 @@ class H2LocalScript(ApiEndpoint):
         helpTable.add_row("delete", "Delete a script from a given id", self.getOption("delete"))
         helpTable.add_row("add", "Add a new script from given data", self.getOption("add"))
         helpTable.add_row("modify", "Modify a script given by his id", self.getOption("modify"))
+        helpTable.add_row("listen", "Switch a script on or off", self.getOption("listen"))
 
         self.utils.console.print(helpTable)
         return
