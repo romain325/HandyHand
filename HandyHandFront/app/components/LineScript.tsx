@@ -33,7 +33,7 @@ export default function LineScript(props: Props): JSX.Element {
           <Col sm={2}>
             <Card.Text>{propsNameToDisplayName(props.title)}</Card.Text>
           </Col>
-          <Col sm={7}>
+          <Col sm={6}>
             <p
               style={{
                 fontSize: 18,
@@ -42,7 +42,7 @@ export default function LineScript(props: Props): JSX.Element {
               {props.description}
             </p>
           </Col>
-          <Col sm={1}>
+          <Col sm={2}>
             <DropdownButton title={props.gestureSet.get(props.gestureId)}>
               {Array.from(props.gestureSet.keys()).map((value, index) => {
                 return (
@@ -66,9 +66,7 @@ export default function LineScript(props: Props): JSX.Element {
                   props.onActiveClic(props.id, isActive);
                   setIsActive(!isActive);
                 }}
-              >
-                {isActive ? 'Listening' : 'Zzz'}
-              </Form.Check.Label>
+              />
             </Form.Check>
           </Col>
           <Col sm={1}>

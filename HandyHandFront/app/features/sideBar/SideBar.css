@@ -12,6 +12,9 @@
   transition: .5s;
 }
 
+.sidebarlink {
+  color: white;
+}
 
 .sidebarheader {
   background:#2E3440;

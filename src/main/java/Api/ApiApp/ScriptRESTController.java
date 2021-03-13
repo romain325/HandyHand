@@ -300,11 +300,12 @@ public class ScriptRESTController {
     public String stopScript(HttpServletRequest req, @RequestBody String data) {
         var obj = new Gson().fromJson(data, JsonObject.class);
 
-        Daemon daemon=daemons.remove(obj.get("scriptId").getAsString());
+        Daemon daemon = daemons.remove(obj.get("scriptId").getAsString());
         if (daemon == null){
-            return "The script is not associated or not founded !";
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The script is not associated or not founded !");
         }
-        daemon.stop();
+
+        daemon.interrupt();
 
         return "The script have been successfully dissociated !";
     }
