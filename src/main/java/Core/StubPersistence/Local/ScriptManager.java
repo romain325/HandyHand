@@ -16,7 +16,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class ScriptManager implements JSONManager {
+/**
+ * Manager of the scripts
+ */
+public class ScriptManager implements JSONManager<Script> {
     private final LocalManager localManager = new LocalManager();
 
     @Override

@@ -1,11 +1,16 @@
 package Core.Daemon;
 
-
-import Core.Script.Script;
-
+/**
+ * Custom Implementation of a Daemon allowing comparaison
+ */
 public class Daemon extends Thread implements Comparable{
     private final String daemonName;
 
+    /**
+     * Create a daemon
+     * @param name Name of the daemon
+     * @param runner Function executed all along
+     */
     public Daemon(String name, Runnable runner) {
         super(runner);
         daemonName = name;
@@ -13,6 +18,10 @@ public class Daemon extends Thread implements Comparable{
         setDaemon(true);
     }
 
+    /**
+     * Get dameon's name
+     * @return daemon's name
+     */
     public String getDaemonName(){
         return daemonName;
     }

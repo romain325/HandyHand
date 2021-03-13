@@ -1,14 +1,9 @@
 
 package Core.Listener;
 
-import Core.Gesture.Finger.FingerCurveCalculator;
 import Core.Gesture.GestureMatcher;
-import Core.Gesture.HandPoses.HandType;
-import Core.Gesture.Matrix.Structure.GestureStructure;
 import Core.Gesture.Matrix.Structure.IDefineStructure;
-import com.leapmotion.leap.*;
-
-import java.util.Map;
+import com.leapmotion.leap.Frame;
 
 public class GestureListener extends MainListener {
     GestureMatcher gestureMatcher;

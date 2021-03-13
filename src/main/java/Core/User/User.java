@@ -11,6 +11,9 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Representation of a user
+ */
 public class User {
     private String id;
     private String mail;
@@ -20,12 +23,17 @@ public class User {
     public User(){}
 
     public User(String mail,String mdp) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        this.mail=mail;
-        password=hash_password(mdp);
-        scriptsId=new ArrayList<>();
-        id=getId();
+        this.mail = mail;
+        password = hash_password(mdp);
+        scriptsId = new ArrayList<>();
+        id = getId();
     }
 
+    /**
+     * Hash the password for saving
+     * @param mdp raw password
+     * @return hashed password
+     */
     private String hash_password(String mdp) throws NoSuchAlgorithmException, InvalidKeySpecException {
         byte[] salt = new byte[16];
         Random random = new Random(2);
@@ -37,29 +45,58 @@ public class User {
         return enc.encodeToString(hash);
     }
 
+    /**
+     * Get user id
+     * @return user id
+     */
     public String getId() {
-        return new String(Base64.getEncoder().encode((mail).toLowerCase().getBytes())); }
+        return new String(Base64.getEncoder().encode((mail).toLowerCase().getBytes()));
+    }
 
+    /**
+     * Get user's mail
+      * @return user's mail
+     */
     public String getMail() {
         return mail;
     }
 
+    /**
+     * Get hashed Password
+     * @return hashed password
+     */
     public String getPassword() {
         return password;
     }
 
+    /**
+     * get script related to the user
+     * @return scripts list of the user
+     */
     public List<String> getScriptsId() {
         return scriptsId;
     }
 
+    /**
+     * Set the scripts' list
+     * @param scriptsId scripts" list
+     */
     public void setScriptsId(List<String> scriptsId) {
         this.scriptsId = scriptsId;
     }
 
+    /**
+     * Add a script to the scripts' list
+     * @param scriptId new script
+     */
     public void addScript(String scriptId) {
         scriptsId.add(scriptId);
     }
 
+    /**
+     * Remove a script from the user's script
+     * @param s script to remove
+     */
     public void removeScript(String s) {
         scriptsId.remove(s);
     }

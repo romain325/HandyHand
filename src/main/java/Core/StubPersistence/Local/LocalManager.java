@@ -1,17 +1,14 @@
 package Core.StubPersistence.Local;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.LinkedList;
 
+/**
+ * Local gesture of the files 
+ */
 public class LocalManager implements FileManager {
     @Override
     public FileManager getParent() {

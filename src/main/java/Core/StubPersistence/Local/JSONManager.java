@@ -1,26 +1,31 @@
 package Core.StubPersistence.Local;
 
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONAware;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
 
-public interface JSONManager<T extends Object> extends FileManager{
+/**
+ * JSON Manager for T class
+ * @param <T> type of the object
+ */
+public interface JSONManager<T extends Object> extends FileManager {
+    /**
+     * Get all value in an array of T
+     * @return array of T
+     */
     T[] getAll();
+
+    /**
+     * Verify existence of a file
+     * @throws IOException can't write file
+     */
     default void checkExistence() throws IOException {
         if(!exists()) createFile();
     }
+
+    /**
+     * Save a JSON String object to a file
+     * @param object String version of the JSONObject
+     */
     default void save(String object){
         try {
             savetoFile(getPath(), object);

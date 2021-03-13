@@ -4,6 +4,9 @@ import Core.Daemon.Daemon;
 import Core.Daemon.Runner.HandPositionRunner;
 import Testing.Tester;
 
+/**
+ * Test our daemon
+ */
 public class DaemonTest implements Tester {
     @Override
     public void start() {

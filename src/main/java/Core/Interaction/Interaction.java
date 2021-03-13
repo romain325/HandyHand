@@ -7,10 +7,18 @@ import com.leapmotion.leap.Frame;
 
 import java.util.*;
 
+/**
+ * Movement interaction
+ */
 public class Interaction implements Runnable{
     private Controller controller = new Controller();
     private Map<Script, Set<MainListener>> listeners = new HashMap<>();
 
+    /**
+     * Limit the call framerate based on the frame id
+     * @param frame current frame
+     * @return is frame valid & lookable
+     */
     protected final boolean limitFrameRate(Frame frame){
         return frame.id() % 2 != 0 && frame.isValid();
     }

@@ -9,6 +9,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 
+/**
+ * Manager of the gesture's working in binary
+ */
 public class GestureManager implements BinaryManager<GestureStructure> {
     private final LocalManager localManager = new LocalManager();
 

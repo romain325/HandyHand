@@ -1,6 +1,5 @@
 package Visual.ProcessingVisual.CameraView;
 
-import Utils.Converter.ByteConverter;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Image;
@@ -9,13 +8,12 @@ import processing.core.PImage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 
+/**
+ * Leap Camera Image
+ */
 public class CameraImage {
     private Controller controller = new Controller();
 
@@ -23,6 +21,12 @@ public class CameraImage {
         controller.setPolicy(Controller.PolicyFlag.POLICY_IMAGES);
     }
 
+    /**
+     * Get byte array from frame
+     * @param frame frame
+     * @return corrected byte array of the image
+     * @throws IOException Error while ccovnerting
+     */
     public byte[] getByteArrayImage(Frame frame) throws IOException {
         if(frame == null || !frame.isValid()) {
             return null;
@@ -47,6 +51,11 @@ public class CameraImage {
         return ba.toByteArray();
     }
 
+    /**
+     * Get image of the byte array from the current frame
+     * @return current frame
+     * @throws IOException Error while ccovnerting
+     */
     public byte[] getByteArrayImage() throws IOException {
         return getByteArrayImage(this.controller.frame());
     }

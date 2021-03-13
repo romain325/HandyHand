@@ -16,8 +16,15 @@ import static processing.core.PConstants.ARGB;
 import static processing.core.PConstants.RGB;
 import static processing.opengl.PShapeOpenGL.NORMAL;
 
+/**
+ * Camera view normalized with shaders
+ */
 public class CameraViewNormalized extends ShaderCallback {
 
+    /**
+     * Get image with shaders correction
+     * @param frame frmae object
+     */
     public void getImageShader(Frame frame) {
 
         //FIRST YOU CREATE A TEXTURE OF THE CURRENT IMAGE
@@ -77,6 +84,10 @@ public class CameraViewNormalized extends ShaderCallback {
 
     }
 
+    /**
+     * Get the corrected image without the shaders
+     * @param frame frame object
+     */
     private void getImageGreedy(Frame frame){
         int targetWidth = 200;
         int targetHeight = 200;
@@ -125,6 +136,11 @@ public class CameraViewNormalized extends ShaderCallback {
 
     }
 
+    /**
+     * Transform float to RGBA Color
+     * @param input color as float
+     * @return RGBA Color
+     */
     private Color encodeFloatRGBA(float input){
         float r,g,b,a,scaled;
         scaled = (float) ((input + 0.6)/2.3);

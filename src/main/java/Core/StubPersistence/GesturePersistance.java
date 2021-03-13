@@ -11,6 +11,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Gesture Managing
+ */
 public class GesturePersistance implements IGestureDataManager{
     GestureManager gestureManager = new GestureManager();
 
@@ -60,6 +63,11 @@ public class GesturePersistance implements IGestureDataManager{
         }
     }
 
+    /**
+     * Remove a gestureStructure from the saved one
+     * @param gestureStructure gesture to remove
+     * @throws Exception Error while saving
+     */
     public void remove(GestureStructure gestureStructure) throws Exception {
         try{
             LinkedList<GestureStructure> list = new LinkedList<>(gestureManager.getAll());

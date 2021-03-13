@@ -1,12 +1,6 @@
 package Testing.GestureTest;
 
-import Core.Daemon.CallLoop;
-import Core.Daemon.Daemon;
-import Core.Gesture.GestureMatcher;
 import Core.Interaction.Interaction;
-import Core.Listener.GestureListener;
-import Core.Listener.MainListener;
-import Core.Script.Script;
 import Testing.Tester;
 import Visual.ProcessingVisual.Skeleton.SkeletonView;
 import Visual.Renderer.ProcessingRenderer;

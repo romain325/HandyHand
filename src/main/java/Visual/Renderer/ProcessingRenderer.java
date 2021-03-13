@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
+/**
+ * Processing Render
+ */
 public class ProcessingRenderer extends PApplet {
     private final Controller controller;
     private int width = 500;
@@ -42,6 +45,10 @@ public class ProcessingRenderer extends PApplet {
         setPolicyFlags(policyFlags);
     }
 
+    /**
+     * Add particular policy flags
+     * @param policyFlags flag to add
+     */
     private void setPolicyFlags(List<Controller.PolicyFlag> policyFlags){
         if(policyFlags != null){
             for (Controller.PolicyFlag val : policyFlags){
@@ -56,6 +63,9 @@ public class ProcessingRenderer extends PApplet {
         size(width,height);
     }
 
+    /**
+     * Show the PApplet
+     */
     public void show() {
         PApplet.runSketch(new String[]{"cameraView"}, this);
     }

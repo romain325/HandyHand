@@ -3,6 +3,9 @@ package Utils.Converter;
 import java.util.Base64;
 import java.util.Map;
 
+/**
+ * Data Transfer Object for the executable
+ */
 public class ExecDTO {
     private final String id;
     private final String name;
@@ -18,14 +21,26 @@ public class ExecDTO {
         this.execPath = path;
     }
 
+    /**
+     * Get exec id
+     * @return exec id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Get exec name
+     * @return exec name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Get exec path
+     * @return exec path
+     */
     public String getExecPath() {
         return execPath;
     }

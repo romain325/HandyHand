@@ -1,5 +1,8 @@
 package Core.Position;
 
+/**
+ * Position of the hnad
+ */
 public enum Position {
     RIGHT("On the right of the Leap Motion"),
     LEFT("On the left of the Leap Motion"),

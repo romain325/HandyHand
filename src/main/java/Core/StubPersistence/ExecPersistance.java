@@ -1,14 +1,14 @@
 package Core.StubPersistence;
 
-import Core.Script.Script;
 import Core.StubPersistence.Local.ExecutableManager;
 import com.google.gson.Gson;
-import jdk.jshell.spi.ExecutionControl;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.naming.NameNotFoundException;
 import java.util.*;
 
+/**
+ * Persistence of the executable
+ */
 public class ExecPersistance implements IExecDataManager{
     ExecutableManager executableManager = new ExecutableManager();
 

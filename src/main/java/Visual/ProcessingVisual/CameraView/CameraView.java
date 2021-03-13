@@ -5,6 +5,9 @@ import Utils.CallBack.SketchCallback;
 import com.leapmotion.leap.*;
 import processing.core.PImage;
 
+/**
+ * View of the Leap Motion camera
+ */
 public class CameraView extends SketchCallback {
     HandPosition handPosition = new HandPosition();
     int cnt = 0;
@@ -18,6 +21,10 @@ public class CameraView extends SketchCallback {
         printPos(frame);
     }
 
+    /**
+     * Get current view of the Leap Motion
+     * @param frame frame
+     */
     public void getImage(Frame frame){
         if(frame == null || !frame.isValid())return;
 
@@ -37,6 +44,10 @@ public class CameraView extends SketchCallback {
         }
     }
 
+    /**
+     * Add entities to identify hand & fingers
+     * @param frame current frame
+     */
     public void printPos(Frame frame){
         var values = handPosition.getHandsPosition(frame);
         StringBuilder pos = new StringBuilder();

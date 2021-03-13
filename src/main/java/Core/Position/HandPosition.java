@@ -8,8 +8,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Describe the Position of the hand
+ */
 public class HandPosition {
 
+    /**
+     * Get frames hands position
+     * @param frame current frame
+     * @return Map of Key:Which hand, Value: set of position
+     */
     public Map<String, Set<Position>> getHandsPosition(Frame frame){
         Map<String,Set<Position>> rtrn = new HashMap<>();
         if (frame.hands().count() == 0) {
@@ -23,10 +31,20 @@ public class HandPosition {
         return rtrn;
     }
 
+    /**
+     * Get type of hand
+     * @param hand Hand object
+     * @return type of hand
+     */
     private String getHand(Hand hand){
         return hand.isLeft() ? "left" : "right";
     }
 
+    /**
+     * Get A set of position
+     * @param hand current hand
+     * @return set
+     */
     private Set<Position> getSpacePos(Hand hand){
         HashSet<Position> set = new HashSet<>();
 

@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Script Managing
+ */
 public class ScriptPersistance implements IScriptDataManager{
     ScriptManager scriptManager = new ScriptManager();
 
@@ -58,11 +61,15 @@ public class ScriptPersistance implements IScriptDataManager{
         }
     }
 
+    /**
+     * Remove a piece of data from the saved ones
+     * @param script script to remove
+     * @throws Exception error while saving
+     */
     public void remove(Script script) throws Exception {
         try{
             List<Script> list = new LinkedList<>(Arrays.asList(scriptManager.getAll()));
             list.remove(script);
-            System.out.println(list.contains(script));
             scriptManager.save(new Gson().toJson(list,List.class));
         } catch (Exception e) {
             throw new Exception("Error remove ScriptPersistance");

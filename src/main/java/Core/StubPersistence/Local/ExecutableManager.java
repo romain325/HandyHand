@@ -11,7 +11,10 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ExecutableManager implements JSONManager {
+/**
+ * Exec Manager working with Json
+ */
+public class ExecutableManager implements JSONManager<Map.Entry<String, String>> {
     private final LocalManager localManager = new LocalManager();
 
     @Override
@@ -47,6 +50,10 @@ public class ExecutableManager implements JSONManager {
         return null;
     }
 
+    /**
+     * get all the Key and Value as a Map
+     * @return Map of all the keys/value
+     */
     public Map<String,String> getAllMap(){
         return Arrays.stream(this.getAll()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
