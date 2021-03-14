@@ -9,6 +9,9 @@ import com.leapmotion.leap.Listener;
  */
 public abstract class MainListener extends Listener {
 
+    /**
+     * Status of the listener
+     */
     protected boolean isActive;
 
     /**

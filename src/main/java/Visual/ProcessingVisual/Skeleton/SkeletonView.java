@@ -7,7 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-
+/**
+ * Class defining the display of the skeleton on the current detected hand
+ */
 public class SkeletonView extends SketchCallback {
     LinkedList<Vector> vectorList = new LinkedList<>();
     @Override

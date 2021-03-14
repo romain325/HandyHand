@@ -12,6 +12,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class to test our Stub
+ */
 public class StubTesting implements Tester {
     @Override
     public void start() {

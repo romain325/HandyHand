@@ -2,10 +2,15 @@ package Core.Listener;
 
 import com.leapmotion.leap.*;
 
+/**
+ * Customized listener from Leap Motion lib
+ */
 public class LmListener extends Listener {
-    long lastFrame = 0;
-    public long count = 0;
 
+    /**
+     * Method called on the initialization of the controller for accepting policies
+     * @param controller controller that have been initialized
+     */
     public void onConnect(Controller controller) {
         for (Gesture.Type v :Gesture.Type.values()) {
             controller.enableGesture(v);
@@ -13,15 +18,27 @@ public class LmListener extends Listener {
         controller.setPolicy(Controller.PolicyFlag.POLICY_IMAGES);
     }
 
+    /**
+     * Method executed on each frames
+     * @param controller controller capturing the frames
+     */
     public void onFrame(Controller controller) {
         Frame frame = controller.frame();
         getPos(frame);
     }
 
+    /**
+     * Method determining if the controller is active
+     * @return the state of the controller
+     */
     public boolean isActive() {
         return false;
     }
 
+    /**
+     * Method to get the image from the frame
+     * @param frame current frame
+     */
     public void getImage(Frame frame){
         ImageList images = frame.images();
         for (Image img : images){
@@ -29,6 +46,10 @@ public class LmListener extends Listener {
         }
     }
 
+    /**
+     * Method to get the current position of the hand using method already available from Leap motion lib
+     * @param frame current frame
+     */
     public void getPos(Frame frame){
         if (!frame.hands().isEmpty()) {
             Hand hand = frame.hands().get(0);

@@ -6,6 +6,9 @@ import Visual.ProcessingVisual.Skeleton.SkeletonView;
 import Visual.Renderer.ProcessingRenderer;
 import com.leapmotion.leap.Controller;
 
+/**
+ * Test our skeleton recognizer
+ */
 public class GestureSkeletonTest implements Tester {
     @Override
     public void start() {

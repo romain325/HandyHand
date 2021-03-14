@@ -7,6 +7,9 @@ import com.leapmotion.leap.Frame;
 
 import java.util.*;
 
+/**
+ * Class defining a listener that recognize the position of your hand compared to the Leap Motion
+ */
 public class PositionListener extends MainListener{
     HandPosition handPosition = new HandPosition();
     String wantedHand;
