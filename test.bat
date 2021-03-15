@@ -1,1 +1,0 @@
-start yoyo.jpg

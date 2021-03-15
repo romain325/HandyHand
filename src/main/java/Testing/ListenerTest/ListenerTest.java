@@ -9,6 +9,9 @@ import Core.Position.Position;
 import Core.Script.Script;
 import Testing.Tester;
 
+/**
+ * Class to test our listener
+ */
 public class ListenerTest implements Tester {
     @Override
     public void start() {

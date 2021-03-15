@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class to test the view of the camera
+ */
 public class CameraViewTest implements Tester {
     private List<Controller.PolicyFlag> policyFlags;
 
@@ -25,11 +28,19 @@ public class CameraViewTest implements Tester {
         //cameraNormalizedTest(controller);
     }
 
+    /**
+     * Method to display the controller view
+     * @param controller current controller
+     */
     private void cameraTest(Controller controller){
         ProcessingRenderer cam = new ProcessingRenderer(controller,new CameraView(), policyFlags);
         cam.show();
     }
 
+    /**
+     * Method to get the camera view without the distortion
+     * @param controller current controller
+     */
     private void cameraNormalizedTest(Controller controller){
         HashMap<String,String[]> shaders =  new HashMap<>();
         shaders.put("dewarp", new String[] {this.getClass().getResource("/dewarp.glpl").getPath(), this.getClass().getResource("/passthrough.glpl").getPath()});

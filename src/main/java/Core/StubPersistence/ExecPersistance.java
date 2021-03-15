@@ -37,6 +37,11 @@ public class ExecPersistance implements IExecDataManager{
         }
     }
 
+    /**
+     * Method to remove an exec from local storage
+     * @param id id of the exec to remove
+     * @throws Exception if error
+     */
     public void remove(String id) throws Exception {
         try {
             var map = executableManager.getAllMap();
@@ -56,6 +61,11 @@ public class ExecPersistance implements IExecDataManager{
         }
     }
 
+    /**
+     * Method to get all exec as a map
+     * @return exec in a map
+     * @throws Exception if error
+     */
     public Map<String,String> getAllAsMap() throws Exception {
         try {
             return executableManager.getAllMap();
@@ -87,6 +97,11 @@ public class ExecPersistance implements IExecDataManager{
         throw new NameNotFoundException(id);
     }
 
+    /**
+     * Method to get the id from an exec
+     * @param entry exec with <"type","path">
+     * @return the id from the exec
+     */
     public static String getId(Map.Entry<String,String> entry) {
         return new String(Base64.getEncoder().encode(entry.getKey().getBytes()));
     }

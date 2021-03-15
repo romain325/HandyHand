@@ -22,11 +22,19 @@ import java.util.*;
 import static Api.ApiApp.UserDBController.getConnectedUserId;
 import static Api.ApiApp.UserDBController.validAuth;
 
+/**
+ * Controller for the syncing of environments
+ */
 @RestController
 @RequestMapping("/env")
 public class ExportEnvController {
 
 
+    /**
+     * Method syncing both environments simultaneously
+     * @param req request that contains the user's token
+     * @return result message
+     */
     @GetMapping("/sync")
     public String SyncEnv(HttpServletRequest req){
         validAuth(req);
@@ -44,6 +52,12 @@ public class ExportEnvController {
         return "The local and distant environment have been sync !";
     }
 
+    /**
+     * Method for exporting local scripts to DB
+     * @param req request that contains the user's token
+     * @param id user's id
+     * @throws Exception if error
+     */
     private void exportScriptToDB(HttpServletRequest req, String id) throws Exception {
             List<Script> myScriptsLocal = new ScriptPersistance().getAll();
             List<Script> myScriptsDB= new UserDBController().allScripts(req,id);
@@ -71,6 +85,12 @@ public class ExportEnvController {
             new MongoConnexion().handyDB().save(user);
     }
 
+    /**
+     * Method for exporting local gesture to DB
+     * @param req request that contains the user's token
+     * @param id user's id
+     * @throws Exception if error
+     */
     private void exportGestureToDB(HttpServletRequest req, String id) throws Exception {
         List<GestureStructure> myGestureLocal= new GesturePersistance().getAll();
 
@@ -80,6 +100,12 @@ public class ExportEnvController {
         }
     }
 
+    /**
+     * Method for exporting distant gesture to local
+     * @param req request that contains the user's token
+     * @param id user's id
+     * @throws Exception if error
+     */
     private void exportGestureLocal(HttpServletRequest req, String id) throws Exception {
         List<Script> scripts = new UserDBController().allScripts(req,id);
         List<String> idGestures = new LinkedList<>();
@@ -114,6 +140,12 @@ public class ExportEnvController {
 
     }
 
+    /**
+     * Method for exporting distant scripts to local
+     * @param req request that contains the user's token
+     * @param id user's id
+     * @throws Exception if error
+     */
     private void exportScriptLocal(HttpServletRequest req, String id) throws Exception {
         List<Script> myScriptsLocal = new ScriptPersistance().getAll();
         List<Script> myScriptsDB= new UserDBController().allScripts(req,id);

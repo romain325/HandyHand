@@ -9,6 +9,9 @@ import Testing.StubTest.StubTesting;
 import Testing.VisualTest.CameraTest.CameraViewTest;
 import Testing.VisualTest.SkeletonTest.SkeletonTest;
 
+/**
+ * Main executed for testing
+ */
 public class MainTest {
     public static void main(String[] args) {
 //         new SkeletonTest().start();
