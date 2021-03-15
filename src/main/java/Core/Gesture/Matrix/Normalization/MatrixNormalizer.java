@@ -253,13 +253,6 @@ public class MatrixNormalizer {
         return getNewTranslationMatrix(palmX, palmY, palmZ);
     }
 
-//    /**
-//     * Matrice de rotation, d'angle teta et d'axe passant par O (origine du repère) porté par le vecteur (a,b,c) de norme 0
-//     * dans un repère orthonormal direct
-//     * @param teta angle de rotation
-//     * @param axe axe passant par O
-//     * @return La matrice de rotation
-//     */
     /**
      * Rotation matrix with teta angle and form any axis passing by the origin.
      * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
