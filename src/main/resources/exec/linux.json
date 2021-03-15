@@ -1,0 +1,7 @@
+{
+  "text/javascript":"/usr/bin/node",
+  "application/x-perl":"/usr/bin/perl",
+  "text/x-lua":"/usr/local/bin/lua",
+  "text/x-ruby":"/usr/bin/ruby",
+  "application/x-httpd-php": "/usr/bin/php"
+}

@@ -1,10 +1,10 @@
 package Core.StubPersistence.Local;
 
 import com.google.gson.Gson;
+import org.springframework.util.SystemPropertyUtils;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,7 +31,23 @@ public class ExecutableManager implements JSONManager<Map.Entry<String, String>>
     public void createFile() throws IOException {
         if(!getParent().exists()) getParent().createFile();
         Files.createFile(getPath());
-        save(new Gson().toJson(new HashMap[]{}, Map.class));
+
+        String filesource = "";
+        if((System.getProperty("os.name")).startsWith("Windows")){
+            filesource = "exec/windows.json";
+        }else{
+            filesource = "exec/linux.json";
+        }
+
+        try {
+            String data = Files.readString(Path.of(getClass().getClassLoader().getResource(filesource).toURI()));
+            System.out.println(data);
+            save(data);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        // save(new Gson().toJson(new HashMap[]{}, Map.class));
     }
 
     @Override
