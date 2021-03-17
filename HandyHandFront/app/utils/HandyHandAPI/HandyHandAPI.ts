@@ -1,4 +1,10 @@
-import {ExecInfo, GestureCard, NewScript, ScriptCard, UserCreds} from './HandyHandAPIType';
+import {
+  ExecInfo,
+  GestureCard,
+  NewScript,
+  ScriptCard,
+  UserCreds,
+} from './HandyHandAPIType';
 import { getAuthedHeader } from '../../features/connection/Connexion';
 import { getAddress } from './HandyHandConfig';
 

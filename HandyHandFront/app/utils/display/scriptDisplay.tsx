@@ -6,10 +6,21 @@ import LineScript from '../../components/LineScript';
 import CardGesture from '../../components/CardGesture';
 import HandyHandAPI from '../HandyHandAPI/HandyHandAPI';
 
+/**
+ * Standardize name display
+ * @param name
+ */
 export function propsNameToDisplayName(name: string): string {
   return name.split('/').reverse()[0].split('.')[0];
 }
 
+/**
+ * Get A list of script as cards
+ * @param items scripts
+ * @param gestures all gestures
+ * @param isOnline is online
+ * @param refreshCards exec on refersh
+ */
 export function allCards(
   items: ScriptCard[],
   gestures: Map<string, string>,
@@ -76,6 +87,13 @@ export function allCards(
   return <div>{elements}</div>;
 }
 
+/**
+ * Get a list of script as list
+ * @param items scripts
+ * @param gestures all gestures
+ * @param isOnline is online
+ * @param refreshCards exec on refersh
+ */
 export function allList(
   items: ScriptCard[],
   gestures: Map<string, string>,
@@ -127,6 +145,11 @@ export function allList(
   return <div>{elements}</div>;
 }
 
+/**
+ * Get a list of gestures as cards
+ * @param items gestures
+ * @param isOnline is online
+ */
 export function allGestureCards(
   items: GestureCard[],
   isOnline: boolean
