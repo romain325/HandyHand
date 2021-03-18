@@ -3,5 +3,6 @@
   "application/x-perl":"/usr/bin/perl",
   "text/x-lua":"/usr/local/bin/lua",
   "text/x-ruby":"/usr/bin/ruby",
+  "text/x-python":"/usr/bin/python3",
   "application/x-httpd-php": "/usr/bin/php"
 }

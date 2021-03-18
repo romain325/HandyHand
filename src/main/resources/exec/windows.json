@@ -1,7 +1,8 @@
 {
-  "application/x-httpd-php":"C:\wamp64\bin\php\php7.4.9\php.exe",
-  "text/x-ruby":"C:\Ruby26-x64\bin\ruby.exe",
-  "text/x-lua":"C:\Program Files (x86)\LuaDist-batteries-0.9.8\bin",
-  "application/x-perl":"C:\Perl\bin\perl.exe",
-  "text/javascript":"C:\Program Files\nodejs\node.exe"
+  "application/x-httpd-php":"C:\\wamp64\\bin\\php\\php7.4.9\\php.exe",
+  "text/x-ruby":"C:\\Ruby26-x64\\bin\\ruby.exe",
+  "text/x-lua":"C:\\Program Files (x86)\\LuaDist-batteries-0.9.8\\bin",
+  "application/x-perl":"C:\\Perl\\bin\\perl.exe",
+  "application/x-python":"C:\\Python36\\python.exe",
+  "text/javascript":"C:\\Program Files\\nodejs\\node.exe"
 }
