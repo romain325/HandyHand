@@ -30,7 +30,7 @@ const HeaderBar = (props: Props) => {
         {!props.isConnected ? (
           <div>
             <Link to={routes.CONNECTION} className="btn btn-primary">
-              Connexion
+              Login
             </Link>
             <Link to={routes.REGISTER} className="btn btn-secondary">
               Register

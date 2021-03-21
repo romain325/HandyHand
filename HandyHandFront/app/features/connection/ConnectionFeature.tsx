@@ -41,7 +41,7 @@ export default function ConnectionFeature() {
       <div>
         <div className={styles.form}>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <h2>Connection</h2>
+            <h2>Login</h2>
             <h6 className={error !== '' ? 'text-danger' : ''}>
               {error !== '' ? error : 'Login to your account'}
             </h6>

@@ -45,7 +45,7 @@ export default function AddScriptFeature() {
               <Form.File
                 className="position-relative"
                 required
-                label="Choisissez un script"
+                label="Choose a script"
                 feedbackTooltip
                 id="file"
                 name="file"
