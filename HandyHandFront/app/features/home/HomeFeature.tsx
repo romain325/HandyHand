@@ -12,8 +12,8 @@ export default function HomeFeature() {
       <img
         src={`http://localhost:8080/leap/view?rdm=${seconds}`}
         alt={`Img ${seconds}`}
-        height={700}
-        width={700}
+        height={250}
+        width={1000}
       />
     );
   }

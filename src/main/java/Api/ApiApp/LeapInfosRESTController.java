@@ -46,6 +46,6 @@ public class LeapInfosRESTController {
 
         byte[] img = new CameraImage().getByteArrayImage();
 
-        IOUtils.copy((img == null || img.length == 0) ? new ClassPathResource("img/defaultImage.jpg").getInputStream() : new ByteArrayInputStream(img), response.getOutputStream());
+        IOUtils.copy((img == null || img.length == 0) ? new ClassPathResource("img/defaultImage.png").getInputStream() : new ByteArrayInputStream(img), response.getOutputStream());
     }
 }
