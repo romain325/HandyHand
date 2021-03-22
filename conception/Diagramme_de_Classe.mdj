@@ -4447,8 +4447,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 24,
-									"top": -224,
+									"left": 472,
+									"top": -232,
 									"width": 10,
 									"height": 10
 								},
@@ -4463,8 +4463,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 24,
-									"top": -224,
+									"left": 472,
+									"top": -232,
 									"width": 10,
 									"height": 10
 								}
@@ -4775,8 +4775,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 64,
-									"top": 120,
+									"left": 512,
+									"top": 112,
 									"width": 10,
 									"height": 10
 								},
@@ -4791,8 +4791,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 64,
-									"top": 120,
+									"left": 512,
+									"top": 112,
 									"width": 10,
 									"height": 10
 								}
@@ -5060,8 +5060,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -96,
-									"top": -208,
+									"left": 352,
+									"top": -216,
 									"width": 10,
 									"height": 10
 								},
@@ -5076,8 +5076,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -96,
-									"top": -208,
+									"left": 352,
+									"top": -216,
 									"width": 10,
 									"height": 10
 								}
@@ -12708,8 +12708,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 144,
-									"top": -64,
+									"left": 592,
+									"top": -72,
 									"width": 10,
 									"height": 10
 								},
@@ -12724,8 +12724,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 144,
-									"top": -64,
+									"left": 592,
+									"top": -72,
 									"width": 10,
 									"height": 10
 								}
@@ -28349,8 +28349,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -120,
-									"top": -96,
+									"left": 328,
+									"top": -104,
 									"width": 10,
 									"height": 10
 								},
@@ -28365,8 +28365,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": -120,
-									"top": -96,
+									"left": 328,
+									"top": -104,
 									"width": 10,
 									"height": 10
 								}
