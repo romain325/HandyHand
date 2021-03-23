@@ -8,16 +8,82 @@
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css" id="theme">
+		<link rel="stylesheet" href="dist/theme/beige.css" id="theme">
+		<link rel="stylesheet" href="dist/h2.css">
 
 		<!-- Theme used for syntax highlighted code -->
 		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
 	</head>
 	<body>
+        <div id="hidden" style="display:none;">
+            <div id="header">
+                <div id="header-right"><img src="img/iut.png" width=120 height=100 style="margin: 0" /></div>
+                <div id="header-left"><img src="img/logo.png" width=150 height=60 style="margin: 0" /></div>
+            </div>
+        </div>
+
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section><h1>HandyHand</h1></section>
+				<section>
+					<h3>Sommaire</h3>
+					<ul>
+						<li>Introduction</li>
+						<li>Contexte</li>
+						<li>Objectifs et Contraintes</li>
+						<li>Organisation</li>
+						<li>Analyse</li>
+						<li>Réalisation</li>
+						<li>Difficultés</li>
+						<li>Bilan Technique</li>
+						<li>Conclusion</li>
+					</ul>
+				</section>
+				<section>
+					<h3>Introduction</h3>
+					<section>
+						<div>
+							<img src="img/prof.png" width=100 height=100 style="margin: 0" />
+							<p style="font-size:20px">Laurent Provot</p>
+							<p style="font-size:16px">Responsable de projet / Maitre d'ouvrage</p>	
+						</div>
+						<div style="display: inline-block">
+							<img src="img/yo.jpeg" width=100 height=100>
+							<p style="font-size:20px">Yoann Périquoi</p>
+							<p style="font-size:16px">BackEnd</p>	
+						</div>
+						<div style="display: inline-block">
+							<img src="img/emerick.jpeg" width=100 height=100>
+							<p style="font-size:20px">Emrick Pesce</p>
+							<p style="font-size:16px">BackEnd</p>	
+						</div>
+						<div style="display: inline-block">
+							<img src="img/thomas.jpeg" width=100 height=100>
+							<p style="font-size:20px">Thomas Blanc</p>
+							<p style="font-size:16px">FrontEnd</p>	
+						</div>
+						<div style="display: inline-block">
+							<img src="img/augu.jpeg" width=100 height=100 style="opacity: 0.4">
+							<p style="font-size:20px" style="color: rgba(255,255,255,0.4)">Augustin Laborie</p>
+							<p style="font-size:16px" style="opacity: 0.4">FrontEnd</p>	
+						</div>
+						<div style="display: inline-block">
+							<img src="img/rom1.jpeg" width=100 height=100>
+							<p style="font-size:20px">Romain Olivier</p>
+							<p style="font-size:16px">Chef de Projet</p>	
+						</div>
+						<div>
+							<p style="font-size:36px">Maitrise d'ouvrage</p>
+						</div>
+					</section>
+					<section>
+						<h3>Notre projet</h3>
+						<img src="img/leap.png" height=250 width=550/>
+					</section>
+				</section>
+				<section>
+					
+				</section>
 			</div>
 		</div>
 
@@ -31,10 +97,24 @@
 			// - https://revealjs.com/config/
 			Reveal.initialize({
 				hash: true,
+				slideNumber: 'c/t',
 
 				// Learn about plugins: https://revealjs.com/plugins/
 				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
+		</script>
+
+		<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+		<script type="text/javascript">
+			var header = $('#header').html();
+			if ( window.location.search.match( /print-pdf/gi ) ) {
+				Reveal.addEventListener( 'ready', function( event ) {
+					$('.slide-background').append(header);
+				});
+			}
+			else {
+				$('div.reveal').append(header);
+			}
 		</script>
 	</body>
 </html>
