@@ -2,6 +2,8 @@
 
 ---------------
 
+![HandyHand](https://socialify.git.ci/romain325/HandyHand/image?description=1&font=Source%20Code%20Pro&pattern=Circuit%20Board&stargazers=1&theme=Dark)
+
 > This repo is the project holder for our 2A DUT Final Project
 
 ## Contributors
