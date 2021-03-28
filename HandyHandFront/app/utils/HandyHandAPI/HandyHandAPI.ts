@@ -1,4 +1,10 @@
-import {ExecInfo, GestureCard, NewScript, ScriptCard, UserCreds} from './HandyHandAPIType';
+import {
+  ExecInfo,
+  GestureCard,
+  NewScript,
+  ScriptCard,
+  UserCreds,
+} from './HandyHandAPIType';
 import { getAuthedHeader } from '../../features/connection/Connexion';
 import { getAddress } from './HandyHandConfig';
 
@@ -92,9 +98,9 @@ export default class HandyHandAPI {
     return await this.getFromAPI('/leap/state');
   }
 
-  public async switchScript(id: string, isActive: boolean, isOnline: boolean) {
+  public async switchScript(id: string, isActive: boolean, isOnline: boolean) : Promise<Response> {
     const place = isOnline ? 'scriptDB' : 'script';
     const action = isActive ? 'stop' : 'launch';
-    await this.postToAPI(`/${place}/${action}`, { scriptId: id }, isOnline);
+    return await this.postToAPI(`/${place}/${action}`, { scriptId: id }, isOnline);
   }
 }

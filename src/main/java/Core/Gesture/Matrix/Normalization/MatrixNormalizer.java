@@ -19,39 +19,6 @@ public class MatrixNormalizer {
     private SimpleMatrix normalizer;
 
     /**
-     * A method to get the matrix normalizer
-     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
-     * @return The matrix normalizer that is contained in the class
-     */
-    public SimpleMatrix getNormalizer() {
-        return normalizer.copy();
-    }
-
-    /**
-     * A method to set the matrix normalizer in the class.
-     * The new matrix have to be of the same size of the old one.
-     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
-     * @param normalizer The new matrix normalizer
-     * @throws BadAttributeValueExpException An exception is thrown if the normalizer is null, or not of the same size of the oldest
-     */
-    private void setNormalizer(SimpleMatrix normalizer) throws BadAttributeValueExpException {
-        if(this.normalizer != null) //If they are already one normalizer
-        {
-            if(normalizer == null) throw new BadAttributeValueExpException("New normalizer have to be not null");
-            if(normalizer.numCols() != this.normalizer.numCols() || normalizer.numRows() != this.normalizer.numRows()) {
-                throw new BadAttributeValueExpException("Size of new normalizer have to be equal to the last");
-            }
-        }
-        else //If normalizer wasn't set before
-        {
-            if(normalizer == null) {
-                throw new BadAttributeValueExpException("New normalizer have to be not null");
-            }
-        }
-        this.normalizer = normalizer;
-    }
-
-    /**
      * A constructor of the class MatrixNormalizer
      * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
      * @param normalizer The matrix normalizer that we want in
@@ -161,7 +128,7 @@ public class MatrixNormalizer {
         boolean isHandupSideDown = Math.abs(handPalmNormalLeap.roll()) > Math.PI/2;
 
         //Get the rotation of the hand around the vector of the palm, to re-axe the hand
-        SimpleMatrix firstRotation = rotationMatrixByAnyAxis2d(handDirectionLeap.yaw() * (isHandupSideDown ? 1 : -1), vectorPalmNormal);
+        SimpleMatrix firstRotation = rotationMatrixByAnyAxis3d(handDirectionLeap.yaw() * (isHandupSideDown ? 1 : -1), vectorPalmNormal);
 
         //We change different vectors with the new rotation
         vectorDirection = firstRotation.mult(vectorDirection);
@@ -253,13 +220,6 @@ public class MatrixNormalizer {
         return getNewTranslationMatrix(palmX, palmY, palmZ);
     }
 
-//    /**
-//     * Matrice de rotation, d'angle teta et d'axe passant par O (origine du repère) porté par le vecteur (a,b,c) de norme 0
-//     * dans un repère orthonormal direct
-//     * @param teta angle de rotation
-//     * @param axe axe passant par O
-//     * @return La matrice de rotation
-//     */
     /**
      * Rotation matrix with teta angle and form any axis passing by the origin.
      * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
@@ -268,7 +228,7 @@ public class MatrixNormalizer {
      * @param axe The vector normalized by which we want to rotate
      * @return The new matrix rotation
      */
-    public SimpleMatrix rotationMatrixByAnyAxis2d(float teta, SimpleMatrix axe) {
+    public SimpleMatrix rotationMatrixByAnyAxis3d(float teta, SimpleMatrix axe) {
         if(axe == null || axe.numRows() != 3 && axe.numRows() != 4) return null;
 
         SimpleMatrix rotation = SimpleMatrix.identity(4);
@@ -367,4 +327,36 @@ public class MatrixNormalizer {
         System.out.println("------------------------");
     }
 
+    /**
+     * A method to get the matrix normalizer
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
+     * @return The matrix normalizer that is contained in the class
+     */
+    public SimpleMatrix getNormalizer() {
+        return normalizer.copy();
+    }
+
+    /**
+     * A method to set the matrix normalizer in the class.
+     * The new matrix have to be of the same size of the old one.
+     * All coordinates are homogeneous, so each matrix have a row and column added, and vectors have a row added
+     * @param normalizer The new matrix normalizer
+     * @throws BadAttributeValueExpException An exception is thrown if the normalizer is null, or not of the same size of the oldest
+     */
+    private void setNormalizer(SimpleMatrix normalizer) throws BadAttributeValueExpException {
+        if(this.normalizer != null) //If they are already one normalizer
+        {
+            if(normalizer == null) throw new BadAttributeValueExpException("New normalizer have to be not null");
+            if(normalizer.numCols() != this.normalizer.numCols() || normalizer.numRows() != this.normalizer.numRows()) {
+                throw new BadAttributeValueExpException("Size of new normalizer have to be equal to the last");
+            }
+        }
+        else //If normalizer wasn't set before
+        {
+            if(normalizer == null) {
+                throw new BadAttributeValueExpException("New normalizer have to be not null");
+            }
+        }
+        this.normalizer = normalizer;
+    }
 }

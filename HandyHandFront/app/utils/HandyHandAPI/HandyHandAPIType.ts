@@ -1,3 +1,6 @@
+/**
+ * Get a script card
+ */
 export interface ScriptCard {
   file: string;
   description: string;
@@ -6,6 +9,9 @@ export interface ScriptCard {
   status: string;
 }
 
+/**
+ * Send a new script
+ */
 export interface NewScript {
   file: string;
   description: string;
@@ -13,11 +19,17 @@ export interface NewScript {
   execType: string;
 }
 
+/**
+ * User credentials
+ */
 export interface UserCreds {
   mail: string;
   password: string;
 }
 
+/**
+ * Gesture informations
+ */
 export interface GestureCard {
   name: string;
   description: string;
@@ -26,6 +38,9 @@ export interface GestureCard {
   id: string;
 }
 
+/**
+ * Inforamtions about an executable
+ */
 export interface ExecInfo {
   id: string;
   name: string;

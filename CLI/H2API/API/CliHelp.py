@@ -30,6 +30,11 @@ class CliHelp(ApiEndpoint):
         table.add_row("help", "Get help about the main object to interact with")
         table.add_row("leap", "Get general informations about the Leap Motion")
         table.add_row("local_script", "Interact with script in a local environnement")
+        table.add_row("db_script", "Interact with script in an online environnement")
         table.add_row("user", "Interact the users of H^2")
+        table.add_row("exec", "Configure your local executable")
+        table.add_row("local_gesture", "Interact with gesture handled locally")
+        table.add_row("db_gesture", "Interact with gesture handled online")
+        table.add_row("env", "Action over your environnements like synchronisation")
 
         self.utils.console.print(table)

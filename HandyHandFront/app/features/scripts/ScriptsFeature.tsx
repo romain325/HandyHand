@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import {Col, Container, Modal, Row} from 'react-bootstrap';
 
 import ContentPage from '../../containers/ContentPage';
 import { allCards, allList } from '../../utils/display/scriptDisplay';
@@ -29,6 +29,7 @@ export default function ScriptsFeatures() {
   const [gesture, setGestures] = useState<Map<string, string>>(
     new Map<string, string>()
   );
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const refresh = () => {
     refreshCards((scripts) => {
@@ -96,11 +97,16 @@ export default function ScriptsFeatures() {
         { items.length == 0 ? (
           <Col>Nothing Found ...</Col>
         ) : isGrid ? (
-          allCards(items, gesture, true, refresh)
+          allCards(items, gesture, true, refresh, setErrorMessage)
         ) : (
-          allList(items, gesture, true, refresh)
+          allList(items, gesture, true, refresh, setErrorMessage)
         )}
       </Container>
+      <Modal show={errorMessage !== ''} onHide={() => setErrorMessage('')}>
+        <Modal.Header>
+          <Modal.Title>{errorMessage}</Modal.Title>
+        </Modal.Header>
+      </Modal>
     </ContentPage>
   );
 }
