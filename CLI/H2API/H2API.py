@@ -30,4 +30,4 @@ class H2API:
             "help": CliHelp
         }
 
-        self.infos.get(self.args[0], "help")(self.args, self.utils)
+        self.infos.get(self.args[0], self.infos["help"])(self.args, self.utils)
