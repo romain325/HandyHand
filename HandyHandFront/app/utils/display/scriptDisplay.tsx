@@ -11,7 +11,11 @@ import HandyHandAPI from '../HandyHandAPI/HandyHandAPI';
  * @param name
  */
 export function propsNameToDisplayName(name: string): string {
-  return name.split('/').reverse()[0].split('.')[0];
+  var nameVar = name.split('/').reverse()[0].split('.')[0].substring(0,25);
+  if(name.length > 35){
+    nameVar += "... "
+  }
+  return nameVar;
 }
 
 async function onActiveClic(
